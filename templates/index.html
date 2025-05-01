@@ -14,15 +14,18 @@
 </head>
 <body class="bg-white p-5">
 
-  <div class="container text-center">
-    <h1 class="mb-4">🎵 PRACTICE TRACKER</h1>
-    <nav class="mb-4">
-    <a href="#">Log Practice</a> |
-    <a href="#">Goals</a> |
-    <a href="#">Stats</a>
-  </nav>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">🎵 PRACTICE TRACKER</h1>
+  
+    <nav>
+      <a href="#" class="text-primary me-3">Log Practice</a>
+      <a href="#" class="text-primary me-3">Goals</a>
+      <a href="#" class="text-primary">Stats</a>
+    </nav>
+  </div>
+  
 
-    <div class="border-offblack card mb-4 p-4">
+    <div class="border-offblack card mb-4 p-4 text-center">
       <h2>Welcome back, Jeremiah!</h2>
       <p>You’ve practiced 145 minutes this week.</p>
     </div>
@@ -30,14 +33,22 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <div class="border-offblack card p-3">
-          <h3>🎯 Weekly Goal</h3>
-          <p>3 hrs – 2 hrs done ✅</p>
+          <h3 class="text-center">🎯 Weekly Goal</h3>
+          <p class="ms-4">- 3 hours</p>
+          <p class="ms-5">Progress:</p>  
+          <div class="progress mx-5">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
         </div>
       </div>
       <div class="col-md-6 mb-3">
         <div class="border-offblack card p-3">
-          <h3>🎼 Etude Challenge</h3>
-          <p>Practice Op. 25 #6 – Ongoing</p>
+          <h3 class="text-center">🎼 Etude Challenge</h3>
+          <p class="ms-4">- Practice Op. 25 #6</p>
+          <p class="ms-5">Progress:</p>  
+          <div class="progress mx-5">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
         </div>
       </div>
     </div>
