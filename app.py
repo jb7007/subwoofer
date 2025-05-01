@@ -13,5 +13,9 @@ def home():
     ]
     return render_template("index.html", user=user, minutes=minutes, logs=logs)
 
+@app.route("/log")
+def log_page():
+    return render_template("log.html")
+
 if __name__ == "__main__":
     app.run(debug=True)

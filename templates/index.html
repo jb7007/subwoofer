@@ -12,18 +12,19 @@
   <!-- my css -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="bg-white p-5">
+<body class="bg-light p-5">
 
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">🎵 PRACTICE TRACKER</h1>
-  
+    <h1 class="mb-0 logo-hover">
+      <a href="{{ url_for('home') }}" class="text-decoration-none text-black">🎵 PRACTICE TRACKER</a>
+    </h1>
+    
     <nav>
-      <a href="#" class="text-black me-3">Goals</a>
-      <a href="#" class="text-black me-3">Stats</a>
-      <button href="#" class="text-white btn btn-dark">Log Practice</button>
+      <a href="#" class="text-black me-4">Goals</a>
+      <a href="#" class="text-black me-4">Stats</a>
+      <a href="{{ url_for('log_page') }}" class="btn btn-dark text-white btn-rotate-hover">Log Practice</a>      
     </nav>
   </div>
-  
 
     <div class="border-offblack card mb-4 p-4 text-center">
       <h2>Welcome back, Jeremiah!</h2>
@@ -32,9 +33,9 @@
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <div class="border-offblack card p-3">
+        <div class="border-offblack card card-hover p-3">
           <h3 class="text-center">🎯 Weekly Goal</h3>
-          <p class="ms-4">- 3 hours</p>
+          <h4 class="ms-4">- 3 hours</h4>
           <p class="ms-5">Progress:</p>  
           <div class="progress mx-5">
             <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
@@ -42,9 +43,9 @@
         </div>
       </div>
       <div class="col-md-6 mb-3">
-        <div class="border-offblack card p-3">
+        <div class="border-offblack card card-hover p-3">
           <h3 class="text-center">🎼 Etude Challenge</h3>
-          <p class="ms-4">- Practice Op. 25 #6</p>
+          <h4 class="ms-4">- Practice Op. 25 #6</h4>
           <p class="ms-5">Progress:</p>  
           <div class="progress mx-5">
             <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
