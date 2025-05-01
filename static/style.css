@@ -1,0 +1,12 @@
+body {
+    font-family: 'Josefin Sans', sans-serif;
+  }
+  
+  .bg-offblack {
+    background-color: #1b1b1b !important;
+  }
+
+  .border-offblack {
+    border: 2px solid #1b1b1b !important;
+  }
+  
