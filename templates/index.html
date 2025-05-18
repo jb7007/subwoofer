@@ -67,50 +67,37 @@
       </div>
     </div>
   </div>
-
-    <!--cards-->
-    <div class="row fade-in" style="animation-delay: 0.4s;">
-      <div class="col-md-6 mb-3">
-        <!--recent goals-->
-        <div class="border-offblack card card-hover p-3">
-          <h2 class="text-center">🎯 Recent Goals</h2>
-          <p class="ms-4 fs-5">- 3 hours</p>
-          <p class="ms-5">Progress:</p>  
-          <div class="progress mx-5">
-            <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <!--weekly challenge-->
-        <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">🎼 Weekly Challenge</h3>
-          <p class="ms-4 fs-5">- Practice Op. 25 #6</p>
-          <p class="ms-5">Progress:</p>  
-          <div class="progress mx-5">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        </div>
-      </div>
+  <div class="card-group">
+  <div class="card">
+    <img src={{ url_for('static', filename='images/shared/treble_clef.svg')}} class="card-img-top" alt="card-group-image">
+    <div class="card-body">
+      <h5 class="card-title">Clean and Easy Logging</h5>
+      <p class="card-text">Logging a practice session has never been easier. No need to add more information than you want- simply log what you played, how long you played it for, and you're done. Review your log anytime to track how often you practice, and add/edit notes as you wish.</p>
     </div>
-    <div class="row fade-in" style="animation-delay: 0.6s;">
-      <div class="col-md-6 mb-3">
-        <!--recent logged practie-->
-        <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">🎙️ Recent Sessions</h3>
-          <p class="ms-4 fs-5">- April 29 - 1 hour - Fantasie Impormptu (Chopin)</p>
-          <p class="ms-4 fs-5">- May 1 - 45 minutes - Arabesque (Debussy)</p>
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <!--practice schedule-->
-        <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">📅 Practice Schedule</h3>
-          <p class="ms-4 fs-5">- May 2 - Arabesque (Debussy)</p>
-          <p class="ms-4 fs-5">- May 3 - Creston Sonata (Creston)</p>
-        </div>
-      </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated 3 mins ago</small>
     </div>
   </div>
+  <div class="card">
+    <img src={{ url_for('static', filename='images/shared/treble_clef.svg')}} class="card-img-top" alt="card-group-image">
+    <div class="card-body">
+      <h5 class="card-title">See Your Progress- Literally</h5>
+      <p class="card-text">With robust visual statistics, </p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated 3 mins ago</small>
+    </div>
+  </div>
+  <div class="card">
+    <img src={{ url_for('static', filename='images/shared/treble_clef.svg')}} class="card-img-top" alt="card-group-image">
+    <div class="card-body">
+      <h5 class="card-title">Tailored For You</h5>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated 3 mins ago</small>
+    </div>
+  </div>
+</div>
 </body>
 </html>
