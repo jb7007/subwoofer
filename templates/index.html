@@ -3,38 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>Practice Tracker</title>
+
   <!--bootstrap css -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
   <!-- google font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  
   <!-- my css -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="bg-light p-5">
+<body class="bg-light p-5"> 
   <div class="d-flex justify-content-between align-items-center mb-4 fade-in" style="animation-delay: 0s;">
-    <h1 class="mb-0 logo-hover">
+    <h1 class="mb-0 logo-hover"> <!--page header-->
       <a href="{{ url_for('home') }}" class="text-decoration-none text-black">🎵 PRACTICE TRACKER</a>
     </h1>
     
-    <nav>
+    <nav> <!--navigation menu-->
       <a href="#" class="text-black me-4">Goals</a>
       <a href="#" class="text-black me-4">Stats</a>
       <a href="{{ url_for('log_page') }}" class="btn btn-dark text-white btn-rotate-hover">Log Practice</a>      
     </nav>
   </div>
-
-    <div class="border-offblack card mb-4 p-4 text-center fade-in" style="animation-delay: 0.2s;">
-      <h2>Welcome back, Jeremiah!</h2>
-      <p>You’ve practiced <b>145</b> minutes this week.</p>
+    <!--welcome banner-->
+    <div class="card">
+      <div class="row g-0">
+        <div class="col-2 d-flex align-items-center justify-content-center">
+          <img src="{{ url_for('static', filename='images/shared/treble_clef.svg') }}"
+               class="img-fluid"
+               style="max-height: 150px;"
+               alt="Treble Clef">
+        </div>
+        <div class="col-7 col-sm-8">
+          <div class="card-body">
+            <h5 class="card-title">PRACTICING HAS NEVER BEEN EASIER</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+      </div>
     </div>
-
+    <!--cards-->
     <div class="row fade-in" style="animation-delay: 0.4s;">
       <div class="col-md-6 mb-3">
+        <!--recent goals-->
         <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">🎯 Weekly Goal</h3>
-          <h4 class="ms-4">- 3 hours</h4>
+          <h2 class="text-center">🎯 Recent Goals</h2>
+          <p class="ms-4 fs-5">- 3 hours</p>
           <p class="ms-5">Progress:</p>  
           <div class="progress mx-5">
             <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
@@ -42,23 +59,32 @@
         </div>
       </div>
       <div class="col-md-6 mb-3">
+        <!--weekly challenge-->
         <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">🎼 Etude Challenge</h3>
-          <h4 class="ms-4">- Practice Op. 25 #6</h4>
+          <h3 class="text-center">🎼 Weekly Challenge</h3>
+          <p class="ms-4 fs-5">- Practice Op. 25 #6</p>
           <p class="ms-5">Progress:</p>  
           <div class="progress mx-5">
             <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="row fade-in" style="animation-delay: 0.6s;">
       <div class="col-md-6 mb-3">
+        <!--recent logged practie-->
         <div class="border-offblack card card-hover p-3">
           <h3 class="text-center">🎙️ Recent Sessions</h3>
-          <h4 class="ms-4">- Practice Op. 25 #6</h4>
-          <p class="ms-5">Progress:</p>  
-          <div class="progress mx-5">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
+          <p class="ms-4 fs-5">- April 29 - 1 hour - Fantasie Impormptu (Chopin)</p>
+          <p class="ms-4 fs-5">- May 1 - 45 minutes - Arabesque (Debussy)</p>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <!--practice schedule-->
+        <div class="border-offblack card card-hover p-3">
+          <h3 class="text-center">📅 Practice Schedule</h3>
+          <p class="ms-4 fs-5">- May 2 - Arabesque (Debussy)</p>
+          <p class="ms-4 fs-5">- May 3 - Creston Sonata (Creston)</p>
         </div>
       </div>
     </div>
