@@ -18,6 +18,17 @@ body {
     transition: all 0.15s ease-in-out;
   }
 
+  .card-group {
+    display: flex;          /* reaffirm flex */
+    flex-wrap: wrap;        /* allow cards to wrap */
+    gap: 0rem;              /* space between cards */
+  }
+
+  .card-group .card {
+    flex: 0 0 25rem;        /* don’t grow/shrink, always 8rem wide */
+    max-width: 100%;       /* responsive safety */
+  }
+
   .card-hover:hover {
     transform: scale(1.02);
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
