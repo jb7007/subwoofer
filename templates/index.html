@@ -16,8 +16,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="bg-light p-5"> 
-  <div class="d-flex justify-content-between align-items-center mb-4 fade-in" style="animation-delay: 0s;">
-    <h1 class="mb-0 logo-hover"> <!--page header-->
+  <!--page header-->
+  <div class="d-flex justify-content-between align-items-center mb-5 fade-in" style="animation-delay: 0s;">
+    <h1 class="mb-0 logo-hover"> 
       <a href="{{ url_for('home') }}" class="text-decoration-none text-black">🎵 PRACTICE TRACKER</a>
     </h1>
     
@@ -27,8 +28,11 @@
       <a href="{{ url_for('log_page') }}" class="btn btn-dark text-white btn-rotate-hover">Log Practice</a>      
     </nav>
   </div>
-  <!--welcome banner-->
-  <div class="card border-0 fade-in" style="animation-delay: 0.2s;">
+  <!--splash text-->
+  <h1 class="display-4 text-center mx-5 mt-5 fade-in" style="animation-delay: 0.5s;"> PRACTICING HAS NEVER BEEN EASIER </h1>
+  <h3 class="lead fade-in text-center mb-5 fade-in"style="animation-delay: 0.6s;"> (...to track) </h1>
+  <!--promotion card 1-->
+  <div class="card border-0 fade-in mb-3" style="animation-delay: 0.8s;">
     <div class="row g-0">
       <div class="col-2 d-flex align-items-center justify-content-center">
         <img src="{{ url_for('static', filename='images/shared/treble_clef.svg') }}"
@@ -36,15 +40,34 @@
             style="max-height: 150px;"
             alt="Treble Clef">
       </div>
-      <div class="col-7 col-sm-8">
+      <div class="col-10 d-flex align-items-center justify-content-center">
         <div class="card-body">
-          <h5 class="card-title">PRACTICING HAS NEVER BEEN EASIER</h5>
+          <h5 class="card-title">CLEAN, SIMPLE, TRACKED</h5>
           <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
         </div>
       </div>
     </div>
   </div>
+  <!-- Promotion Card 2 -->
+  <div class="card border-0 fade-in mb-3" style="animation-delay: 1s;">
+    <div class="row g-0">
+      <!-- Text Content -->
+      <div class="col-10 d-flex align-items-center justify-content-center">
+        <div class="card-body text-end">
+          <h5 class="card-title">DESIGN IN MIND</h5>
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+    <!-- Image -->
+    <div class="col-2 d-flex align-items-center justify-content-center p-4">
+      <img src="{{ url_for('static', filename='images/shared/bass_clef.svg') }}"
+          class="img-fluid"
+          style="max-height: 150px;"
+          alt="Treble Clef">
+      </div>
+    </div>
+  </div>
+
     <!--cards-->
     <div class="row fade-in" style="animation-delay: 0.4s;">
       <div class="col-md-6 mb-3">
