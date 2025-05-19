@@ -25,22 +25,22 @@
     <nav> <!--navigation menu-->
       <a href="#" class="text-black me-4">Goals</a>
       <a href="#" class="text-black me-4">Stats</a>
-      <a href="{{ url_for('log_page') }}" class="btn btn-dark text-white btn-rotate-hover">Log Practice</a>      
+      <a href="{{ url_for('log_page') }}" class="pt-button pt-button-hover">Log Practice</a>      
     </nav>
   </div>
   <!--splash text-->
-  <h1 class="display-4 text-center mx-5 mt-5 fade-in" style="animation-delay: 0.5s;"> PRACTICING HAS NEVER BEEN EASIER </h1>
-  <h3 class="lead fade-in text-center mb-5 fade-in"style="animation-delay: 0.6s;"> (...to track) </h3>
+  <h1 class="hero-title fade-in delay-05"> PRACTICING HAS NEVER BEEN EASIER </h1>
+  <h3 class="hero-subtitle fade-in delay-06"> (...to track) </h3>
   <!--promotion card 1-->
-  <div class="card border-0 fade-in mb-3" style="animation-delay: 0.8s;">
+  <div class="card-promo fade-in delay-08">
     <div class="row g-0">
-      <div class="col-2 d-flex align-items-center justify-content-center">
+      <div class="card-promo-image">
         <img src="{{ url_for('static', filename='images/shared/treble_clef.svg') }}"
             class="img-fluid"
             style="max-height: 150px;"
             alt="Treble Clef">
       </div>
-      <div class="col-10 d-flex align-items-center justify-content-center">
+      <div class="card-promo-text">
         <div class="card-body">
           <h5 class="card-title">CLEAN, SIMPLE, TRACKED</h5>
           <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -49,17 +49,17 @@
     </div>
   </div>
   <!-- Promotion Card 2 -->
-  <div class="card border-0 fade-in mb-3" style="animation-delay: 1s;">
+  <div class="card-promo fade-in delay-1">
     <div class="row g-0">
       <!-- Text Content -->
-      <div class="col-10 d-flex align-items-center justify-content-center">
+      <div class="card-promo-text">
         <div class="card-body text-end">
           <h5 class="card-title">DESIGN IN MIND</h5>
           <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
       </div>
     <!-- Image -->
-    <div class="col-2 d-flex align-items-center justify-content-center p-4">
+    <div class="card-promo-image p-4">
       <img src="{{ url_for('static', filename='images/shared/bass_clef.svg') }}"
           class="img-fluid"
           style="max-height: 150px;"
@@ -67,10 +67,10 @@
       </div>
     </div>
   </div>
-  <div class="d-flex justify-content-center fade-in" style="animation-delay: 1.2s;">
+  <div class="center-flex fade-in delay-12">
     <div class="card-row">
       <div class="card">
-        <img src={{ url_for('static', filename='images/home/clipboard.png.png')}}  
+        <img src="{{ url_for('static', filename='images/home/clipboard.png')}}"
         class="card-img-top mx-auto" 
         style="width:250px;height:250px;" 
         alt="card-group-image">
@@ -80,8 +80,8 @@
         </div>
       </div>
       <div class="card">
-        <img src={{ url_for('static', filename='images/home/clipboard.png.png')}} 
-        class="card-img-top mx-auto" 
+        <img src="{{ url_for('static', filename='images/home/clipboard.png')}}"
+        class="card-center_img-top" 
         style="width:250px;height:250px;" 
         alt="card-group-image">
         <div class="card-body">
@@ -90,8 +90,8 @@
         </div>
       </div>
       <div class="card">
-        <img src={{ url_for('static', filename='images/home/clipboard.png.png')}} 
-        class="card-img-top mx-auto" 
+        <img src="{{ url_for('static', filename='images/home/clipboard.png')}}"
+        class="card-center_img-top" 
         style="width:250px;height:250px;" 
         alt="card-group-image">
         <div class="card-body">
