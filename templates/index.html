@@ -17,7 +17,7 @@
 </head>
 <body class="bg-light p-5"> 
   <!--page header-->
-  <div class="d-flex justify-content-between align-items-center mb-5 fade-in" style="animation-delay: 0s;">
+  <div class="page-header fade-in delay-0">
     <h1 class="mb-0 logo-hover"> 
       <a href="{{ url_for('home') }}" class="text-decoration-none text-black">🎵 PRACTICE TRACKER</a>
     </h1>
@@ -30,7 +30,7 @@
   </div>
   <!--splash text-->
   <h1 class="display-4 text-center mx-5 mt-5 fade-in" style="animation-delay: 0.5s;"> PRACTICING HAS NEVER BEEN EASIER </h1>
-  <h3 class="lead fade-in text-center mb-5 fade-in"style="animation-delay: 0.6s;"> (...to track) </h1>
+  <h3 class="lead fade-in text-center mb-5 fade-in"style="animation-delay: 0.6s;"> (...to track) </h3>
   <!--promotion card 1-->
   <div class="card border-0 fade-in mb-3" style="animation-delay: 0.8s;">
     <div class="row g-0">
@@ -68,9 +68,9 @@
     </div>
   </div>
   <div class="d-flex justify-content-center fade-in" style="animation-delay: 1.2s;">
-    <div class="card-group">
+    <div class="card-row">
       <div class="card">
-        <img src={{ url_for('static', filename='images/home/clipboard.png.png')}} 
+        <img src={{ url_for('static', filename='images/home/clipboard.png.png')}}  
         class="card-img-top mx-auto" 
         style="width:250px;height:250px;" 
         alt="card-group-image">
