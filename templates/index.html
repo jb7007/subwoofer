@@ -84,7 +84,27 @@
       </div>
     </div>
     <div class="center-flex fade-in delay-14 mt-5">
-      <a href="#" class="pt-button">Sign Up and Start Practicing!</a>
+      <button class="pt-button" id="signUp">Sign Up and Start Practicing!</button>
+    </div>
+
+    <!-- GSAP core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Logic for this page -->
+    <script src="{{ url_for('static', filename='js/logic.js') }}"></script>
+
+    <!-- Animations for this page -->
+    <script src="{{ url_for('static', filename='js/animation.js') }}"></script>
+
+    <!-- js -->
+    <!-- SIGNUP MODAL (Hidden by default) -->
+    <div class="modal-overlay" id="signupModal">
+      <div class="modal-content" id="modalBox">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <h2>Sign Up</h2>
+        <p>Sign-up form coming soon ✨</p>
+      </div>
     </div>
   </body>
 </html>
