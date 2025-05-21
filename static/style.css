@@ -157,7 +157,9 @@ body {
 }
 
 .modal-overlay {
+  opacity: 0;
   display: none;
+  pointer-events: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -171,6 +173,7 @@ body {
 
 .modal-overlay.active {
   display: flex;
+  pointer-events: all;
 }
 
 .modal-content {
