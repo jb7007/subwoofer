@@ -4,18 +4,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("signupModal");
 
   openBtn.addEventListener("click", (e) => {
-    e.preventDefault(); // stops the link from jumping
+    e.preventDefault();
     modal.classList.add("active");
+    animateModalIn(); // ← Call animation
   });
 
   closeBtn.addEventListener("click", () => {
-    modal.classList.remove("active");
+    animateModalOut(); // ← Call animation
+    modal.classList.remove("active")
   });
 
-  // Close modal if user clicks outside it
   window.addEventListener("click", (e) => {
     if (e.target === modal) {
-      modal.classList.remove("active");
+      animateModalOut();
+      modal.classList.remove("active")
     }
   });
 });
