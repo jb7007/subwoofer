@@ -14,7 +14,7 @@
   </head>
   <body class="bg-light p-5">
     <!--page header-->
-    <div class="page-header fade-in delay-0">
+    <div class="page-header">
       <h1 class="mb-0 logo-hover">
         <a href="{{ url_for('home') }}" class="text-decoration-none text-black">🎵 PRACTICE TRACKER</a>
       </h1>
@@ -26,34 +26,34 @@
       </nav>
     </div>
     <!--splash text-->
-    <h1 class="hero-title fade-in delay-05"> PRACTICING HAS NEVER BEEN EASIER </h1>
+    <h1 class="hero-title"> PRACTICING HAS NEVER BEEN EASIER </h1>
     <h3 class="hero-subtitle fade-in delay-06"> (...to track) </h3>
     <!--promotion card 1-->
-    <div class="card-promo fade-in delay-08">
+    <div class="card-promo" id="cardPromo1">
       <div class="row g-0">
-        <div class="card-promo-image">
+        <div class="card-promo-image" id="img1">
           <img src="{{ url_for('static', filename='images/shared/treble_clef.svg') }}" class="img-fluid" style="max-height: 150px;" alt="Treble Clef">
         </div>
         <div class="card-promo-text">
           <div class="card-body">
-            <h5 class="card-title">CLEAN, SIMPLE, TRACKED</h5>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h5 class="card-title" id="promoTitle1">CLEAN, SIMPLE, TRACKED</h5>
+            <p class="card-text" id="promoTxt1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           </div>
         </div>
       </div>
     </div>
     <!-- Promotion Card 2 -->
-    <div class="card-promo fade-in delay-1">
+    <div class="card-promo" id="cardPromo2">
       <div class="row g-0">
         <!-- Text Content -->
         <div class="card-promo-text">
           <div class="card-body text-end">
-            <h5 class="card-title">DESIGN IN MIND</h5>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h5 class="card-title" id="promoTitle2">DESIGN IN MIND</h5>
+            <p class="card-text" id="promoTxt2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           </div>
         </div>
         <!-- Image -->
-        <div class="card-promo-image p-4">
+        <div class="card-promo-image p-4" id="img2">
           <img src="{{ url_for('static', filename='images/shared/bass_clef.svg') }}" class="img-fluid" style="max-height: 150px;" alt="Treble Clef">
         </div>
       </div>
@@ -98,6 +98,8 @@
     <!-- GSAP core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- split type -->
+    <script src="https://unpkg.com/split-type"></script>
 
     <!-- Animations for this page -->
     <script src="{{ url_for('static', filename='js/animation.js') }}"></script>
