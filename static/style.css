@@ -1,6 +1,32 @@
 body {
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Commissioner', sans-serif;
 }
+
+/* SCROLLING MOTION PARALLAX */
+.parallax-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%; /* taller for scrolling effect */
+  filter: blur(1px);
+  z-index: -1;
+
+  background-image: url("/static/images/shared/practice-bg.svg");
+  background-repeat: repeat; /* TILES the SVG */
+
+  background-size: auto; /* or 'contain' or custom size */
+  background-position: top left;
+
+  pointer-events: none;
+  will-change: background-position;
+}
+
+/* SHADOWS */
+body, h1, h2, h3, p, a {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* adjust as needed */
+}
+
 
 /* PAGE HEADER */
 .page-header {
@@ -16,6 +42,7 @@ body {
   font-size: 2.5rem;        /* like display-4 */
   font-weight: 300;
   text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   margin: 3rem 3rem 1.5rem; /* mt-5 + mx-5 approx */
 }
 
@@ -24,6 +51,7 @@ body {
   font-size: 1.25rem;       /* like lead */
   font-weight: 300;
   text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   margin-bottom: 3rem;      /* mb-5 */
   color: #555;
 }
@@ -45,6 +73,7 @@ body {
 
 .card {
   background-color: #fcfcfc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
 .card.card-hover {
@@ -111,6 +140,7 @@ body {
 .pt-button {
   display: inline-block;
   background-color: #1b1b1b;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.5);
   color: #fff;
   border: none;
   padding: 0.5rem 1.25rem;
@@ -125,6 +155,10 @@ body {
   background-color: #111;
   transform: scale(1.05) rotate(2deg);
   box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+.submit-btn {
+  margin-top: 1.5rem;
 }
 
 .modal-overlay {
@@ -147,6 +181,7 @@ body {
   pointer-events: all;
 }
 
+
 .modal-content {
   background: white;
   padding: 2rem;
@@ -155,6 +190,7 @@ body {
   width: 90%;
   position: relative;
   text-align: center;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.75);
 }
 
 .modal-close {
@@ -165,6 +201,10 @@ body {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+thead th {
+  border-bottom: 2px solid #000 !important;
 }
 
 
