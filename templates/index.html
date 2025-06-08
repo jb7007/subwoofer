@@ -8,11 +8,12 @@
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap" rel="stylesheet">
     <!-- my css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body class="bg-light p-5">
+    <div class="parallax-bg"></div>
     <!--page header-->
     <div class="page-header">
       <h1 class="mb-0 logo-hover">
@@ -60,21 +61,21 @@
     </div>
     <div class="center-flex fade-in delay-12">
       <div class="card-row">
-        <div class="card">
+        <div class="card mx-4">
           <img src="{{ url_for('static', filename='images/home/clipboard.png')}}" class="card-img-top mx-auto" style="width:250px;height:250px;" alt="card-group-image">
           <div class="card-body">
             <h5 class="card-title">Clean and Easy Logging</h5>
             <p class="card-text">Logging a practice session has never been easier. No need to add more information than you want- simply log what you played, how long you played it for, and you're done. Review your log anytime to track how often you practice, and add/edit notes as you wish.</p>
           </div>
         </div>
-        <div class="card">
+        <div class="card mx-4">
           <img src="{{ url_for('static', filename='images/home/clipboard.png')}}" class="card-center_img-top" style="width:250px;height:250px;" alt="card-group-image">
           <div class="card-body">
             <h5 class="card-title">See Your Progress (literally)</h5>
             <p class="card-text">With robust visual statistics, you can view your habits, progression for pieces, and more. The more details you log about your practice sessions—like tempo, focus areas, and personal notes—the richer and more accurate your progress stats become. Track your growth effortlessly.</p>
           </div>
         </div>
-        <div class="card">
+        <div class="card mx-4">
           <img src="{{ url_for('static', filename='images/home/clipboard.png')}}" class="card-center_img-top" style="width:250px;height:250px;" alt="card-group-image">
           <div class="card-body">
             <h5 class="card-title">Tailored For You</h5>
@@ -88,11 +89,18 @@
     </div>
     <!-- SIGNUP MODAL (Hidden by default) -->
     <div class="modal-overlay" id="signupModal">
-      <div class="modal-content" id="modalBox">
+      <form action="/register" method="POST" class="modal-content" id="modalBox">
         <button class="modal-close" id="closeModal">&times;</button>
         <h2>Sign Up</h2>
-        <p>Sign-up form coming soon ✨</p>
-      </div>
+
+        <label for="username">Username</label>
+        <input name="username" id="username" type="text" required>
+
+        <label for="password">Password</label>
+        <input name="password" id="password" type="password" required>
+
+        <button type="submit" class="submit-btn">Create Account</button>
+      </form>
     </div>
     
     <!-- GSAP core -->
