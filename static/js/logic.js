@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // HOMEPAGE
   const openBtn = document.getElementById("signUp");
   const closeBtn = document.getElementById("closeModal");
   const modal = document.getElementById("signupModal");
@@ -20,4 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.classList.remove("active")
     }
   });
+
+  // LOGGING
+  
 });

@@ -1,5 +1,7 @@
 // === HOMEPAGE ANIMATION ===
 window.addEventListener("load", () => {
+  gsap.registerPlugin(ScrollTrigger);
+
   // defaults means that all elements will follow these guidelines unless otherwise specified
   const tl = gsap.timeline({ defaults: { duration: 1, ease: "power2.out" } });
 
@@ -7,7 +9,7 @@ window.addEventListener("load", () => {
   tl.from(".page-header", { opacity: 0, y: -30 });
 
   // Logo/title
-  tl.from(".page-header h1", { y: -20, opacity: 0 }, "-=0.25");
+  tl.from(".page-header h1", { y: -20, opacity: 0 }, "-=0.5");
 
   // Animate nav links EXCLUDING the button
   tl.from(".page-header nav a:not(.pt-button)", {
@@ -83,6 +85,17 @@ window.addEventListener("load", () => {
     opacity: 0,
     ease: "power.out(1)",
   }, "-=0.4");
+
+  gsap.to(".parallax-bg", {
+  backgroundPositionY: "-800px", // scrolls up
+  ease: "none",
+  scrollTrigger: {
+    trigger: "body",
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true
+  }
+});
 
 });
 
