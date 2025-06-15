@@ -8,15 +8,14 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 200%; /* taller for scrolling effect */
-  filter: blur(1px);
+  height: 200vh; /* taller for parallax scroll */
   z-index: -1;
 
-  background-image: url("/static/images/shared/practice-bg.svg");
-  background-repeat: repeat; /* TILES the SVG */
-
-  background-size: auto; /* or 'contain' or custom size */
+  background-image: url("/static/images/shared/practice-bg.png");
+  background-repeat: repeat;
+  background-size: 2000px; /* don't scale it, let it tile naturally */
   background-position: top left;
+  filter: blur(1px);
 
   pointer-events: none;
   will-change: background-position;
@@ -26,7 +25,6 @@ body {
 body, h1, h2, h3, p, a {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* adjust as needed */
 }
-
 
 /* PAGE HEADER */
 .page-header {
@@ -157,8 +155,12 @@ body, h1, h2, h3, p, a {
   box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
 }
 
-.submit-btn {
+.modal-btn {
   margin-top: 1.5rem;
+}
+
+.modal-btn + .modal-btn {
+  margin-top: 1rem;
 }
 
 .modal-overlay {
@@ -179,8 +181,8 @@ body, h1, h2, h3, p, a {
 .modal-overlay.active {
   display: flex;
   pointer-events: all;
+  opacity: 1;
 }
-
 
 .modal-content {
   background: white;
@@ -202,6 +204,21 @@ body, h1, h2, h3, p, a {
   border: none;
   cursor: pointer;
 }
+
+.form-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.form-label-right {
+  font-size: 0.875rem;
+  color: #777;
+  margin-left: auto;
+}
+
 
 thead th {
   border-bottom: 2px solid #000 !important;
