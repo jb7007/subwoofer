@@ -2,6 +2,16 @@
 window.addEventListener("load", () => {
   gsap.registerPlugin(ScrollTrigger);
 
+  let split1 = new SplitType("#promoTitle1", {
+    type: "words"
+  }), split2 = new SplitType("#promoTitle2", {
+    type: "words"
+  }), split3 = new SplitType("#promoTxt1", {
+    type: "lines"
+  }), split4 = new SplitType("#promoTxt2", {
+    type: "lines"
+  });
+
   // defaults means that all elements will follow these guidelines unless otherwise specified
   const tl = gsap.timeline({ defaults: { duration: 1, ease: "power2.out" } });
 
@@ -54,16 +64,6 @@ window.addEventListener("load", () => {
 
   tl.from(".hero-subtitle", { x: -20, opacity: 0, duration: 0.6, ease: "back.out(3)"}, "-=0.5");
 
-  let split1 = new SplitType("#promoTitle1", {
-    type: "words"
-  }), split2 = new SplitType("#promoTitle2", {
-    type: "words"
-  }), split3 = new SplitType("#promoTxt1", {
-    type: "lines"
-  }), split4 = new SplitType("#promoTxt2", {
-    type: "lines"
-  });
-
   tl.from([split1.words, split2.words], {
     x: 100,
     opacity: 0,
@@ -86,30 +86,43 @@ window.addEventListener("load", () => {
     ease: "power.out(1)",
   }, "-=0.4");
 
-  gsap.to(".parallax-bg", {
-  backgroundPositionY: "-800px", // scrolls up
-  ease: "none",
-  scrollTrigger: {
-    trigger: "body",
-    start: "top top",
-    end: "bottom bottom",
-    scrub: true
-  }
-});
-
 });
 
 // === MODAL ANIMATION ===
-const modalBox = document.getElementById("modalBox");
-const modal = document.getElementById("signupModal");
+// modal boxes
+const signupModalBox = document.getElementById("signupModalBox");
+const loginModalBox = document.getElementById("loginModalBox");
 
-const modalTL = gsap.timeline({ paused: true });
+// modal overlays (dim bg)
+const signupModal = document.getElementById("signupModal");
+const loginModal = document.getElementById("loginModal");
 
-modalTL
-  .set(modal, { opacity: 0, display: "flex" })
-  .to(modal, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0)
+// timeline for animations
+const signupModalTL = gsap.timeline({ paused: true });
+const loginModalTL = gsap.timeline({ paused: true });
+
+signupModalTL
+  .set(signupModal, { opacity: 0 })
+  .to(signupModal, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0)
   .fromTo(
-    modalBox, { 
+    signupModalBox, { 
+        y: 100, 
+        opacity: 0,
+        rotation: 10
+    }, { 
+        y: 0, 
+        opacity: 1,
+        duration: 0.625,
+        rotation: 0, 
+        ease: "back.out(4)"
+      }, 0.1
+  );
+
+loginModalTL
+  .set(loginModal, { opacity: 0 })
+  .to(loginModal, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0)
+  .fromTo(
+    loginModalBox, { 
         y: 100, 
         opacity: 0,
         rotation: 10
@@ -122,26 +135,52 @@ modalTL
       }, 0.1
   );
 
-function animateModalIn() {
-  modalTL.play();
+function signupAnimateModalIn() {
+  signupModalTL.play();
+}
+
+function loginAnimateModalIn() {
+  loginModalTL.play();
 }
 
 // Animate out
-function animateModalOut() {
-  gsap.to(modalBox, {
+function signupAnimateModalOut() {
+  gsap.to(signupModalBox, {
     y: 50,
     opacity: 0,
     duration: 0.3,
     rotation: -22.5,
     ease: "power2.in",
     onComplete: () => {
-      gsap.to(modal, {
+      gsap.to(signupModal, {
         opacity: 0,
         duration: 0.2,
         ease: "power1.in",
         onComplete: () => {
-          gsap.set(modal, { display: "none" });
-          modalTL.pause(0); // rewind for next time
+          signupModal.classList.remove("active");
+          signupModalTL.pause(0); // rewind for next time
+        }
+      });
+    }
+  });
+
+}
+
+function loginAnimateModalOut() {
+  gsap.to(loginModalBox, {
+    y: 50,
+    opacity: 0,
+    duration: 0.3,
+    rotation: -22.5,
+    ease: "power2.in",
+    onComplete: () => {
+      gsap.to(loginModal, {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power1.in",
+        onComplete: () => {
+          loginModal.classList.remove("active");
+          loginModalTL.pause(0); // rewind for next time
         }
       });
     }
