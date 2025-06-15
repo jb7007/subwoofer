@@ -21,9 +21,11 @@
       </h1>
       <nav>
         <!--navigation menu-->
-        <a href="#" class="text-black me-4">Goals</a>
+        <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
         <a href="#" class="text-black me-4">Stats</a>
-        <a href="{{ url_for('log_page') }}" class="pt-button pt-button-hover">Log Practice</a>
+        <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
+        <a href="#" class="pt-button pt-button-hover me-3" id="loginButton">Log In</a>
+        <a href="#" class="pt-button pt-button-hover" id="navSignupButton">Sign Up</a>
       </nav>
     </div>
     <!--splash text-->
@@ -85,21 +87,40 @@
       </div>
     </div>
     <div class="center-flex fade-in delay-14 mt-5">
-      <button class="pt-button" id="signUp">Sign Up and Start Practicing!</button>
+      <button class="pt-button" id="signUp" type="button">Sign Up and Start Practicing!</button>
     </div>
+
     <!-- SIGNUP MODAL (Hidden by default) -->
     <div class="modal-overlay" id="signupModal">
-      <form action="/register" method="POST" class="modal-content" id="modalBox">
-        <button class="modal-close" id="closeModal">&times;</button>
-        <h2>Sign Up</h2>
+      <form class="modal-content" id="signupModalBox">
+        <button class="modal-close" id="signupCloseModal" type="button">&times;</button>
+        <h2>SIGN UP</h2>
+        <p><em>Welcome. Glad to have you.</p></em>
 
-        <label for="username">Username</label>
-        <input name="username" id="username" type="text" required>
+        <label for="signupUsername">Username</label>
+        <input name="username" id="signupUsername" type="text" required>
 
-        <label for="password">Password</label>
-        <input name="password" id="password" type="password" required>
+        <label for="signupPassword">Password</label>
+        <input name="password" id="signupPassword" type="password" required>
 
-        <button type="submit" class="submit-btn">Create Account</button>
+        <button type="submit" class="modal-btn">Create Account</button>
+      </form>
+    </div>
+
+    <!-- LOGIN MODAL (Hidden by default) -->
+    <div class="modal-overlay" id="loginModal">
+      <form action="/login" method="POST" class="modal-content" id="loginModalBox">
+        <button class="modal-close" id="loginCloseModal" type="button">&times;</button>
+        <h2>LOG IN</h2>
+        <p><em>Welcome back. Now, where did we leave off?</em></p>
+
+        <label for="loginUsername">Username</label>
+        <input name="username" id="loginUsername" type="text" required>
+
+        <label for="loginPassword">Password</label>
+        <input name="password" id="loginPassword" type="password" required>
+
+        <button type="submit" class="modal-btn">Login</button>
       </form>
     </div>
     
@@ -112,6 +133,6 @@
     <!-- Animations for this page -->
     <script src="{{ url_for('static', filename='js/animation.js') }}"></script>
     <!-- Logic for this page -->
-    <script src="{{ url_for('static', filename='js/logic.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
   </body>
 </html>
