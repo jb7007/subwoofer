@@ -42,7 +42,7 @@
         <th scope="col">Notes</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="logTableBody">
       <tr>
         <th scope="row">1</th>
         <td>Mark</td>
@@ -69,14 +69,56 @@
     </tbody>
   </table>
 
-  <!-- Modal Overlay -->
   <div class="modal-overlay" id="logModal">
-    <form class="modal-content" method="POST" id="logModalBox">
-      <button class="modal-close" id="closeLogModal">&times;</button>
+    <form class="modal-content" id="practiceModalBox">
+      <button class="modal-close" id="practiceCloseModal" type="button">&times;</button>
       <h2>Log Practice Session</h2>
-      
-      <p>Form coming soon ✨</p>
-    </div>
+      <p><em>You did a good thing today. Let's record it.</em></p>
+
+      <label class="form-label-row" for="logDate">
+        <span class="me-auto">
+          When did you practice? 
+          <span style="color: red;">* </span>
+        </span>
+        <span class="form-label-right">(Date)</span>
+      </label>
+      <input type="datetime-local" id="logDate" name="date" class="mb-3" required />
+
+      <label class="form-label-row" for="instrument">
+        <span class="me-auto">
+          With what?
+          <span style="color: red;">* </span>
+        </span>
+        <span class="form-label-right">(Instrument)</span>
+      </label>
+      <input type="text" id="instrument" name="instrument" class="mb-3" required />
+
+      <label class="form-label-row" for="piece">
+        <span class="me-auto">
+          Any specific repertoire?
+        </span>
+        <span class="form-label-right">(Piece)</span>
+      </label>
+      <input type="text" id="piece" name="piece" class="mb-3" />
+
+      <label class="form-label-row" for="logDuration">
+        <span class="me-auto">
+          For how many long?
+          <span style="color: red;"> * </span>
+        </span>
+        <span class="form-label-right">(Duration in mins.)</span>
+      </label>
+      <input type="number" id="logDuration" name="duration" class="mb-3" required min="1" />
+
+      <label class="form-label-row me-auto" for="logNotes">Anything else you wanna add...?</label>
+      <textarea id="logNotes" name="notes" placeholder="Optional notes..." class="mb-3"></textarea>
+
+      <button type="submit" class="modal-btn">Submit</button>
+      <button type="button" class="modal-btn" id="closePracticeLogModal">Cancel</button>
+    </form>
   </div>
+
+  <script src="{{ url_for('static', filename='js/log.js') }}"></script>
+
  </body>
 </html>
