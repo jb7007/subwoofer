@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // MODAL BUTTONS
     const logOpenBtn = document.getElementById("openLogModal");
     const logCloseBtn = document.getElementById("practiceCloseModal");
+    const logCancelBtn = document.getElementById("closePracticeLogModal");
 
     const logModal = document.getElementById("logModal");
 
@@ -14,6 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   logCloseBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // TEMPORARY, will replace w gsap animation handling
+    logModal.classList.remove("active");
+
+    logModal.querySelectorAll('input').forEach(input => input.value = '');
+  });
+
+  logCancelBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
 
