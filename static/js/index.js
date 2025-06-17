@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   // MODAL BUTTONS
-  const signupOpenBtn = document.getElementById("signUp");
-  const signupNavBtn = document.getElementById("navSignupButton");
-  const loginOpenBtn = document.getElementById("loginButton");
+  const signupOpenBtn = document.getElementById("signUp"); // bottom/main sign up button 
+  const signupNavBtn = document.getElementById("navSignupButton"); // nav bar sign up button
+  const loginOpenBtn = document.getElementById("loginButton"); // log in nav bar button
 
   const signupCloseBtn = document.getElementById("signupCloseModal");
   const loginCloseBtn = document.getElementById("loginCloseModal");
   
+  // MODAL OVERLAYS (adds dark bg and modal)
   const signupModal = document.getElementById("signupModal");
   const loginModal = document.getElementById("loginModal");
   
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const signupForm = document.getElementById("signupModalBox");
     signupForm.reset();
     
-    signupModal.classList.add("active");
+    signupModal.classList.add("active"); // placeholder, will replace w/ gsap animations
     signupAnimateModalIn() // ← Call animation
   });
 
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({ username, password }),
     });
 
-    const data = await response.json(); // parse once
+    const data = await response.json(); // parse into json 
 
     if (response.ok) {
       if (data.redirect) {
@@ -102,7 +103,11 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Signup success:", data.message);
       }
     } else {
-      alert(data.message || "Signup failed.");
+      if (response.status === 409) {
+        alert("Username already exists! Try another one.");
+      } else {
+        alert(data.message || "Signup failed.")
+      }
     }
   } catch (err) {
     console.error("Signup error:", err);
