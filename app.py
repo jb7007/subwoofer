@@ -1,5 +1,6 @@
 # importing flask, database, and classes/tables
 from flask import Flask, render_template, request, jsonify, redirect, render_template, session, url_for
+from flask_login import login_required, current_user
 from models import db, User, PracticeLog
 from datetime import datetime
 
@@ -42,6 +43,9 @@ def register():
         return jsonify({"message": "Missing username or password"}), 400
 
     # Check if user exists, hash password, insert into DB, etc.
+    if User.query.filter_by(username=username).first():
+        return jsonify({"message": "username already taken!"}), 409
+        
     print(f"Registering user: {username}")
     
     new_user = User(username=username)
@@ -101,6 +105,25 @@ def add_log():
     db.session.commit()
     
     return jsonify({ "message": "log added!" }), 201
+
+@app.route("/api/logs", methods=["GET"])
+@login_required
+def get_logs():
+    logs = PracticeLog.query.filter_by(user_id=current_user.id).order_by(PracticeLog.date.desc()).all()
+
+    serialized_logs = []
+    for log in logs:
+        serialized_logs.append({
+            "id": log.id,
+            "date": log.date.strftime("%Y-%m-%d"),
+            "duration": log.duration,
+            "instrument": log.instrument,
+            "repertoire": log.piece.title if log.piece else "Unlisted",
+            "notes": log.notes or ""
+        })
+
+    return jsonify(serialized_logs), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
