@@ -8,7 +8,7 @@
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap" rel="stylesheet">
     <!-- my css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
@@ -20,18 +20,24 @@
       </h1>
       <nav>
         <!--navigation menu-->
-        <a href="#" class="text-black me-4">Goals</a>
-        <a href="#" class="text-black me-4">Stats</a>
-        <a href="{{ url_for('log_page') }}" class="btn btn-dark text-white btn-rotate-hover">Log Practice</a>
+        {% if user.is_authenticated %}
+          <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
+          <a href="#" class="text-black me-4">Stats</a>
+          <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
+          <a href="{{ url_for('logout') }}" class="text-black me-4">Log Out</a>
+        {% else %}
+          <a href="#" class="pt-button pt-button-hover me-3" id="loginButton">Log In</a>
+          <a href="#" class="pt-button pt-button-hover" id="navSignupButton">Sign Up</a>
+        {% endif %}
       </nav>
     </div>
     <!--welcome banner-->
-    <div class="border-offblack card mb-4 p-4 text-center fade-in" style="animation-delay: 0.2s;">
+    <div class="border-offblack card mb-4 p-4 text-center fade-in">
       <h2>Welcome back, {{ user.username }}!</h2>
       <p>You’ve practiced <b>{{ minutes }}</b> minutes this week. </p>
     </div>
     <!--cards-->
-    <div class="row fade-in" style="animation-delay: 0.4s;">
+    <div class="row fade-in">
       <div class="col-md-6 mb-3">
         <!--recent goals-->
         <div class="border-offblack card card-hover p-3">
@@ -55,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="row fade-in" style="animation-delay: 0.6s;">
+    <div class="row fade-in">
       <div class="col-md-6 mb-3">
         <!--recent logged practie-->
         <div class="border-offblack card card-hover p-3">

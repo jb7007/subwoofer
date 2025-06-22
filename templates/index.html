@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Practice Tracker</title>
+    <title>🎵 Practice Tracker – Log and Visualize Your Practice</title>
     <!--bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- google font -->
@@ -21,11 +21,15 @@
       </h1>
       <nav>
         <!--navigation menu-->
-        <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
-        <a href="#" class="text-black me-4">Stats</a>
-        <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
-        <a href="#" class="pt-button pt-button-hover me-3" id="loginButton">Log In</a>
-        <a href="#" class="pt-button pt-button-hover" id="navSignupButton">Sign Up</a>
+        {% if user.is_authenticated %}
+          <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
+          <a href="#" class="text-black me-4">Stats</a>
+          <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
+          <a href="{{ url_for('logout') }}" class="text-black me-4">Log Out</a>
+        {% else %}
+          <a href="#" class="pt-button pt-button-hover me-3" id="loginButton">Log In</a>
+          <a href="#" class="pt-button pt-button-hover" id="navSignupButton">Sign Up</a>
+        {% endif %}
       </nav>
     </div>
     <!--splash text-->
@@ -130,9 +134,9 @@
     <!-- split type -->
     <script src="https://unpkg.com/split-type"></script>
 
-    <!-- Animations for this page -->
-    <script src="{{ url_for('static', filename='js/animation.js') }}"></script>
     <!-- Logic for this page -->
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/init.js') }}"></script>
+    <!-- Animations for this page -->
+    <script type="module" src="{{ url_for('static', filename='js/animation/homepage.js') }}"></script>
   </body>
 </html>
