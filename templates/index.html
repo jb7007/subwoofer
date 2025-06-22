@@ -23,7 +23,7 @@
         <!--navigation menu-->
         {% if user.is_authenticated %}
           <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
-          <a href="#" class="text-black me-4">Stats</a>
+          <a href="{{ url_for('stats') }}" class="text-black me-4">Stats</a>
           <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
           <a href="{{ url_for('logout') }}" class="text-black me-4">Log Out</a>
         {% else %}
@@ -34,7 +34,7 @@
     </div>
     <!--splash text-->
     <h1 class="hero-title"> PRACTICING HAS NEVER BEEN EASIER </h1>
-    <h3 class="hero-subtitle fade-in delay-06"> (...to track) </h3>
+    <h3 class="hero-subtitle"> (...to track) </h3>
     <!--promotion card 1-->
     <div class="card-promo" id="cardPromo1">
       <div class="row g-0">
