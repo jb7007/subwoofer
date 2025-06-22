@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body class="bg-light p-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 fade-in" style="animation-delay: 0s;">
+    <div class="d-flex justify-content-between align-items-center mb-4 fade-in">
       <h1 class="mb-0 logo-hover">
         <!--page header-->
         <a href="{{ url_for('home') }}" class="text-decoration-none text-black">🎵 PRACTICE TRACKER</a>
@@ -21,8 +21,7 @@
       <nav>
         <!--navigation menu-->
         {% if user.is_authenticated %}
-          <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
-          <a href="#" class="text-black me-4">Stats</a>
+          <a href="{{ url_for('stats') }}" class="text-black me-4">Stats</a>
           <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
           <a href="{{ url_for('logout') }}" class="text-black me-4">Log Out</a>
         {% else %}
@@ -32,53 +31,24 @@
       </nav>
     </div>
     <!--welcome banner-->
-    <div class="border-offblack card mb-4 p-4 text-center fade-in">
-      <h2>Welcome back, {{ user.username }}!</h2>
-      <p>You’ve practiced <b>{{ minutes }}</b> minutes this week. </p>
+    <div class="mb-4 text-center">
+      <h1 class="hero-title">Welcome back, {{ user.username }}!</h1>
+      <p>You’ve practiced for <b>{{ minutes }}</b> minutes with us.</p>
     </div>
+    <hr>
     <!--cards-->
-    <div class="row fade-in">
-      <div class="col-md-6 mb-3">
-        <!--recent goals-->
-        <div class="border-offblack card card-hover p-3">
-          <h2 class="text-center">🎯 Recent Goals</h2>
-          <p class="ms-4 fs-5">- 3 hours</p>
-          <p class="ms-5">Progress:</p>
-          <div class="progress mx-5">
-            <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        </div>
+    <div class="row">
+      <div class="col" style="text-align: center;">
+        <span class="hero-subtitle">RECENT LOGS</span>
       </div>
-      <div class="col-md-6 mb-3">
-        <!--weekly challenge-->
-        <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">🎼 Weekly Challenge</h3>
-          <p class="ms-4 fs-5">- Practice Op. 25 #6</p>
-          <p class="ms-5">Progress:</p>
-          <div class="progress mx-5">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        </div>
+      <div class="col" style="text-align: center;">
+        <span class="hero-subtitle">QUICK STATS</span>
+        <ul>
+          <li>Most Used Instrument: {{common_instrument}}</li>
+          <li>Tea</li>
+          <li>Milk</li>
+        </ul>  
       </div>
-    </div>
-    <div class="row fade-in">
-      <div class="col-md-6 mb-3">
-        <!--recent logged practie-->
-        <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">🎙️ Recent Sessions</h3>
-          <p class="ms-4 fs-5">- April 29 - 1 hour - Fantasie Impormptu (Chopin)</p>
-          <p class="ms-4 fs-5">- May 1 - 45 minutes - Arabesque (Debussy)</p>
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <!--practice schedule-->
-        <div class="border-offblack card card-hover p-3">
-          <h3 class="text-center">📅 Practice Schedule</h3>
-          <p class="ms-4 fs-5">- May 2 - Arabesque (Debussy)</p>
-          <p class="ms-4 fs-5">- May 3 - Creston Sonata (Creston)</p>
-        </div>
-      </div>
-    </div>
     </div>
   </body>
 </html>
