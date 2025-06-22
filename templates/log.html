@@ -23,8 +23,7 @@
         <!--navigation menu-->
         {% if user.is_authenticated %}
           <a href="{{ url_for('dashboard') }}" class="text-black me-4">Dashboard</a>
-          <a href="#" class="text-black me-4">Stats</a>
-          <a href="{{ url_for('log_page') }}" class="text-black me-4">Logs</a>
+          <a href="{{ url_for('stats') }}" class="text-black me-4">Stats</a>
           <a href="{{ url_for('logout') }}" class="text-black me-4">Log Out</a>
         {% else %}
           <a href="#" class="pt-button pt-button-hover me-3" id="loginButton">Log In</a>
@@ -39,10 +38,12 @@
   <table class="table caption-top table-hover table-bordered">
   <thead class="table-light">
     <tr>
+      <th>#</th>
       <th>Date</th>
       <th>Duration (min)</th>
       <th>Instrument</th>
       <th>Repertoire</th>
+      <th>Composer</th>
       <th>Notes</th>
     </tr>
   </thead>
@@ -74,7 +75,31 @@
         </span>
         <span class="form-label-right">(Instrument)</span>
       </label>
-      <input type="text" id="instrument" name="instrument" class="mb-3" required />
+      <select id="instrument" name="instrument" class="mb-3" required>
+        <option value="" disabled selected>Select an instrument</option>
+        <option value="piano">Piano</option>
+        <option value="guitar">Guitar</option>
+        <option value="violin">Violin</option>
+        <option value="viola">Viola</option>
+        <option value="cello">Cello</option>
+        <option value="uprightBass">Upright Bass</option>
+        <option value="flute">Flute</option>
+        <option value="clarinet">Clarinet</option>
+        <option value="oboe">Oboe</option>
+        <option value="bassoon">Bassoon</option>
+        <option value="sopSax">Soprano Saxophone</option>
+        <option value="altoSax">Alto Saxophone</option>
+        <option value="tenSax">Tenor Saxophone</option>
+        <option value="barSax">Baritone Saxophone</option>
+        <option value="trumpet">Trumpet</option>
+        <option value="trombone">Trombone</option>
+        <option value="frenchHorn">French Horn</option>
+        <option value="tuba">Tuba</option>
+        <option value="harp">Harp</option>
+        <option value="drums">Drums</option>
+        <option value="voice">Voice</option>
+        <option value="other">Other</option>
+      </select>
 
       <label class="form-label-row" for="piece">
         <span class="me-auto">
@@ -84,9 +109,17 @@
       </label>
       <input type="text" id="piece" name="piece" class="mb-3" />
 
+      <label class="form-label-row" for="composer" id="composerLabel">
+        <span class="me-auto">
+          By who?
+        </span>
+        <span class="form-label-right">(Composer)</span>
+      </label>
+      <input type="text" id="composerInput" name="composer" class="mb-3" />
+
       <label class="form-label-row" for="logDuration">
         <span class="me-auto">
-          For how many long?
+          For how long?
           <span style="color: red;"> * </span>
         </span>
         <span class="form-label-right">(Duration in mins.)</span>
