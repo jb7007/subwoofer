@@ -23,11 +23,9 @@ def inject_user():
     return dict(user=current_user)
 
 # user_loader callback for Flask-Login
-@login_manager.user_loader                 # ─── ADDED ───>
+@login_manager.user_loader 
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-# ────────────────────────────────────────────────────────────────────────────<
 
 # config
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -105,6 +103,7 @@ def dashboard():
     return render_template("dashboard.html", user=current_user, minutes=420)
 
 @app.route("/log", methods=["POST", "GET"])
+@login_required
 def log_page():
     return render_template("log.html")
 
