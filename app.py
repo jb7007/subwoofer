@@ -1,8 +1,9 @@
 # importing flask, database, and classes/tables
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user  # ─── ADDED ───>
-from models import db, User, PracticeLog
+from models import db, User, PracticeLog, Piece
 from datetime import datetime
+from instrument_map import instrument_labels as INSTRUMENTS
 
 # password hashing
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -97,10 +98,68 @@ def logout():
     logout_user()  # ← removes the session info
     return redirect("/")
 
-@app.route("/dashboard", methods=["GET"])
+@app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", user=current_user, minutes=420)
+    return render_template("dashboard.html", user=current_user)
+
+@app.route('/api/dash-stats', methods=['GET'])
+@login_required
+def dash_stats():
+    # all logs for the current user
+    logs = PracticeLog.query.filter_by(user_id=current_user.id).all()
+    
+    if not logs:
+        return jsonify({
+            "total_minutes": 0,
+            "common_instrument": "Unlisted",
+            "most_practiced_day": "Unlisted"
+        }), 200
+    
+    # calculate total minutes from all logs
+    total_minutes = sum(log.duration for log in logs)
+        
+    # get frequent instruments and days
+    freq_instruments = {}
+    freq_days = {}
+    for log in logs:
+        if log.instrument:
+            # Count frequency of each instrument
+            freq_instruments[log.instrument] = freq_instruments.get(log.instrument, 0) + 1
+        if log.date:
+            # Count frequency of each day
+            day = log.date.strftime("%Y-%m-%d")
+            freq_days[day] = freq_days.get(day, 0) + 1
+
+    common_key = max(freq_instruments, key=freq_instruments.get, default=None) # get the most common instrument key
+    common_instrument = INSTRUMENTS.get(common_key, "Unlisted") if common_key else "Unlisted" # get the human-readable label
+    common_day_str = max(freq_days, key=freq_days.get, default="Unlisted") # get the most common day as a string
+
+
+@app.route("/api/recent-logs")
+@login_required
+def api_recent_logs():
+    logs = PracticeLog.query.filter_by(user_id=current_user.id).order_by(PracticeLog.date.desc()).limit(5).all()
+
+    serialized = []
+    for log in logs:
+        serialized.append({
+            "date": log.date.strftime("%Y-%m-%d"),
+            "duration": log.duration,
+            "instrument": log.instrument,
+            "piece": log.piece.title if log.piece else "Unlisted",
+            "composer": log.piece.composer if log.piece else "Unlisted",
+            "notes": log.notes or ""
+        })
+
+    return jsonify(serialized)
+
+@app.route("/stats", methods=["GET"])
+@login_required
+def stats():
+    return render_template("stats.html")
+
+
 
 @app.route("/log", methods=["POST", "GET"])
 @login_required
@@ -111,15 +170,42 @@ def log_page():
 @login_required
 def add_log():
     data = request.get_json()
+    
     data["date"] = datetime.fromisoformat(data.get("date"))
-    data["user_id"] = current_user.id 
+    data["user_id"] = current_user.id
+    
+    if "piece" in data: 
+        if "composer" in data:
+            # If both piece and composer are provided, create or find the piece
+            piece_title = data.pop("piece", None)  # this is the piece title from the form
+            composer_name = data.pop("composer", None) 
+            piece = Piece.query.filter_by(title=piece_title, composer=composer_name).first()
+            if not piece:
+                piece = Piece(title=piece_title, composer=composer_name)
+                piece.user_id = current_user.id
+                db.session.add(piece)
+                db.session.commit()
+            data["piece_id"] = piece.id
+        else:
+            piece_title = data.pop("piece", None) # this is the piece title from the form
+            if piece_title:
+                piece = Piece.query.filter_by(title=piece_title).first()
+                if not piece:
+                    piece = Piece(title=piece_title)
+                    piece.user_id = current_user.id
+                    db.session.add(piece)
+                    db.session.commit()
+                data["piece_id"] = piece.id
+            else:
+                data["piece_id"] = None
+    
     new_log = PracticeLog(**data)
     db.session.add(new_log)
     db.session.commit()
     return jsonify({ "message": "log added!" }), 201
 
 @app.route("/api/logs", methods=["GET"])
-@login_required  # now works, because login_manager is set up ─── ADDED ───>
+@login_required 
 def get_logs():
     logs = PracticeLog.query.filter_by(user_id=current_user.id)\
              .order_by(PracticeLog.date.desc()).all()
@@ -132,6 +218,7 @@ def get_logs():
             "duration": log.duration,
             "instrument": log.instrument,
             "piece": log.piece.title if log.piece else "Unlisted",
+            "composer": log.piece.composer if log.piece else "Unlisted",
             "notes": log.notes or ""
         })
     return jsonify(serialized_logs), 200
