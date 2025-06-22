@@ -14,6 +14,32 @@ import {
   logAnimateModalOut
 } from './animation/modal.js';
 
+const instrumentMap = {
+  piano: "Piano",
+  guitar: "Guitar",
+  violin: "Violin",
+  viola: "Viola",
+  cello: "Cello",
+  uprightBass: "Upright Bass",
+  flute: "Flute",
+  clarinet: "Clarinet",
+  oboe: "Oboe",
+  bassoon: "Bassoon",
+  sopSax: "Soprano Saxophone",
+  altoSax: "Alto Saxophone",
+  tenSax: "Tenor Saxophone",
+  barSax: "Baritone Saxophone",
+  trumpet: "Trumpet",
+  trombone: "Trombone",
+  frenchHorn: "French Horn",
+  tuba: "Tuba",
+  harp: "Harp",
+  drums: "Drums",
+  voice: "Voice",
+  other: "Other"
+};
+
+
 export function setupSignupForm() {
   const signupForm = document.getElementById("signupModalBox");
   if (!signupForm) return;
@@ -66,6 +92,34 @@ export function setupLogForm() {
   const logForm = document.getElementById("practiceModalBox");
   if (!logForm) return;
 
+  const pieceInput = document.getElementById("piece");
+  const composerLabel = document.getElementById("composerLabel");
+  const composerInput = document.getElementById("composerInput");
+
+  if (!pieceInput || !composerLabel || !composerInput) return;
+
+  // Initialize composer input state
+  if (pieceInput) {
+    pieceInput.value = ""; // clear piece input on load
+    composerLabel.style.display = "none"; // hide composer label initially
+    composerInput.style.display = "none"; // hide composer input initially
+  }
+
+  pieceInput.addEventListener("input", () => {
+    if (pieceInput.value.trim() !== "") {
+      composerInput.disabled = false; // enable composer input if piece is entered
+      composerInput.value = ""; // clear composer input when piece is entered
+      composerLabel.style.display = "flex"; // show composer label
+      composerInput.style.display = "flex"; // show composer field
+    } else {
+      composerInput.value = ""; // clear composer input if piece is cleared
+      composerInput.disabled = true; // disable composer input if no piece
+      composerLabel.style.display = "none"; // optional: re-hide if field is cleared
+      composerInput.style.display = "none"; // optional: re-hide if field is cleared
+    }
+  });
+
+
   logForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -74,7 +128,8 @@ export function setupLogForm() {
       date: document.getElementById("logDate").value,
       duration: document.getElementById("logDuration").value,
       instrument: document.getElementById("instrument").value,
-      piece_id: document.getElementById("piece")?.value || null,
+      piece: document.getElementById("piece")?.value || null,
+      composer: document.getElementById("composerInput")?.value || null,
       notes: document.getElementById("logNotes")?.value || null
     };
 
@@ -202,10 +257,12 @@ export function renderLogs(logs) {
     const row = document.createElement("tr");
 
     row.innerHTML = `
+      <td>${log.id}</td>
       <td>${log.date}</td>
       <td>${log.duration}</td>
-      <td>${log.instrument}</td>
+      <td>${instrumentMap[log.instrument] || log.instrument}</td>
       <td>${log.piece}</td>
+      <td>${log.composer || "N/A"}</td>
       <td>${log.notes}</td>
     `;
 
