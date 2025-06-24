@@ -26,6 +26,8 @@ class User(UserMixin, db.Model):
 class PracticeLog(db.Model):
     __tablename__ = 'practice_log'
     id = db.Column(db.Integer, primary_key=True)
+    user_log_number = db.Column(db.Integer, nullable=False)
+
     # links each log to a specific user (log.user)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
@@ -42,6 +44,6 @@ class PracticeLog(db.Model):
 class Piece(db.Model):    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
+            
     title = db.Column(db.String(100), nullable=False)
     composer = db.Column(db.String(100), nullable=True)
