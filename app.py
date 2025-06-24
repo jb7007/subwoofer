@@ -1,6 +1,6 @@
 # importing flask, database, and classes/tables
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
-from flask_login import LoginManager, login_required, current_user, login_user, logout_user  # ─── ADDED ───>
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user 
 from models import db, User, PracticeLog, Piece
 from datetime import datetime
 from instrument_map import instrument_labels as INSTRUMENTS
@@ -118,6 +118,8 @@ def dash_stats():
     
     # calculate total minutes from all logs
     total_minutes = sum(log.duration for log in logs)
+    temp_avg = total_minutes / len(logs) if logs else 0.0
+    avg_minutes = round(temp_avg, 2)  # round to 2 decimal places 
         
     # get frequent instruments and days
     freq_instruments = {}
@@ -134,9 +136,16 @@ def dash_stats():
     common_key = max(freq_instruments, key=freq_instruments.get, default=None) # get the most common instrument key
     common_instrument = INSTRUMENTS.get(common_key, "Unlisted") if common_key else "Unlisted" # get the human-readable label
     common_day_str = max(freq_days, key=freq_days.get, default="Unlisted") # get the most common day as a string
+    
+    return jsonify({
+        "total_minutes": total_minutes,
+        "average_minutes": avg_minutes,
+        "common_instrument": common_instrument,
+        "most_practiced_day": common_day_str
+    }), 200
 
 
-@app.route("/api/recent-logs")
+@app.route("/api/recent-logs", methods=["GET"])
 @login_required
 def api_recent_logs():
     logs = PracticeLog.query.filter_by(user_id=current_user.id).order_by(PracticeLog.date.desc()).limit(5).all()
@@ -144,7 +153,7 @@ def api_recent_logs():
     serialized = []
     for log in logs:
         serialized.append({
-            "date": log.date.strftime("%Y-%m-%d"),
+            "date": log.date.strftime("%b %d, %Y"),
             "duration": log.duration,
             "instrument": log.instrument,
             "piece": log.piece.title if log.piece else "Unlisted",
@@ -159,8 +168,6 @@ def api_recent_logs():
 def stats():
     return render_template("stats.html")
 
-
-
 @app.route("/log", methods=["POST", "GET"])
 @login_required
 def log_page():
@@ -174,30 +181,32 @@ def add_log():
     data["date"] = datetime.fromisoformat(data.get("date"))
     data["user_id"] = current_user.id
     
-    if "piece" in data: 
-        if "composer" in data:
-            # If both piece and composer are provided, create or find the piece
-            piece_title = data.pop("piece", None)  # this is the piece title from the form
-            composer_name = data.pop("composer", None) 
-            piece = Piece.query.filter_by(title=piece_title, composer=composer_name).first()
-            if not piece:
-                piece = Piece(title=piece_title, composer=composer_name)
-                piece.user_id = current_user.id
-                db.session.add(piece)
-                db.session.commit()
-            data["piece_id"] = piece.id
-        else:
-            piece_title = data.pop("piece", None) # this is the piece title from the form
-            if piece_title:
-                piece = Piece.query.filter_by(title=piece_title).first()
-                if not piece:
-                    piece = Piece(title=piece_title)
-                    piece.user_id = current_user.id
-                    db.session.add(piece)
-                    db.session.commit()
-                data["piece_id"] = piece.id
-            else:
-                data["piece_id"] = None
+    piece_title = data.pop("piece", None)
+    composer_name = data.pop("composer", None)
+
+    if piece_title:
+        # Normalize inputs
+        piece_title = piece_title.strip()
+        composer_name = composer_name.strip() if composer_name else "Unknown"
+
+        # Try to find by both title and composer
+        piece = Piece.query.filter_by(title=piece_title, composer=composer_name).first()
+        if not piece:
+            piece = Piece(title=piece_title, composer=composer_name, user_id=current_user.id)
+            db.session.add(piece)
+            db.session.commit()
+
+        data["piece_id"] = piece.id
+    else:
+        data["piece_id"] = None
+        
+    latest_log = PracticeLog.query.filter_by(user_id=current_user.id)\
+        .order_by(PracticeLog.user_log_number.desc())\
+            .first()
+                              
+    next_index = (latest_log.user_log_number + 1) if latest_log else 1
+    data["user_log_number"] = next_index
+
     
     new_log = PracticeLog(**data)
     db.session.add(new_log)
@@ -208,13 +217,13 @@ def add_log():
 @login_required 
 def get_logs():
     logs = PracticeLog.query.filter_by(user_id=current_user.id)\
-             .order_by(PracticeLog.date.desc()).all()
-
+        .order_by(PracticeLog.date.desc()).all()
+    
     serialized_logs = []
     for log in logs:
         serialized_logs.append({
-            "id": log.id,
-            "date": log.date.strftime("%Y-%m-%d"),
+            "id": log.user_log_number,
+            "date": log.date.strftime("%b %d, %Y"),
             "duration": log.duration,
             "instrument": log.instrument,
             "piece": log.piece.title if log.piece else "Unlisted",
