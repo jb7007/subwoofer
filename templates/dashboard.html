@@ -33,22 +33,34 @@
     <!--welcome banner-->
     <div class="mb-4 text-center">
       <h1 class="hero-title">Welcome back, {{ user.username }}!</h1>
-      <p>You’ve practiced for <b>{{ minutes }}</b> minutes with us.</p>
+      <h2 class="hero-subtitle">You’ve practiced for <span id="total-mins-header">Loading...</span> minutes with us.</h2>
+      <p>On average, you spend about <span id="avg-mins-header">Loading...</span> minutes practicing each session.</p>
     </div>
     <hr>
     <!--cards-->
     <div class="row">
       <div class="col" style="text-align: center;">
         <span class="hero-subtitle">RECENT LOGS</span>
+        <ul id="recent-logs" style="text-align: left;">
+          <!-- insert javascript here -->
+        </ul>
       </div>
       <div class="col" style="text-align: center;">
         <span class="hero-subtitle">QUICK STATS</span>
-        <ul>
-          <li>Most Used Instrument: {{common_instrument}}</li>
-          <li>Tea</li>
-          <li>Milk</li>
+        <ul style="text-align: left;">
+          <li>Most Used Instrument: <span id="top-instrument">Loading...</span></li>
+          <li>Total Practice Time: <span id="total-mins">Loading...</span></li>
+          <li>Average Practice Time: <span id="avg-mins">Loading...</span></li>
         </ul>  
       </div>
     </div>
+
+    <!-- GSAP core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- split type -->
+  <script src="https://unpkg.com/split-type"></script>
+
+  <script type="module" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
   </body>
 </html>
