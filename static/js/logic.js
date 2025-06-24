@@ -14,30 +14,102 @@ import {
   logAnimateModalOut
 } from './animation/modal.js';
 
+let logsData = []; // raw logs fetched from Flask
+let currentSort = { field: "date", asc: false };
+
 const instrumentMap = {
-  piano: "Piano",
-  guitar: "Guitar",
+  // Strings
   violin: "Violin",
   viola: "Viola",
   cello: "Cello",
-  uprightBass: "Upright Bass",
-  flute: "Flute",
-  clarinet: "Clarinet",
-  oboe: "Oboe",
-  bassoon: "Bassoon",
-  sopSax: "Soprano Saxophone",
-  altoSax: "Alto Saxophone",
-  tenSax: "Tenor Saxophone",
-  barSax: "Baritone Saxophone",
-  trumpet: "Trumpet",
-  trombone: "Trombone",
-  frenchHorn: "French Horn",
-  tuba: "Tuba",
+  doubleBass: "Double Bass",
   harp: "Harp",
-  drums: "Drums",
+
+  // Woodwinds
+  piccolo: "Piccolo",
+  flute: "Flute",
+  oboe: "Oboe",
+  englishHorn: "English Horn",
+  clarinetEb: "E♭ Clarinet",
+  clarinetBb: "B♭ Clarinet",
+  bassClarinet: "Bass Clarinet",
+  contraClarinet: "Contrabass Clarinet",
+  bassoon: "Bassoon",
+  contrabassoon: "Contrabassoon",
+
+  // Saxophones
+  sopranoSax: "Soprano Saxophone",
+  altoSax: "Alto Saxophone",
+  tenorSax: "Tenor Saxophone",
+  baritoneSax: "Baritone Saxophone",
+  bassSax: "Bass Saxophone",
+
+  // Brass
+  trumpet: "Trumpet",
+  cornet: "Cornet",
+  flugelhorn: "Flugelhorn",
+  frenchHorn: "French Horn",
+
+  // Low Brass
+  trombone: "Trombone",
+  bassTrombone: "Bass Trombone",
+  euphonium: "Euphonium",
+  baritoneHorn: "Baritone Horn",
+  tuba: "Tuba",
+
+  // Percussion
+  snareDrum: "Snare Drum",
+  bassDrum: "Bass Drum",
+  cymbals: "Cymbals",
+  timpani: "Timpani",
+  xylophone: "Xylophone",
+  marimba: "Marimba",
+  vibraphone: "Vibraphone",
+  glockenspiel: "Glockenspiel",
+  drumSet: "Drum Set",
+  multiPercussion: "Multi-Percussion Setup",
+  accessoryPercussion: "Accessory Percussion",
+  percussionOther: "Other / Unlisted Percussion",
+
+  // Other
+  piano: "Piano",
+  organ: "Organ",
+  celesta: "Celesta",
+  guitar: "Guitar",
+  electricGuitar: "Electric Guitar",
+  bassGuitar: "Bass Guitar",
+  ukulele: "Ukulele",
   voice: "Voice",
   other: "Other"
 };
+
+// getter so other files can access logsData safely
+export function setLogsData(data) {
+  logsData = data;
+}
+
+export function sortLogs(field) {
+  if (currentSort.field === field) {
+    currentSort.asc = !currentSort.asc;
+  } else {
+    currentSort.field = field;
+    currentSort.asc = true;
+  }
+
+  const sorted = [...logsData].sort((a, b) => {
+    let valA = a[field];
+    let valB = b[field];
+    if (field === "date") {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    }
+    if (valA < valB) return currentSort.asc ? -1 : 1;
+    if (valA > valB) return currentSort.asc ? 1 : -1;
+    return 0;
+  });
+
+  renderLogs(sorted);
+}
 
 
 export function setupSignupForm() {
@@ -160,6 +232,19 @@ export function setupLogForm() {
   });
 }
 
+export function hiddenInputSetup(hiddenFields) {
+  hiddenFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.style.display = "none"; // Hide composer input
+      field.disabled = true; // Disable composer input
+      if (fieldId === "composerInput") {
+        field.value = ""; // Clear composer input on close
+      }
+    }
+  });
+}
+
 export function setupModalListeners() {
   const modals = {
     signup: {
@@ -169,7 +254,8 @@ export function setupModalListeners() {
       modal: "signupModal",
       animateIn: signupAnimateModalIn,
       animateOut: signupAnimateModalOut,
-      form: "signupModalBox"
+      form: "signupModalBox",
+      hiddenFields: null
     },
     login: {
       openButtons: ["loginButton"],
@@ -178,7 +264,8 @@ export function setupModalListeners() {
       modal: "loginModal",
       animateIn: loginAnimateModalIn,
       animateOut: loginAnimateModalOut,
-      form: "loginModalBox"
+      form: "loginModalBox",
+      hiddenFields: null
     },
     log: {
       openButtons: ["openLogModal"],
@@ -187,11 +274,12 @@ export function setupModalListeners() {
       modal: "logModal",
       animateIn: logAnimateModalIn,
       animateOut: logAnimateModalOut,
-      form: "practiceModalBox"
+      form: "practiceModalBox",
+      hiddenFields: ["composerInput", "composerLabel"]
     }
   };
 
-  Object.values(modals).forEach(({ openButtons, closeButton, cancelButton, modal, animateIn, animateOut, form }) => {
+  Object.values(modals).forEach(({ openButtons, closeButton, cancelButton, modal, animateIn, animateOut, form, hiddenFields }) => {
     const modalEl = document.getElementById(modal);
     if (!modalEl) return;
 
@@ -200,6 +288,7 @@ export function setupModalListeners() {
       if (e.key === "Escape" && modalEl.classList.contains("active")) {
         e.preventDefault();
         e.stopPropagation();
+        // Call animateOut if available, else close modal
         if (typeof animateOut === "function") animateOut();
         else closeModal(modalEl);
       }
@@ -209,6 +298,8 @@ export function setupModalListeners() {
       const btn = document.getElementById(id);
       if (!btn) return;
       btn.addEventListener("click", e => {
+        if (modalEl.classList.contains("active")) return; // Prevent re-opening if already active
+        if (hiddenFields) hiddenInputSetup(hiddenFields);
         e.preventDefault();
         document.getElementById(form)?.reset();
         if (typeof animateIn === "function") animateIn();
@@ -267,6 +358,46 @@ export function renderLogs(logs) {
     `;
 
     tableBody.appendChild(row);
+  });
+}
+
+export function renderRecentLogs(logs) {
+  const recentLogs = document.getElementById("recent-logs");
+  if (!recentLogs) return;
+
+  recentLogs.innerHTML = ""; // Clear it first
+
+  // Group logs by date
+  const grouped = {};
+
+  logs.forEach(log => {
+    if (!grouped[log.date]) { // Initialize array for this date if not already present
+      grouped[log.date] = [];
+    }
+    grouped[log.date].push(log); // Add log to the date group
+  });
+
+  // Render each date group
+  Object.keys(grouped).forEach(date => {
+    const dateHeading = document.createElement("li"); // Create a list item for the date
+    dateHeading.className = "log-date-heading"; 
+    dateHeading.innerHTML = `<strong>${date}</strong>`;
+    recentLogs.appendChild(dateHeading); // Append the date heading to the recent logs container
+
+    const dateGroup = document.createElement("ul"); // Create a new unordered list for this date's logs
+    dateGroup.className = "log-date-group"; 
+    recentLogs.appendChild(dateGroup); // Append the date group to the recent logs container
+
+    grouped[date].forEach(log => { // For each log in this date group
+      const logItem = document.createElement("li"); // Create a list item for the log
+      logItem.className = "recent-log-item";
+      logItem.innerHTML = `
+        ${instrumentMap[log.instrument] || log.instrument} - 
+        <em>${log.piece || "N/A"} by ${log.composer || "Unknown"}
+        <span class="log-duration">(${log.duration} mins)</span></em>
+      `;
+      dateGroup.appendChild(logItem); // Append the log item to the date group
+    });
   });
 }
 
