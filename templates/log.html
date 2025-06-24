@@ -33,26 +33,39 @@
   </div>
 
   <!-- Log Practice Button -->
-  <button id="openLogModal" class="btn btn-dark mb-4">Log Practice</button>
+  <div>
+    <button id="openLogModal" class="btn btn-dark mb-4">Log Practice</button>
+    <p class="text-muted mb-4">
+      <em>Click the button above to log your practice sessions.</em>
+  </div>
 
   <table class="table caption-top table-hover table-bordered">
-  <thead class="table-light">
-    <tr>
-      <th>#</th>
-      <th>Date</th>
-      <th>Duration (min)</th>
-      <th>Instrument</th>
-      <th>Repertoire</th>
-      <th>Composer</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody id="log-table-body">
-    <!-- JavaScript will insert rows here -->
-  </tbody>
-</table>
+    <thead class="table-light">
+      <tr>
+        <th data-sort="id">Log ID #</th>
+        <th data-sort="date">Date</th>
+        <th data-sort="duration">Duration (min)</th>
+        <th data-sort="instrument">Instrument</th>
+        <th data-sort="piece">Repertoire</th>
+        <th>Composer</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody id="log-table-body">
+      <!-- JavaScript will insert rows here -->
+      </tbody>
+  </table>
 
-
+  {% if user.logs %}
+    <p class="text-muted" style="text-align: center;">
+      <em>Click on a log entry to view more details.</em>
+    </p>
+  {% else %}
+    <p class="text-muted">
+      <em>No practice logs found. Start logging your practice sessions!</em>
+    </p>
+  {% endif %}
+  
   <div class="modal-overlay" id="logModal">
     <form class="modal-content" id="practiceModalBox">
       <button class="modal-close" id="practiceCloseModal" type="button">&times;</button>
@@ -77,28 +90,76 @@
       </label>
       <select id="instrument" name="instrument" class="mb-3" required>
         <option value="" disabled selected>Select an instrument</option>
-        <option value="piano">Piano</option>
-        <option value="guitar">Guitar</option>
-        <option value="violin">Violin</option>
-        <option value="viola">Viola</option>
-        <option value="cello">Cello</option>
-        <option value="uprightBass">Upright Bass</option>
-        <option value="flute">Flute</option>
-        <option value="clarinet">Clarinet</option>
-        <option value="oboe">Oboe</option>
-        <option value="bassoon">Bassoon</option>
-        <option value="sopSax">Soprano Saxophone</option>
-        <option value="altoSax">Alto Saxophone</option>
-        <option value="tenSax">Tenor Saxophone</option>
-        <option value="barSax">Baritone Saxophone</option>
-        <option value="trumpet">Trumpet</option>
-        <option value="trombone">Trombone</option>
-        <option value="frenchHorn">French Horn</option>
-        <option value="tuba">Tuba</option>
-        <option value="harp">Harp</option>
-        <option value="drums">Drums</option>
-        <option value="voice">Voice</option>
-        <option value="other">Other</option>
+        <optgroup label="Strings">
+          <option value="violin">Violin</option>
+          <option value="viola">Viola</option>
+          <option value="cello">Cello</option>
+          <option value="doubleBass">Double Bass</option>
+          <option value="harp">Harp</option>
+        </optgroup>
+
+        <optgroup label="Woodwinds">
+          <option value="piccolo">Piccolo</option>
+          <option value="flute">Flute</option>
+          <option value="oboe">Oboe</option>
+          <option value="englishHorn">English Horn</option>
+          <option value="clarinetEb">E♭ Clarinet</option>
+          <option value="clarinetBb">B♭ Clarinet</option>
+          <option value="bassClarinet">Bass Clarinet</option>
+          <option value="contraClarinet">Contrabass Clarinet</option>
+          <option value="bassoon">Bassoon</option>
+          <option value="contrabassoon">Contrabassoon</option>
+        </optgroup>
+
+        <optgroup label="Saxophones">
+          <option value="sopranoSax">Soprano Saxophone</option>
+          <option value="altoSax">Alto Saxophone</option>
+          <option value="tenorSax">Tenor Saxophone</option>
+          <option value="baritoneSax">Baritone Saxophone</option>
+          <option value="bassSax">Bass Saxophone</option>
+        </optgroup>
+
+        <optgroup label="Brass">
+          <option value="trumpet">Trumpet</option>
+          <option value="cornet">Cornet</option>
+          <option value="flugelhorn">Flugelhorn</option>
+          <option value="frenchHorn">French Horn</option>
+        </optgroup>
+
+        <optgroup label="Low Brass">
+          <option value="trombone">Trombone</option>
+          <option value="bassTrombone">Bass Trombone</option>
+          <option value="euphonium">Euphonium</option>
+          <option value="baritoneHorn">Baritone Horn</option>
+          <option value="tuba">Tuba</option>
+        </optgroup>
+
+        <optgroup label="Percussion">
+          <option value="snareDrum">Snare Drum</option>
+          <option value="bassDrum">Bass Drum</option>
+          <option value="cymbals">Cymbals</option>
+          <option value="timpani">Timpani</option>
+          <option value="xylophone">Xylophone</option>
+          <option value="marimba">Marimba</option>
+          <option value="vibraphone">Vibraphone</option>
+          <option value="glockenspiel">Glockenspiel</option>
+          <option value="drumSet">Drum Set</option>
+          <option value="multiPercussion">Multi-Percussion Setup</option>
+          <option value="accessoryPercussion">Accessory Percussion</option>
+          <option value="percussionOther">Other / Unlisted Percussion</option>
+        </optgroup>
+
+        <optgroup label="Other">
+          <option value="piano">Piano</option>
+          <option value="organ">Organ</option>
+          <option value="celesta">Celesta</option>
+          <option value="guitar">Guitar</option>
+          <option value="electricGuitar">Electric Guitar</option>
+          <option value="bassGuitar">Bass Guitar</option>
+          <option value="ukulele">Ukulele</option>
+          <option value="voice">Voice</option>
+          <option value="other">Other</option>
+        </optgroup>
       </select>
 
       <label class="form-label-row" for="piece">
