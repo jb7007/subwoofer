@@ -77,3 +77,13 @@ export async function fetchLogs() {
   };
 }
 
+export async function recentLogs() {
+  const response = await fetch(`/api/recent-logs`);
+
+  const data = await response.json();
+  return {
+    ok: response.ok,
+    data
+  };
+}
+
