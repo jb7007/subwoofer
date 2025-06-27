@@ -101,7 +101,8 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", user=current_user)
+    date = datetime.now().strftime("%B %d, %Y")
+    return render_template("dashboard.html", user=current_user, date=date)
 
 @app.route('/api/dash-stats', methods=['GET'])
 @login_required
