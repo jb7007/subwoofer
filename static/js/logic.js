@@ -371,8 +371,8 @@ export function renderRecentLogs(logs) {
   const grouped = {};
 
   logs.forEach(log => {
-    if (!grouped[log.date]) { // Initialize array for this date if not already present
-      grouped[log.date] = [];
+    if (!grouped[log.date]) { // Initialize array for logs for this date if not already present
+      grouped[log.date] = []; // the date is the key, the log is the value
     }
     grouped[log.date].push(log); // Add log to the date group
   });
@@ -385,7 +385,7 @@ export function renderRecentLogs(logs) {
     recentLogs.appendChild(dateHeading); // Append the date heading to the recent logs container
 
     const dateGroup = document.createElement("ul"); // Create a new unordered list for this date's logs
-    dateGroup.className = "log-date-group"; 
+    dateGroup.className = "log-date-group";  
     recentLogs.appendChild(dateGroup); // Append the date group to the recent logs container
 
     grouped[date].forEach(log => { // For each log in this date group
