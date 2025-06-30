@@ -225,6 +225,7 @@ def get_logs():
         serialized_logs.append({
             "id": log.user_log_number,
             "date": log.date.strftime("%b %d, %Y"),
+            "isodate": log.date.strftime("%Y-%m-%d"),
             "duration": log.duration,
             "instrument": log.instrument,
             "piece": log.piece.title if log.piece else "Unlisted",
