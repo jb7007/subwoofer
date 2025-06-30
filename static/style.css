@@ -340,6 +340,14 @@ thead th {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.dash-card-title {
+  font-size: 1.25rem;
+  font-weight: 300;
+  text-align: center;
+  color: #555;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .log-list {
   width: 100%;
   max-width: 300px;
@@ -387,4 +395,54 @@ thead th {
 .instrument-stat-list {
   list-style: none;
   text-align: right;
+}
+
+.two-column-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.total-practice-time-container {
+  flex: 0 0 auto;
+}
+
+.daily-practice-time-container {
+  flex: 0 0 auto;
+}
+
+.total-bar-chart {
+  flex: 1;
+  min-width: 100px;
+  height: 100px;
+}
+
+.daily-gauge {
+  width: 100%;
+  height: 100px;
+}
+
+.total-chart {
+  width: 100%;
+  height: 100px;
+}
+
+#total-chart {
+  width: 100%;
+  height: 125px;
+  overflow: hidden;
+}
+
+#daily-gauge {
+  width: 100%;
+  height: 125px;
+  overflow: hidden;
+}
+
+#daily-gauge .plot-container,
+#daily-gauge svg {
+  padding: 0 !important;
+  margin: 0 !important;
 }
