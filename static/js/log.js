@@ -1,6 +1,12 @@
 // static/js/log.js
-import { setupModalListeners, setupLogForm, renderLogs, sortLogs, setLogsData } from "./logic.js";
-import { fetchLogs } from "./api.js";
+import {
+  setupModalListeners,
+  setupLogForm,
+  renderLogs,
+  sortLogs,
+  setLogsData,
+} from "./logic.js";
+import { fetchLogs } from "./api/index.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   setupModalListeners();
@@ -12,13 +18,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (ok) {
       setLogsData(data);
       renderLogs(data);
-    } 
-    else console.error("Failed to load logs.");
+    } else console.error("Failed to load logs.");
   } catch (err) {
     console.error("Error fetching logs:", err);
   }
 
-  document.querySelectorAll("[data-sort]").forEach(header => {
+  document.querySelectorAll("[data-sort]").forEach((header) => {
     header.addEventListener("click", () => {
       const field = header.getAttribute("data-sort");
       sortLogs(field);
