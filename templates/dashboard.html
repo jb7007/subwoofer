@@ -55,10 +55,10 @@
               <hr style="width: 17%" />
               <div class="card-row" style="margin-bottom: 1rem;">
                 <div class="dash-card">
-                  <div class="daily-header">
+                  <div class="dash-card-header">
                     <h3 class="dash-card-title">TODAY'S TOTAL MINUTES</h3>
-                    <hr style="margin: 0.25rem" />
                   </div>
+                  <hr style="margin: 0.25rem" />
                   <div class="daily-gauge" id="daily-gauge"></div>
                   <hr style="margin: 0.25rem" />
                   <p id="daily-practice-txt" style="text-align: center; margin-bottom: 0;">
@@ -66,19 +66,26 @@
                   </p>
                 </div>
                 <div class="dash-card">
-                  <div class="daily-header">
+                  <div class="dash-card-header">
                     <h3 class="dash-card-title">ALL-TIME TOTAL MINUTES</h3>
-                    <hr style="margin: 0.25rem" />
                   </div>
+                  <hr style="margin: 0.25rem" />
                   <div class="total-chart" id="total-chart"></div>
                   <hr style="margin: 0.25rem" />
                   <p id="total-practice-txt" style="text-align: center; margin-bottom: 0;">
                     <em>Loading...</em>
                   </p>
                 </div>
-                <div class="dash-card-streak">
-                  <h3 id="streak">Loading...</h3>
-                  <p>Longest Streak</p>
+                <div class="dash-card">
+                  <div class="dash-card-header">
+                    <h3 class="dash-card-title">MEAN TIME PER LOG</h3>
+                  </div>
+                  <hr style="margin: 0.25rem" />
+                  <div class="avg-chart" id="avg-chart"></div>
+                  <hr style="margin: 0.25rem" />
+                  <p style="text-align: center; margin-bottom: 0;">
+                    <em>~<span id="avg-practice-txt">Loading...</span> per session</em>
+                  </p>
                 </div>
               </div>
             </div>
@@ -99,7 +106,7 @@
                           <h2 id="top-instrument">Loading...</h2>
                           <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem;" />
                           <p>
-                            <em>Most Practiced Piece: <span class="common-piece">Loading...</span></em>
+                            <em>Most Practiced Piece: <span id="common-piece">Loading...</span></em>
                           </p>
                         </div>
                         <div class="instrument-info">
