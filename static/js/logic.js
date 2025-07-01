@@ -2,8 +2,14 @@
 // handles signup + log form logic, and sets up modal behavior
 
 // API functions (allow getting/posting data)
-import { registerUser, loginUser, submitLog, fetchLogs } from './api.js';
-import { closeModal } from './modal.js';
+import {
+  registerUser,
+  loginUser,
+  submitLog,
+  fetchLogs,
+  fetchPieces,
+} from "./api/index.js";
+import { closeModal } from "./modal.js";
 // modal animation functions (if available)
 import {
   signupAnimateModalIn,
@@ -11,8 +17,10 @@ import {
   loginAnimateModalIn,
   loginAnimateModalOut,
   logAnimateModalIn,
-  logAnimateModalOut
-} from './animation/modal.js';
+  logAnimateModalOut,
+} from "./animation/modal.js";
+
+import { renderTxtShort } from "./plot.js";
 
 let logsData = []; // raw logs fetched from Flask
 let currentSort = { field: "date", asc: false };
@@ -80,7 +88,7 @@ const instrumentMap = {
   bassGuitar: "Bass Guitar",
   ukulele: "Ukulele",
   voice: "Voice",
-  other: "Other"
+  other: "Other",
 };
 
 // getter so other files can access logsData safely
@@ -110,7 +118,6 @@ export function sortLogs(field) {
 
   renderLogs(sorted);
 }
-
 
 export function setupSignupForm() {
   const signupForm = document.getElementById("signupModalBox");
@@ -191,18 +198,41 @@ export function setupLogForm() {
     }
   });
 
-
   logForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // gather data from form fields
+    const dropdownValue = document.getElementById("pieceDropdown").value;
+    const manualTitle = document.getElementById("piece")?.value.trim();
+    const manualComposer = document
+      .getElementById("composerInput")
+      ?.value.trim();
+
+    let pieceTitle = null;
+    let composer = null;
+
+    if (dropdownValue) {
+      // Use the saved piece from the dropdown
+      const [title, comp] = dropdownValue.split(":::");
+      pieceTitle = title?.trim();
+      composer = comp?.trim();
+    } else if (manualTitle) {
+      // Use the manually typed piece
+      pieceTitle = manualTitle;
+      composer = manualComposer || "Unknown";
+    } else {
+      // No piece info given
+      pieceTitle = null;
+      composer = null;
+    }
+
     const logData = {
       date: document.getElementById("logDate").value,
       duration: document.getElementById("logDuration").value,
       instrument: document.getElementById("instrument").value,
-      piece: document.getElementById("piece")?.value || null,
-      composer: document.getElementById("composerInput")?.value || null,
-      notes: document.getElementById("logNotes")?.value || null
+      piece: pieceTitle,
+      composer: composer,
+      notes: document.getElementById("logNotes")?.value || null,
     };
 
     try {
@@ -225,7 +255,6 @@ export function setupLogForm() {
       if (fetchOk) {
         renderLogs(logs);
       }
-
     } catch {
       alert("network error.");
     }
@@ -233,7 +262,7 @@ export function setupLogForm() {
 }
 
 export function hiddenInputSetup(hiddenFields) {
-  hiddenFields.forEach(fieldId => {
+  hiddenFields.forEach((fieldId) => {
     const field = document.getElementById(fieldId);
     if (field) {
       field.style.display = "none"; // Hide composer input
@@ -255,7 +284,7 @@ export function setupModalListeners() {
       animateIn: signupAnimateModalIn,
       animateOut: signupAnimateModalOut,
       form: "signupModalBox",
-      hiddenFields: null
+      hiddenFields: null,
     },
     login: {
       openButtons: ["loginButton"],
@@ -265,7 +294,7 @@ export function setupModalListeners() {
       animateIn: loginAnimateModalIn,
       animateOut: loginAnimateModalOut,
       form: "loginModalBox",
-      hiddenFields: null
+      hiddenFields: null,
     },
     log: {
       openButtons: ["openLogModal"],
@@ -275,67 +304,81 @@ export function setupModalListeners() {
       animateIn: logAnimateModalIn,
       animateOut: logAnimateModalOut,
       form: "practiceModalBox",
-      hiddenFields: ["composerInput", "composerLabel"]
-    }
+      hiddenFields: ["composerInput", "composerLabel"],
+    },
   };
 
-  Object.values(modals).forEach(({ openButtons, closeButton, cancelButton, modal, animateIn, animateOut, form, hiddenFields }) => {
-    const modalEl = document.getElementById(modal);
-    if (!modalEl) return;
+  Object.values(modals).forEach(
+    ({
+      openButtons,
+      closeButton,
+      cancelButton,
+      modal,
+      animateIn,
+      animateOut,
+      form,
+      hiddenFields,
+    }) => {
+      const modalEl = document.getElementById(modal);
+      if (!modalEl) return;
 
-    document.addEventListener("keydown", e => {
-      // Close modal on Escape key if it's active
-      if (e.key === "Escape" && modalEl.classList.contains("active")) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Call animateOut if available, else close modal
-        if (typeof animateOut === "function") animateOut();
-        else closeModal(modalEl);
-      }
-    });
-
-    openButtons.forEach(id => {
-      const btn = document.getElementById(id);
-      if (!btn) return;
-      btn.addEventListener("click", e => {
-        if (modalEl.classList.contains("active")) return; // Prevent re-opening if already active
-        if (hiddenFields) hiddenInputSetup(hiddenFields);
-        e.preventDefault();
-        document.getElementById(form)?.reset();
-        if (typeof animateIn === "function") animateIn();
-        else modalEl.classList.add("active");
+      document.addEventListener("keydown", (e) => {
+        // Close modal on Escape key if it's active
+        if (e.key === "Escape" && modalEl.classList.contains("active")) {
+          e.preventDefault();
+          e.stopPropagation();
+          // Call animateOut if available, else close modal
+          if (typeof animateOut === "function") animateOut();
+          else closeModal(modalEl);
+        }
       });
-    });
 
-    if (closeButton) {
-      const btn = document.getElementById(closeButton);
-      btn?.addEventListener("click", e => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof animateOut === "function") animateOut();
-        else closeModal(modalEl);
+      openButtons.forEach((id) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.addEventListener("click", (e) => {
+          if (modalEl.classList.contains("active")) return; // Prevent re-opening if already active
+          if (hiddenFields) hiddenInputSetup(hiddenFields);
+          e.preventDefault();
+          document.getElementById(form)?.reset();
+
+          populatePieceDropdown();
+
+          if (typeof animateIn === "function") animateIn();
+          else modalEl.classList.add("active");
+        });
+      });
+
+      if (closeButton) {
+        const btn = document.getElementById(closeButton);
+        btn?.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (typeof animateOut === "function") animateOut();
+          else closeModal(modalEl);
+        });
+      }
+
+      if (cancelButton) {
+        const btn = document.getElementById(cancelButton);
+        btn?.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (typeof animateOut === "function") animateOut();
+          else closeModal(modalEl);
+        });
+      }
+
+      window.addEventListener("click", (e) => {
+        if (e.target === modalEl) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (typeof animateOut === "function") animateOut();
+          else closeModal(modalEl);
+        }
       });
     }
-
-    if (cancelButton) {
-      const btn = document.getElementById(cancelButton);
-      btn?.addEventListener("click", e => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof animateOut === "function") animateOut();
-        else closeModal(modalEl);
-      });
-    }
-
-    window.addEventListener("click", e => {
-      if (e.target === modalEl) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof animateOut === "function") animateOut();
-        else closeModal(modalEl);
-      }
-    });
-  });
+  );
 }
 
 export function renderLogs(logs) {
@@ -344,7 +387,7 @@ export function renderLogs(logs) {
 
   tableBody.innerHTML = ""; // Clear current rows
 
-  logs.forEach(log => {
+  logs.forEach((log) => {
     const row = document.createElement("tr");
 
     row.innerHTML = `
@@ -370,34 +413,62 @@ export function renderRecentLogs(logs) {
   // Group logs by date
   const grouped = {};
 
-  logs.forEach(log => {
-    if (!grouped[log.date]) { // Initialize array for logs for this date if not already present
+  logs.forEach((log) => {
+    if (!grouped[log.date]) {
+      // Initialize array for logs for this date if not already present
       grouped[log.date] = []; // the date is the key, the log is the value
     }
     grouped[log.date].push(log); // Add log to the date group
   });
 
   // Render each date group
-  Object.keys(grouped).forEach(date => {
+  Object.keys(grouped).forEach((date) => {
     const dateHeading = document.createElement("li"); // Create a list item for the date
-    dateHeading.className = "log-date-heading"; 
+    dateHeading.className = "log-date-heading";
     dateHeading.innerHTML = `<strong>${date}</strong>`;
     recentLogs.appendChild(dateHeading); // Append the date heading to the recent logs container
 
     const dateGroup = document.createElement("ul"); // Create a new unordered list for this date's logs
-    dateGroup.className = "log-date-group";  
+    dateGroup.className = "log-date-group";
     recentLogs.appendChild(dateGroup); // Append the date group to the recent logs container
+    let count = 0;
 
-    grouped[date].forEach(log => { // For each log in this date group
+    grouped[date].forEach((log) => {
+      // For each log in this date group
       const logItem = document.createElement("li"); // Create a list item for the log
       logItem.className = "recent-log-item";
       logItem.innerHTML = `
         ${instrumentMap[log.instrument] || log.instrument} - 
         <em>${log.piece || "N/A"} by ${log.composer || "Unknown"}
-        <span class="log-duration">(${log.duration} mins)</span></em>
+        (<span class="log-duration" id="${count}durationIs${
+        log.duration
+      }">Loading...</span>)</em>
       `;
+
+      let listId = count + "durationIs" + log.duration;
       dateGroup.appendChild(logItem); // Append the log item to the date group
+      count++;
+      renderTxtShort(listId, log.duration);
     });
   });
 }
 
+export async function populatePieceDropdown() {
+  const dropdown = document.getElementById("pieceDropdown");
+  if (!dropdown) return;
+
+  const { ok, data } = await fetchPieces();
+  if (!ok) {
+    console.warn("Could not load pieces.");
+    return;
+  }
+
+  dropdown.innerHTML = '<option value="">-- Select a piece --</option>';
+
+  data.forEach((piece) => {
+    const option = document.createElement("option");
+    option.value = `${piece.title}:::${piece.composer}`;
+    option.textContent = `${piece.title} (${piece.composer})`;
+    dropdown.appendChild(option);
+  });
+}

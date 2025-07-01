@@ -47,3 +47,4 @@ class Piece(db.Model):
             
     title = db.Column(db.String(100), nullable=False)
     composer = db.Column(db.String(100), nullable=True)
+    log_time = db.Column(db.Integer, nullable=False)

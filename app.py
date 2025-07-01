@@ -1,4 +1,5 @@
 # importing flask, database, and classes/tables
+from collections import defaultdict
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user 
 from models import db, User, PracticeLog, Piece
@@ -123,26 +124,33 @@ def dash_stats():
     avg_minutes = round(temp_avg, 2)  # round to 2 decimal places 
         
     # get frequent instruments and days
-    freq_instruments = {}
-    freq_days = {}
+    freq_instruments = defaultdict(int)
     for log in logs:
         if log.instrument:
             # Count frequency of each instrument
-            freq_instruments[log.instrument] = freq_instruments.get(log.instrument, 0) + 1
-        if log.date:
-            # Count frequency of each day
-            day = log.date.strftime("%Y-%m-%d")
-            freq_days[day] = freq_days.get(day, 0) + 1
-
+            freq_instruments[log.instrument] += 1
+             
     common_key = max(freq_instruments, key=freq_instruments.get, default=None) # get the most common instrument key
+    
+    freq_instr_logs = PracticeLog.query.filter_by(instrument=common_key).all()
+    piece_durations = defaultdict(int)
+    
+    for log in freq_instr_logs:
+        if log.piece:
+            piece_durations[log.piece] += log.duration
+    
+    common_piece = max(piece_durations, key=piece_durations.get, default=None)
+    common_title = common_piece.title if common_piece else "Unlisted"
+    print(common_title)
+
     common_instrument = INSTRUMENTS.get(common_key, "Unlisted") if common_key else "Unlisted" # get the human-readable label
-    common_day_str = max(freq_days, key=freq_days.get, default="Unlisted") # get the most common day as a string
     
     return jsonify({
         "total_minutes": total_minutes,
         "average_minutes": avg_minutes,
         "common_instrument": common_instrument,
-        "most_practiced_day": common_day_str
+        "common_instr_key": common_key,
+        "common_piece": common_title
     }), 200
 
 
@@ -193,11 +201,12 @@ def add_log():
         # Try to find by both title and composer
         piece = Piece.query.filter_by(title=piece_title, composer=composer_name).first()
         if not piece:
-            piece = Piece(title=piece_title, composer=composer_name, user_id=current_user.id)
+            piece = Piece(title=piece_title, composer=composer_name, user_id=current_user.id, log_time=0)
             db.session.add(piece)
             db.session.commit()
 
         data["piece_id"] = piece.id
+        piece.log_time += int(data.get("duration"))
     else:
         data["piece_id"] = None
         
@@ -233,6 +242,13 @@ def get_logs():
             "notes": log.notes or ""
         })
     return jsonify(serialized_logs), 200
+
+@app.route("/api/pieces", methods=["GET"])
+@login_required
+def get_pieces():
+    pieces = Piece.query.filter_by(user_id=current_user.id).order_by(Piece.title.asc()).all()
+    result = [{"id": p.id, "title": p.title, "composer": p.composer, "minutes": p.log_time} for p in pieces]
+    return jsonify(result), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
