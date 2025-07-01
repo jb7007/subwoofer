@@ -1,7 +1,11 @@
 // static/js/dashboard.js
 import { setupModalListeners, renderRecentLogs } from "./logic.js";
-import { fetchLogs, recentLogs } from "./api.js";
-import { renderDailyMinutes, renderTotalMinutes } from "./plot.js";
+import { fetchLogs, recentLogs } from "./api/index.js";
+import {
+  renderDailyMinutes,
+  renderTotalMinutes,
+  renderAvgMinutes,
+} from "./plot.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   setupModalListeners();
@@ -11,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (ok) {
       renderDailyMinutes(data);
       renderTotalMinutes(data);
+      renderAvgMinutes(data);
     } else console.error("Failed to load logs for chart.");
   } catch (err) {
     console.error("Error fetching logs for chart:", err);
@@ -39,5 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("avg-mins").textContent = data.average_minutes;
       document.getElementById("avg-mins-header").textContent =
         data.average_minutes;
+      document.getElementById("common-piece").textContent = data.common_piece;
     });
 });
