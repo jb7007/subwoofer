@@ -186,6 +186,7 @@ def log_page():
 @login_required
 def add_log():
     data = request.get_json()
+    print(data)
     
     data["date"] = datetime.fromisoformat(data.get("date"))
     data["user_id"] = current_user.id
