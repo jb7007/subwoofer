@@ -1,5 +1,5 @@
 // static/js/animation/modal.js
-import { openModal } from "../modal.js";
+import { openModal } from "../logic/modal.js";
 
 function buildModalInTimeline(modalOverlay, modalBox) {
   return gsap
@@ -18,7 +18,7 @@ let signupModalTL, loginModalTL, logModalTL;
 
 export function signupAnimateModalIn() {
   const overlay = document.getElementById("signupModal");
-  const box     = document.getElementById("signupModalBox");
+  const box = document.getElementById("signupModalBox");
   if (!overlay || !box) return;
 
   openModal(overlay);
@@ -30,7 +30,7 @@ export function signupAnimateModalIn() {
 
 export function loginAnimateModalIn() {
   const overlay = document.getElementById("loginModal");
-  const box     = document.getElementById("loginModalBox");
+  const box = document.getElementById("loginModalBox");
   if (!overlay || !box) return;
 
   openModal(overlay);
@@ -42,7 +42,7 @@ export function loginAnimateModalIn() {
 
 export function logAnimateModalIn() {
   const overlay = document.getElementById("logModal");
-  const box     = document.getElementById("practiceModalBox");
+  const box = document.getElementById("practiceModalBox");
   if (!overlay || !box) return;
 
   openModal(overlay);
@@ -71,26 +71,26 @@ function animateModalOut(modalBox, modalOverlay, timelineRef) {
         onComplete: () => {
           modalOverlay.classList.remove("active");
           timelineRef.pause(0);
-        }
+        },
       });
-    }
+    },
   });
 }
 
 export function signupAnimateModalOut() {
   const overlay = document.getElementById("signupModal");
-  const box     = document.getElementById("signupModalBox");
+  const box = document.getElementById("signupModalBox");
   animateModalOut(box, overlay, signupModalTL);
 }
 
 export function loginAnimateModalOut() {
   const overlay = document.getElementById("loginModal");
-  const box     = document.getElementById("loginModalBox");
+  const box = document.getElementById("loginModalBox");
   animateModalOut(box, overlay, loginModalTL);
 }
 
 export function logAnimateModalOut() {
   const overlay = document.getElementById("logModal");
-  const box     = document.getElementById("practiceModalBox");
+  const box = document.getElementById("practiceModalBox");
   animateModalOut(box, overlay, logModalTL);
 }
