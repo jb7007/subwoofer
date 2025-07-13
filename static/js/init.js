@@ -2,7 +2,12 @@
 // sets up app logic like modals and form submission (runs on all app pages)
 
 // import the core setup functions
-import { setupSignupForm, setupLoginForm, setupLogForm, setupModalListeners } from './logic.js';
+import {
+  setupSignupForm,
+  setupLoginForm,
+  setupLogForm,
+  setupModalListeners,
+} from "./logic/logic.js";
 
 // run when the document is ready
 document.addEventListener("DOMContentLoaded", () => {
