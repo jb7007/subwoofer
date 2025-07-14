@@ -1,9 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
+def utc_now():
+    return datetime.now(timezone.utc)
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
     
@@ -31,16 +34,21 @@ class PracticeLog(db.Model):
     # links each log to a specific user (log.user)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
-    date = db.Column(db.DateTime, nullable=False)
+    local_date = db.Column(db.Date, nullable=False)
+    utc_timestamp = db.Column(db.DateTime(timezone=True), nullable=False)
+    
+    created_at = db.Column(db.DateTime, default=utc_now)
+    updated_at = db.Column(db.DateTime, default=utc_now, onupdate=utc_now)
+    
     instrument = db.Column(db.String(50), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     notes = db.Column(db.Text)
 
-    # (OPTIONAL) links each piece to a specific user (log.piece)
+    # links each piece to a specific user (log.piece)
     piece_id = db.Column(db.Integer, db.ForeignKey('piece.id'), nullable=True)
     # allows for (piece.logs) via backref='logs'
     piece = db.relationship('Piece', backref='logs', lazy=True)
-
+    
 class Piece(db.Model):    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
