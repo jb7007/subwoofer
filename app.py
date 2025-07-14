@@ -5,6 +5,7 @@ from flask_login import LoginManager, login_required, current_user, login_user, 
 from models import db, User, PracticeLog, Piece
 from datetime import datetime
 from instrument_map import instrument_labels as INSTRUMENTS
+from utils import add_to_db, get_avg_log_mins, get_frequent, get_logs_from, get_total_log_mins, serialize_logs, verify
 
 # password hashing
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -50,18 +51,16 @@ def home():
 def register():
     data = request.get_json()
     username = data.get("username")
-    raw_password = data.get("password")
-
-    if not username or not raw_password:
-        return jsonify({"message": "Missing username or password"}), 400
-
-    if User.query.filter_by(username=username).first():
-        return jsonify({"message": "username already taken!"}), 409
+    password = data.get("password")
+    
+    verify({"username": username, "password": password}, 400)
+    
+    existing_user = User.query.filter_by(username=username).first()
+    verify({"user": existing_user}, 409, does_exist=True)
 
     new_user = User(username=username)
-    new_user.set_password(raw_password)
-    db.session.add(new_user)
-    db.session.commit()
+    new_user.set_password(password)
+    add_to_db(db, new_user)
 
     login_user(new_user)
 
@@ -71,24 +70,16 @@ def register():
 def login():
     data = request.get_json()
     username = data.get("username")
-    print("Username received:", username)
-    if not username:
-        print("No username provided")
-        return jsonify({"message": "Missing username"}), 400
-
     password = data.get("password")
+    print("Username received:", username)
     print("Password received:", password)
-    if not password:
-        print("No password provided")
-        return jsonify({"message": "Missing password"}), 400
+
+    verify({"username": username, "password": password}, 400)
     
     user = User.query.filter_by(username=username).first()
-    if not user:
-        print("User not found")
-        return jsonify({"message": "User not found"}), 401
-    if not check_password_hash(user.password_hash, password):
-        print("Incorrect password")
-        return jsonify({"message": "Incorrect password"}), 401
+    
+    verify({"user": user}, 401, msg_override="User not found")
+    verify({"password": password}, 401, msg_prefix="Incorrect")
 
     login_user(user)
     print("User logged in:", user.username)
@@ -109,7 +100,7 @@ def dashboard():
 @login_required
 def dash_stats():
     # all logs for the current user
-    logs = PracticeLog.query.filter_by(user_id=current_user.id).all()
+    logs = get_logs_from(current_user)
     
     if not logs:
         return jsonify({
@@ -119,37 +110,23 @@ def dash_stats():
         }), 200
     
     # calculate total minutes from all logs
-    total_minutes = sum(log.duration for log in logs)
-    temp_avg = total_minutes / len(logs) if logs else 0.0
-    avg_minutes = round(temp_avg, 2)  # round to 2 decimal places 
+    total_minutes = get_total_log_mins(logs)
+    avg_minutes = get_avg_log_mins(logs, 2) if logs else 0.0
         
-    # get frequent instruments and days
-    freq_instruments = defaultdict(int)
-    for log in logs:
-        if log.instrument:
-            # Count frequency of each instrument
-            freq_instruments[log.instrument] += 1
-             
-    common_key = max(freq_instruments, key=freq_instruments.get, default=None) # get the most common instrument key
+    most_played_instrument = get_frequent("instrument", logs)
     
-    freq_instr_logs = PracticeLog.query.filter_by(instrument=common_key).all()
-    piece_durations = defaultdict(int)
-    
-    for log in freq_instr_logs:
-        if log.piece:
-            piece_durations[log.piece] += log.duration
-    
-    common_piece = max(piece_durations, key=piece_durations.get, default=None)
-    common_title = common_piece.title if common_piece else "Unlisted"
-    print(common_title)
+    freq_instr_logs = PracticeLog.query.filter_by(instrument=most_played_instrument).all()
 
-    common_instrument = INSTRUMENTS.get(common_key, "Unlisted") if common_key else "Unlisted" # get the human-readable label
+    most_common_piece = get_frequent("piece", freq_instr_logs, "duration")
+    common_title = most_common_piece.title if most_common_piece else "Unlisted"
+
+    common_instrument = INSTRUMENTS.get(most_played_instrument, "Unlisted") if most_played_instrument else "Unlisted" # get the human-readable label
     
     return jsonify({
         "total_minutes": total_minutes,
         "average_minutes": avg_minutes,
         "common_instrument": common_instrument,
-        "common_instr_key": common_key,
+        "common_instr_key": most_played_instrument,
         "common_piece": common_title
     }), 200
 
@@ -157,18 +134,9 @@ def dash_stats():
 @app.route("/api/recent-logs", methods=["GET"])
 @login_required
 def api_recent_logs():
-    logs = PracticeLog.query.filter_by(user_id=current_user.id).order_by(PracticeLog.date.desc()).limit(5).all()
+    logs = PracticeLog.query.filter_by(user_id=current_user.id).order_by(PracticeLog.utc_timestamp.desc()).limit(5).all()
 
-    serialized = []
-    for log in logs:
-        serialized.append({
-            "date": log.date.strftime("%b %d, %Y"),
-            "duration": log.duration,
-            "instrument": log.instrument,
-            "piece": log.piece.title if log.piece else "Unlisted",
-            "composer": log.piece.composer if log.piece else "Unlisted",
-            "notes": log.notes or ""
-        })
+    serialized = serialize_logs(logs)
 
     return jsonify(serialized)
 
@@ -188,7 +156,8 @@ def add_log():
     data = request.get_json()
     print(data)
     
-    data["date"] = datetime.fromisoformat(data.get("date"))
+    data["utc_timestamp"] = datetime.fromisoformat(data.get("utc_timestamp"))
+    data["local_date"] = datetime.fromisoformat(data.get("local_date"))
     data["user_id"] = current_user.id
     
     piece_title = data.pop("piece", None)
@@ -203,8 +172,7 @@ def add_log():
         piece = Piece.query.filter_by(title=piece_title, composer=composer_name).first()
         if not piece:
             piece = Piece(title=piece_title, composer=composer_name, user_id=current_user.id, log_time=0)
-            db.session.add(piece)
-            db.session.commit()
+            add_to_db(db, piece)
 
         data["piece_id"] = piece.id
         piece.log_time += int(data.get("duration"))
@@ -220,22 +188,21 @@ def add_log():
 
     
     new_log = PracticeLog(**data)
-    db.session.add(new_log)
-    db.session.commit()
+    add_to_db(db, new_log)
     return jsonify({ "message": "log added!" }), 201
 
 @app.route("/api/logs", methods=["GET"])
 @login_required 
 def get_logs():
     logs = PracticeLog.query.filter_by(user_id=current_user.id)\
-        .order_by(PracticeLog.date.desc()).all()
+        .order_by(PracticeLog.utc_timestamp.desc()).all()
     
     serialized_logs = []
     for log in logs:
         serialized_logs.append({
             "id": log.user_log_number,
-            "date": log.date.strftime("%b %d, %Y"),
-            "isodate": log.date.strftime("%Y-%m-%d"),
+            "date": log.local_date.strftime("%b %d, %Y"),
+            "isodate": log.utc_timestamp.strftime("%Y-%m-%d"),
             "duration": log.duration,
             "instrument": log.instrument,
             "piece": log.piece.title if log.piece else "Unlisted",

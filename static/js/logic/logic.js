@@ -224,9 +224,18 @@ export function setupLogForm() {
       composer = null;
     }
 
+    const rawDateStr = document.getElementById("logDate").value;
+
+    const localDateObj = new Date(`${rawDateStr}T00:00:00`);
+    const utcTimestamp = localDateObj.toISOString();
+
+    const localDate = rawDateStr;
+
     const logData = {
-      date: document.getElementById("logDate").value,
-      duration: document.getElementById("logDuration").value,
+      local_date: localDate,
+      utc_timestamp: utcTimestamp,
+
+      duration: parseInt(document.getElementById("logDuration").value),
       instrument: document.getElementById("instrument").value,
       piece: pieceTitle,
       composer: composer,
@@ -391,7 +400,7 @@ export function renderLogs(logs) {
 
     row.innerHTML = `
       <td>${log.id}</td>
-      <td>${log.date}</td>
+      <td>${log.display_date}</td>
       <td>${log.duration}</td>
       <td>${instrumentMap[log.instrument] || log.instrument}</td>
       <td>${log.piece}</td>
