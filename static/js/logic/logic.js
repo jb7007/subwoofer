@@ -23,6 +23,7 @@ import {
 let logsData = []; // raw logs fetched from Flask
 let currentSort = { field: "date", asc: false };
 
+// TODO: make separate file for importing
 export const instrumentMap = {
   // Strings
   violin: "Violin",
@@ -90,6 +91,7 @@ export const instrumentMap = {
 };
 
 // getter so other files can access logsData safely
+// TODO: fix and refactor sorting log logic
 export function setLogsData(data) {
   logsData = data;
 }
@@ -117,6 +119,7 @@ export function sortLogs(field) {
   renderLogs(sorted);
 }
 
+// TODO: separate logic for setting up modal forms
 export function setupSignupForm() {
   const signupForm = document.getElementById("signupModalBox");
   if (!signupForm) return;
@@ -199,23 +202,24 @@ export function setupLogForm() {
   logForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // gather data from form fields
+    // get HTML dropdown value for the piece
     const dropdownValue = document.getElementById("pieceDropdown").value;
+    // gets user-typed piece title and composer (if included) and trims inputs
     const manualTitle = document.getElementById("piece")?.value.trim();
-    const manualComposer = document
-      .getElementById("composerInput")
-      ?.value.trim();
+    const manualComposer = document.getElementById("composerInput")?.value.trim();
 
+    // piece title and composer info to be sent to backend, we'll clean them up later
     let pieceTitle = null;
     let composer = null;
 
-    if (dropdownValue) {
-      // Use the saved piece from the dropdown
+    if (dropdownValue) { // if user selects a pre-selected piece 
+      // use the saved piece from the dropdown
       const [title, comp] = dropdownValue.split(":::");
+      // sets pieceTitle and composer to clean values for backend to use
       pieceTitle = title?.trim();
       composer = comp?.trim();
     } else if (manualTitle) {
-      // Use the manually typed piece
+      // use the manually typed piece
       pieceTitle = manualTitle;
       composer = manualComposer || "Unknown";
     } else {
@@ -224,16 +228,23 @@ export function setupLogForm() {
       composer = null;
     }
 
-    const rawDateStr = document.getElementById("logDate").value;
-
-    const localDateObj = new Date(`${rawDateStr}T00:00:00`);
-    const utcTimestamp = localDateObj.toISOString();
-
-    const localDate = rawDateStr;
-
     const logData = {
-      local_date: localDate,
-      utc_timestamp: utcTimestamp,
+      /* ANCHOR Sending Log Data
+      SENT DATA:
+      - log.local_date
+      - log.utc_timestamp
+      - log.duration
+      - log.instrument
+      - log.piece
+      - log.composer
+      - log.notes
+
+      REMAINING (initialized by backend):
+      - log.id (increments user log number index)
+      - log.updated_at (uses log.utc_timestamp)
+      */
+      local_date: document.getElementById("logDate").value,
+      utc_timestamp: new Date().toISOString(),
 
       duration: parseInt(document.getElementById("logDuration").value),
       instrument: document.getElementById("instrument").value,
@@ -416,6 +427,7 @@ export async function populatePieceDropdown() {
   const dropdown = document.getElementById("pieceDropdown");
   if (!dropdown) return;
 
+  // TODO: adjust backend logic for fetching specific log attributes
   const { ok, data } = await fetchPieces();
   if (!ok) {
     console.warn("Could not load pieces.");
