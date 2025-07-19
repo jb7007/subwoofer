@@ -4,7 +4,7 @@
 export async function fetchJson(url, options = {}) {
   try {
     const response = await fetch(url, options);
-    const data = await response.json();
+    const data = isJson ? await response.json() : null;
     return {
       ok: response.ok,
       status: response.status,
