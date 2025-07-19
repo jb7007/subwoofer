@@ -1,4 +1,4 @@
-import { fetchJson } from "./apiHelper.js";
+import { fetchJson } from "./api-helper.js";
 
 // sends a new user's credentials to the backend
 export const registerUser = (username, password) =>

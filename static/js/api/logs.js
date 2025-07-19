@@ -1,4 +1,4 @@
-import { fetchJson } from "./apiHelper.js";
+import { fetchJson } from "./api-helper.js";
 
 export const submitLog = (logData) =>
   fetchJson("/api/logs", {
