@@ -229,7 +229,8 @@ export function setupLogForm() {
     }
 
     const logData = {
-      /* ANCHOR Sending Log Data
+      // !ANCHOR Sending Log Data
+      /*
       SENT DATA:
       - log.local_date
       - log.utc_timestamp
