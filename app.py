@@ -156,6 +156,7 @@ def add_log():
     data = request.get_json()
     print(data)
     
+    # TODO: turn into a util function
     data["utc_timestamp"] = datetime.fromisoformat(data.get("utc_timestamp"))
     data["local_date"] = datetime.fromisoformat(data.get("local_date"))
     data["user_id"] = current_user.id
@@ -171,6 +172,7 @@ def add_log():
         # Try to find by both title and composer
         piece = Piece.query.filter_by(title=piece_title, composer=composer_name).first()
         if not piece:
+            # make a piece and add it to the database
             piece = Piece(title=piece_title, composer=composer_name, user_id=current_user.id, log_time=0)
             add_to_db(db, piece)
 
@@ -182,7 +184,8 @@ def add_log():
     latest_log = PracticeLog.query.filter_by(user_id=current_user.id)\
         .order_by(PracticeLog.user_log_number.desc())\
             .first()
-                              
+                        
+    # TODO: turn into a util function      
     next_index = (latest_log.user_log_number + 1) if latest_log else 1
     data["user_log_number"] = next_index
 
@@ -197,6 +200,7 @@ def get_logs():
     logs = PracticeLog.query.filter_by(user_id=current_user.id)\
         .order_by(PracticeLog.utc_timestamp.desc()).all()
     
+    # TODO: replace with serialize function and adjust js frontend
     serialized_logs = []
     for log in logs:
         serialized_logs.append({
@@ -214,6 +218,7 @@ def get_logs():
 @app.route("/api/pieces", methods=["GET"])
 @login_required
 def get_pieces():
+    # TODO: admire modularity
     pieces = Piece.query.filter_by(user_id=current_user.id).order_by(Piece.title.asc()).all()
     result = [{"id": p.id, "title": p.title, "composer": p.composer, "minutes": p.log_time} for p in pieces]
     return jsonify(result), 200
