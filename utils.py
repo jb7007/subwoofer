@@ -55,7 +55,6 @@ def serialize_logs(logs):
             "id": log.user_log_number,
             "local_date": log.local_date,
             "utc_date": log.utc_timestamp,
-            "created_at": log.created_at,
             "updated_at": log.updated_at,
             "instrument": log.instrument,
             "duration": log.duration,
@@ -85,3 +84,14 @@ def get_frequent(attribute, logs, *, return_pair=False, return_count=False, seco
 
 def set_data(data, attribute, value):
     data[attribute] = value
+    
+def get_first_log(*, return_date=False, utc=True):
+    first_log = PracticeLog.query.filter_by(user_id=current_user.id).order_by(PracticeLog.utc_timestamp).first()
+    
+    if not first_log:
+        return None
+    
+    if return_date:
+        return first_log.local_date if not utc else first_log.utc_timestamp
+        
+    return first_log
