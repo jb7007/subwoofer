@@ -1,5 +1,5 @@
 // static/js/animation/modal.js
-import { openModal } from "../logic/modal.js";
+import { openModal } from "../logic/modals/modal.js";
 
 function buildModalInTimeline(modalOverlay, modalBox) {
   return gsap
