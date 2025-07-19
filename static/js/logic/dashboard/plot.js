@@ -36,20 +36,23 @@ export function renderDailyMinutes(logs) {
 }
 
 // renders graphic for user's minute total for all-time
+// TODO: fix log date sorting 
 export function renderTotalMinutes(logs) {
   let totalMins;
   let xRange;
+  // x and y plots
   const xVals = [];
   const yVals = [];
   if (logsNotFound(logs)) {
     totalMins = 0;
     xRange = 0;
   } else {
+    // sort logs
     const logsByDate = [...logs].sort(
       (a, b) => new Date(a.isodate) - new Date(b.isodate)
     );
 
-    const [year, month, day] = logsByDate[0].isodate.split("-").map(Number);
+    const [year, month, day] = logsByDate[0].isodate.split("-").map(Number); // get first log date
     let current = new Date(year, month - 1, day); // month is 0-indexed
     const end = new Date(); // ends at the current day
 
@@ -59,10 +62,11 @@ export function renderTotalMinutes(logs) {
     const logMap = new Map();
 
     for (const log of logs) {
+      // TODO: fix log attributes
       if (!logMap.has(log.isodate)) {
-        logMap.set(log.isodate, []);
+        logMap.set(log.isodate, []); // sets key as date and value as array of logs
       }
-      logMap.get(log.isodate).push(log);
+      logMap.get(log.isodate).push(log); // gets the value for the key (e.g., the date) which is the array, and pushes a log
     }
 
     while (current <= end) {
