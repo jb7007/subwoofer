@@ -1,4 +1,4 @@
-// dashboard.js
+// js/logic/dashboard/dashboard.js
 // handles main logic for dashboard
 
 import { fetchLogs, recentLogs, getDashStats } from "../../api/index.js";
