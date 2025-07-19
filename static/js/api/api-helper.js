@@ -1,4 +1,4 @@
-// apiHelper.js
+// api-helper.js
 // helper functions for api files
 
 export async function fetchJson(url, options = {}) {
