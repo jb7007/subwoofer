@@ -1,7 +1,7 @@
 // dashHelper.js
 // provides helper functions for dashboard logic files
 
-import { instrumentMap } from "../logic.js";
+import { instrumentMap } from "../../instrument-map.js"
 
 export function renderAsTxt(
   htmlId,
