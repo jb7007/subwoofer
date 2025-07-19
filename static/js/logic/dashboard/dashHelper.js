@@ -66,6 +66,8 @@ export function renderRecentLogs(logs) {
   const grouped = {};
 
   logs.forEach((log) => {
+    // FIXME
+    // TODO: adjust log attribute to match backend
     if (!grouped[log.date]) {
       // Initialize array for logs for this date if not already present
       grouped[log.date] = []; // the date is the key, the log is the value
@@ -74,6 +76,8 @@ export function renderRecentLogs(logs) {
   });
 
   // Render each date group
+  // FIXME
+  // TODO: adjust log attribute to match backend
   Object.keys(grouped).forEach((date) => {
     const dateHeading = document.createElement("li"); // Create a list item for the date
     dateHeading.className = "log-date-heading";
