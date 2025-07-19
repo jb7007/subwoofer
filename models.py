@@ -37,7 +37,6 @@ class PracticeLog(db.Model):
     local_date = db.Column(db.Date, nullable=False)
     utc_timestamp = db.Column(db.DateTime(timezone=True), nullable=False)
     
-    created_at = db.Column(db.DateTime, default=utc_now)
     updated_at = db.Column(db.DateTime, default=utc_now, onupdate=utc_now)
     
     instrument = db.Column(db.String(50), nullable=False)
