@@ -1,6 +1,6 @@
 // js/components/recent-logs.js
 
-import { instrumentMap } from "../instrument-map.js";
+import { instrumentMap } from "../utils/instrument-map.js";
 import { renderTxtShort } from "./time-format.js";
 
 // Takes log entries and renders them grouped by date

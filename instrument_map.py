@@ -5,7 +5,6 @@ instrument_labels = {
     "cello": "Cello",
     "doubleBass": "Double Bass",
     "harp": "Harp",
-
     # Woodwinds
     "piccolo": "Piccolo",
     "flute": "Flute",
@@ -17,27 +16,23 @@ instrument_labels = {
     "contraClarinet": "Contrabass Clarinet",
     "bassoon": "Bassoon",
     "contrabassoon": "Contrabassoon",
-
     # Saxophones
     "sopranoSax": "Soprano Saxophone",
     "altoSax": "Alto Saxophone",
     "tenorSax": "Tenor Saxophone",
     "baritoneSax": "Baritone Saxophone",
     "bassSax": "Bass Saxophone",
-
     # Brass
     "trumpet": "Trumpet",
     "cornet": "Cornet",
     "flugelhorn": "Flugelhorn",
     "frenchHorn": "French Horn",
-
     # Low Brass
     "trombone": "Trombone",
     "bassTrombone": "Bass Trombone",
     "euphonium": "Euphonium",
     "baritoneHorn": "Baritone Horn",
     "tuba": "Tuba",
-
     # Percussion
     "snareDrum": "Snare Drum",
     "bassDrum": "Bass Drum",
@@ -51,7 +46,6 @@ instrument_labels = {
     "multiPercussion": "Multi-Percussion Setup",
     "accessoryPercussion": "Accessory Percussion",
     "percussionOther": "Other / Unlisted Percussion",
-
     # Other
     "piano": "Piano",
     "organ": "Organ",
@@ -61,5 +55,5 @@ instrument_labels = {
     "bassGuitar": "Bass Guitar",
     "ukulele": "Ukulele",
     "voice": "Voice",
-    "other": "Other"
+    "other": "Other",
 }
