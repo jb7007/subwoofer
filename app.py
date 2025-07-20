@@ -124,7 +124,7 @@ def dash_stats():
     
     freq_instr_logs = PracticeLog.query.filter_by(instrument=most_played_instrument).all()
 
-    most_common_piece = get_frequent("piece", freq_instr_logs, "duration")
+    most_common_piece = get_frequent("piece", freq_instr_logs, second_attr="duration")
     common_title = most_common_piece.title if most_common_piece else "Unlisted"
 
     common_instrument = INSTRUMENTS.get(most_played_instrument, "Unlisted") if most_played_instrument else "Unlisted" # get the human-readable label
