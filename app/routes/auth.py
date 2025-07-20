@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, redirect, request
 from flask_login import current_user, login_user, logout_user
 
-from models import User, db
-from utils import add_to_db, verify
+from app.models import User, db
+from app.utils import add_to_db, verify
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -51,7 +51,6 @@ def login():
 
     login_user(user)
     return jsonify({"message": "Login successful", "redirect": "/dashboard"}), 200
-
 
 @auth_bp.route("/logout")
 def logout():

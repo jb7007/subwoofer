@@ -1,11 +1,16 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from flask_login import current_user, login_required
 
-from models import PracticeLog, db
-from utils import add_to_db, serialize_logs, prepare_log_data, get_or_create_piece
+from app.models import PracticeLog, db
+from app.utils import add_to_db, serialize_logs, prepare_log_data, get_or_create_piece
 
 logs_bp = Blueprint("logs", __name__)
 
+
+@logs_bp.route("/log", methods=["POST", "GET"])
+@login_required
+def log_page():
+    return render_template("log.html")
 
 @logs_bp.route("/api/logs", methods=["POST"])
 @login_required

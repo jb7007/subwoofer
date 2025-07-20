@@ -7,7 +7,7 @@ from datetime import datetime
 from flask import jsonify
 from flask_login import current_user
 
-from models import PracticeLog, Piece, db
+from app.models import PracticeLog, Piece, db
 
 
 # ─── DATABASE HELPERS 
