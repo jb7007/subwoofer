@@ -3,9 +3,9 @@
 
 import { fetchLogs, recentLogs, getDashStats } from "../../api/index.js";
 import { setupModalListeners } from "../../modals/modal-setup.js";
-import { renderRecentLogs } from "./dashHelper.js";
+import { renderRecentLogs } from "../../components/recent-logs.js";
 import { renderGraphs } from "./plot.js";
-import { setTextContent } from "./utils.js";
+import { setMetricText } from "../../components/dash-metrics.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	setupModalListeners();
@@ -21,17 +21,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 			renderRecentLogs(recentResult.data);
 		}
 		if (dashResult.ok) {
-			const ids = {
+			setMetricText({
 				"top-instrument": dashResult.data.common_instrument,
 				"total-mins": dashResult.data.total_minutes,
 				"total-mins-header": dashResult.data.total_minutes,
 				"avg-mins": dashResult.data.average_minutes,
-				"avg-mins-header": dashResult.data.average_mintes,
+				"avg-mins-header": dashResult.data.average_minutes,
 				"common-piece": dashResult.data.common_piece,
-			};
-
-			Object.entries(ids).forEach(([id, value]) => {
-				setTextContent(id, value);
 			});
 		}
 	} catch (err) {
