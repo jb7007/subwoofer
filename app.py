@@ -73,16 +73,23 @@ def login():
     password = data.get("password")
     print("Username received:", username)
     print("Password received:", password)
+    
+    response = jsonify({"message": "Login successful", "redirect": "/dashboard"}), 200
 
-    verify({"username": username, "password": password}, 400)
+    check = verify({"username": username, "password": password}, 400)
+    if check: return check
     
     user = User.query.filter_by(username=username).first()
     
-    verify({"user": user}, 401, msg_override="User not found")
-    verify({"password": password}, 401, msg_prefix="Incorrect")
+    check = verify({"user": user}, 401)
+    if check: return check
+    
+    check = verify({"password": password}, 401, msg_override="Incorrect password")
+    if check: return check
 
     login_user(user)
     print("User logged in:", user.username)
+    print("Sending JSON response")
     return jsonify({"message": "Login successful", "redirect": "/dashboard"}), 200
 
 @app.route("/logout")

@@ -10,7 +10,7 @@ def add_to_db(db, *items):
         db.session.add(item)
     db.session.commit()
 
-def verify(fields: dict, error_code, *, msg_override=None, does_exist=False):
+def verify(fields: dict, error_code, *, msg_override=None, does_exist=False, verb_override=None):
     target_fields = []
 
     for key, val in fields.items():
@@ -22,7 +22,7 @@ def verify(fields: dict, error_code, *, msg_override=None, does_exist=False):
 
     if target_fields:
         msg_string = ", ".join(target_fields)
-        verb = "already exist" if does_exist else "are missing"
+        verb = verb_override if verb_override else "already exist" if does_exist else "are missing"
         return jsonify({"message": f"The following fields {verb}: {msg_string}"}), error_code
 
 def get_logs():
