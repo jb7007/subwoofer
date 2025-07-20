@@ -28,3 +28,19 @@ export function extractPieceAndComposer() {
 
 	return { pieceTitle, composer };
 }
+
+export function resetPieceComposerFields() {
+	const pieceInput = document.getElementById("piece");
+	const composerLabel = document.getElementById("composerLabel");
+	const composerInput = document.getElementById("composerInput");
+
+	if (pieceInput) pieceInput.value = "";
+
+	if (composerInput) {
+		composerInput.value = "";
+		composerInput.disabled = true; // Disable composer input
+		composerInput.style.display = "none";
+	}
+
+	if (composerLabel) composerLabel.style.display = "none";
+}
