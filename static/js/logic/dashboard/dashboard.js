@@ -1,10 +1,11 @@
 // js/logic/dashboard/dashboard.js
 // handles main logic for dashboard
 
-import { fetchLogs, recentLogs, getDashStats } from "../../api/index.js";
+import { fetchLogs, recentLogs } from "../../api/logs.js";
+import { getDashStats } from "../../api/dash.js";
 import { setupModalListeners } from "../../modals/modal-setup.js";
 import { renderRecentLogs } from "../../components/recent-logs.js";
-import { renderGraphs } from "./plot.js";
+import { renderGraphs } from "../../components/graph-display.js";
 import { setMetricText } from "../../components/dash-metrics.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
