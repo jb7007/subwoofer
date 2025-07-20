@@ -1,11 +1,11 @@
 import { fetchJson } from "./api-helper.js";
 
 export const submitLog = (logData) =>
-  fetchJson("/api/logs", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(logData),
-  });
+	fetchJson("/api/logs", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(logData),
+	});
 
 // gets the current user's logs
 export const fetchLogs = () => fetchJson("/api/logs");
