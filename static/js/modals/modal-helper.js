@@ -1,5 +1,5 @@
 import { hiddenInputSetup } from "./modal-setup.js";
-import { resetPieceComposerFields } from "../logic/log-form.js";
+import { resetPieceComposerFields } from "../logic/logs/log-form.js";
 import { fetchPieces } from "../api/logs.js";
 
 export function openModal(modalElement) {

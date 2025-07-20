@@ -5,7 +5,7 @@ import {
 	setUpOpenButton,
 	modalOverlayExit,
 } from "./modal-helper.js";
-import { handleLogSubmission } from "../logic/logs.js";
+import { handleLogSubmission } from "../logic/logs/logs.js";
 import {
 	signupAnimateModalIn,
 	signupAnimateModalOut,
