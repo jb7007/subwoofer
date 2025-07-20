@@ -7,13 +7,14 @@ import { closeLogModal } from "../modals/modal-safety.js";
 import { extractPieceAndComposer } from "../../js/logic/log-form.js";
 import { setLogs } from "../state/logs.js";
 import { renderLogs } from "../components/log-table.js";
+import { fetchLogs } from "../api/logs.js";
 
 // ANCHOR Sending Log Data
 
 export function getLogData() {
 	const { pieceTitle, composer } = extractPieceAndComposer();
 	const logData = {
-		local_date: document.getElementById("logDate").value,
+		local_date: document.getElementById("logDate").value.split("T")[0],
 		utc_timestamp: new Date().toISOString(),
 
 		duration: parseInt(document.getElementById("logDuration").value),
@@ -43,7 +44,10 @@ export function sortLogs(logs, field, ascending = true) {
 export async function handleLogSubmission() {
 	try {
 		const logData = getLogData();
+		console.log("Submitting log data:", logData);
 		const { ok, data } = await submitLog(logData);
+		console.log("Log submission response:", { ok, data });
+		console.log("Log data:", data);
 		if (!ok) {
 			alert(data.message || "Failed to submit log.");
 			return;
@@ -52,6 +56,7 @@ export async function handleLogSubmission() {
 		closeLogModal();
 
 		const { ok: updateOk, data: logs } = await fetchLogs();
+		console.log("Updated logs after submission:", logs);
 		if (updateOk) {
 			setLogs(logs);
 			renderLogs(logs);
