@@ -1,8 +1,6 @@
 import pytest
 from app import create_app, db
 from app.models import User
-from flask import template_rendered
-from contextlib import contextmanager
 
 @pytest.fixture
 def app():
@@ -25,14 +23,25 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture
-def db_session(app):
-    return db.session
+def session(app):
+    connection = db.engine.connect()
+    transaction = connection.begin()
+    options = {"bind": connection}
+    session = db.create_scoped_session(options=options)
+    db.session = session
+    
+    yield session
+    
+    session.remove()
+    transaction.rollback()
+    connection.close()
 
 def create_test_user(username="testuser", password="testpass"):
     user = User(username=username)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
+    
     return user
 
 def login_test_user(client, username="testuser", password="testpass"):
