@@ -41,6 +41,19 @@ def verify(fields: dict, error_code, *, msg_override=None, does_exist=False, ver
 
 # ─── LOG DATA FORMATTING / PREP 
 
+def set_as_local(
+    utc_dt: datetime,
+    tz_name: str = "UTC",
+    fmt: Optional[str] = None
+) -> str:
+    fmt = fmt or "%Y-%m-%d"
+    
+    if utc_dt.tzinfo is None:
+        utc_dt = utc_dt.replace(tzinfo=timezone.utc)
+    
+    local_dt = utc_dt.astimezone(ZoneInfo(tz_name))
+    return local_dt.strftime(fmt)
+
 def prepare_log_data(raw: dict, user_id: int) -> dict:
     """
     Prepare and clean incoming log data:
@@ -63,7 +76,7 @@ def prepare_log_data(raw: dict, user_id: int) -> dict:
     return data
 
 
-def serialize_logs(logs: list) -> list:
+def serialize_logs(logs: list, local_format: Optional[str] = None) -> list:
     """
     Serialize a list of PracticeLog objects into dictionaries for JSON.
     """
@@ -71,7 +84,7 @@ def serialize_logs(logs: list) -> list:
     for log in logs:
         output.append({
             "id": log.user_log_number,
-            "local_date": log.local_date,
+            "local_date": set_as_local(log.utc_timestamp, log.user.timezone, local_format),
             "utc_date": log.utc_timestamp,
             "updated_at": log.updated_at,
             "instrument": log.instrument,
@@ -81,18 +94,6 @@ def serialize_logs(logs: list) -> list:
             "composer": log.piece.composer if log.piece else "Unlisted",
         })
     return output
-
-def set_as_local(
-    utc_dt: datetime,
-    tz_name: str = "UTC",
-    fmt: str = "%Y-%m-%d"
-) -> str:
-    if utc_dt.tzinfo is None:
-        utc_dt = utc_dt.replace(tzinfo=timezone.utc)
-    
-    local_dt = utc_dt.astimezone(ZoneInfo(tz_name))
-    return local_dt.strftime(fmt)
-
 
 # ─── PIECE MANAGEMENT 
 

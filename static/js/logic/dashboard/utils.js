@@ -22,5 +22,5 @@ export function getTodayISO() {
 export function getDailyGraphVal(logs) {
 	return logsNotFound(logs)
 		? 0
-		: totalLogMins(logs.filter((log) => log.isodate === getTodayISO()));
+		: totalLogMins(logs.filter((log) => log.local_date === getTodayISO()));
 }
