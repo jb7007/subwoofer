@@ -41,9 +41,14 @@ export function setupSignupForm() {
 		e.preventDefault();
 		const username = document.getElementById("signupUsername").value.trim();
 		const password = document.getElementById("signupPassword").value;
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		try {
 			// register user via API
-			const { ok, status, data } = await registerUser(username, password);
+			const { ok, status, data } = await registerUser(
+				username,
+				password,
+				timezone
+			);
 			if (ok) {
 				if (data.redirect) window.location.href = data.redirect;
 				else console.log("signup success:", data.message);

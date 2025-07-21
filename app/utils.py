@@ -3,12 +3,13 @@
 
 from collections import defaultdict, Counter
 from typing import List, Optional, Tuple, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import jsonify
 from flask_login import current_user
+from datetime import timezone, datetime
+from zoneinfo import ZoneInfo
 
-from app.models import PracticeLog, Piece, db
-
+from .models import PracticeLog, Piece, db
 
 # ─── DATABASE HELPERS 
 
@@ -19,7 +20,6 @@ def add_to_db(*items):
     for item in items:
         db.session.add(item)
     db.session.commit()
-
 
 def verify(fields: dict, error_code, *, msg_override=None, does_exist=False, verb_override=None):
     """
@@ -81,6 +81,17 @@ def serialize_logs(logs: list) -> list:
             "composer": log.piece.composer if log.piece else "Unlisted",
         })
     return output
+
+def set_as_local(
+    utc_dt: datetime,
+    tz_name: str = "UTC",
+    fmt: str = "%Y-%m-%d"
+) -> str:
+    if utc_dt.tzinfo is None:
+        utc_dt = utc_dt.replace(tzinfo=timezone.utc)
+    
+    local_dt = utc_dt.astimezone(ZoneInfo(tz_name))
+    return local_dt.strftime(fmt)
 
 
 # ─── PIECE MANAGEMENT 

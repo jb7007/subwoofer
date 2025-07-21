@@ -9,16 +9,20 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
+    register_data = request.get_json()
+    username = register_data.get("username")
+    password = register_data.get("password")
+    timezone = register_data.get("timezone", "UTC")
+    
+    if timezone:
+        print("timezone capturted successfully:", timezone)
 
-    verify({"username": username, "password": password}, 400)
+    verify({"username": username, "password": password, "timezone": timezone}, 400)
 
     existing_user = User.query.filter_by(username=username).first()
     verify({"user": existing_user}, 409, does_exist=True)
 
-    new_user = User(username=username)
+    new_user = User(username=username, timezone=timezone)
     new_user.set_password(password)
     add_to_db(new_user)
 

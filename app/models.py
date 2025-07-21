@@ -4,12 +4,10 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 
-db = SQLAlchemy()
-
-
 def utc_now():
     return datetime.now(timezone.utc)
 
+db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -18,6 +16,9 @@ class User(UserMixin, db.Model):
 
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    
+    creation_date = db.Column(db.DateTime, default=utc_now, nullable=False)
+    timezone = db.Column(db.String(50), default="UTC", nullable=False)
 
     # establishes a property/way to list all logs owned by the user (user.logs)
     logs = db.relationship("PracticeLog", backref="user", lazy=True)
