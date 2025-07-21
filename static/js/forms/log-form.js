@@ -44,3 +44,21 @@ export function resetPieceComposerFields() {
 
 	if (composerLabel) composerLabel.style.display = "none";
 }
+
+export function setupPieceInputToggle() {
+	const pieceInput = document.getElementById("piece");
+	const composerLabel = document.getElementById("composerLabel");
+	const composerInput = document.getElementById("composerInput");
+
+	if (!pieceInput || !composerInput || !composerLabel) return;
+
+	pieceInput.addEventListener("input", () => {
+		const pieceFilled = pieceInput.value.trim() !== "";
+
+		composerInput.disabled = !pieceFilled;
+		composerInput.value = "";
+
+		composerLabel.style.display = pieceFilled ? "flex" : "none";
+		composerInput.style.display = pieceFilled ? "flex" : "none";
+	});
+}
