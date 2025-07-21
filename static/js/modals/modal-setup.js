@@ -70,6 +70,7 @@ export function setupLoginForm() {
 		e.preventDefault();
 		const username = document.getElementById("loginUsername").value.trim();
 		const password = document.getElementById("loginPassword").value;
+		console.log("loginUser called with:", username, password);
 		try {
 			// login user via API
 			const { ok, status, data } = await loginUser(username, password);
