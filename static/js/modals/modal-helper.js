@@ -1,5 +1,5 @@
 import { hiddenInputSetup } from "./modal-setup.js";
-import { resetPieceComposerFields } from "../logic/logs/log-form.js";
+import { resetPieceComposerFields } from "../forms/log-form.js";
 import { fetchPieces } from "../api/logs.js";
 
 export function openModal(modalElement) {
@@ -16,7 +16,6 @@ export function closeModal(modalElement) {
 		input.value = ""; // clear input field
 	});
 
-	// optionally could also clear textareas if you want
 	modalElement.querySelectorAll("textarea").forEach((area) => {
 		area.value = ""; // clear textarea field
 	});

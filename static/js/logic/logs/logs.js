@@ -4,7 +4,7 @@
 
 import { submitLog } from "../../api/logs.js";
 import { closeLogModal } from "../../modals/modal-safety.js";
-import { extractPieceAndComposer } from "./log-form.js";
+import { extractPieceAndComposer } from "../../forms/log-form.js";
 import { setLogs } from "../../state/logs.js";
 import { renderLogs } from "../../components/log-table.js";
 import { fetchLogs } from "../../api/logs.js";

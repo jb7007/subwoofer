@@ -1,4 +1,6 @@
-import { registerUser, loginUser } from "../api/auth.js";
+import { handleSignupSubmit } from "../forms/signup-form.js";
+import { handleLoginSubmit } from "../forms/login-form.js";
+import { setupPieceInputToggle } from "../forms/log-form.js";
 import {
 	setUpEscapeToExit,
 	setUpExitButton,
@@ -15,50 +17,13 @@ import {
 	logAnimateModalOut,
 } from "../../js/animation/modal.js";
 
-export function setupPieceInputToggle() {
-	const pieceInput = document.getElementById("piece");
-	const composerLabel = document.getElementById("composerLabel");
-	const composerInput = document.getElementById("composerInput");
-
-	if (!pieceInput || !composerInput || !composerLabel) return;
-
-	pieceInput.addEventListener("input", () => {
-		const pieceFilled = pieceInput.value.trim() !== "";
-
-		composerInput.disabled = !pieceFilled;
-		composerInput.value = "";
-
-		composerLabel.style.display = pieceFilled ? "flex" : "none";
-		composerInput.style.display = pieceFilled ? "flex" : "none";
-	});
-}
-
 export function setupSignupForm() {
 	const signupForm = document.getElementById("signupModalBox");
 	if (!signupForm) return;
 
 	signupForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
-		const username = document.getElementById("signupUsername").value.trim();
-		const password = document.getElementById("signupPassword").value;
-		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		try {
-			// register user via API
-			const { ok, status, data } = await registerUser(
-				username,
-				password,
-				timezone
-			);
-			if (ok) {
-				if (data.redirect) window.location.href = data.redirect;
-				else console.log("signup success:", data.message);
-			} else {
-				if (status === 409) alert("username already exists! try another one.");
-				else alert(data.message || "signup failed.");
-			}
-		} catch {
-			alert("network error or server issue.");
-		}
+		await handleSignupSubmit();
 	});
 }
 
@@ -68,23 +33,7 @@ export function setupLoginForm() {
 
 	loginForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
-		const username = document.getElementById("loginUsername").value.trim();
-		const password = document.getElementById("loginPassword").value;
-		console.log("loginUser called with:", username, password);
-		try {
-			// login user via API
-			const { ok, status, data } = await loginUser(username, password);
-			console.log("login response:", { ok, status, data });
-			if (ok) {
-				if (data.redirect) window.location.href = data.redirect;
-				else console.log("login success:", data.message);
-			} else {
-				if (status === 401) alert("invalid username or password.");
-				else alert(data.message || "login failed.");
-			}
-		} catch {
-			alert("network error or server issue.");
-		}
+		await handleLoginSubmit();
 	});
 }
 
