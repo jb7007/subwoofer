@@ -44,16 +44,16 @@ function renderTotalMinutes(logs) {
 
 	if (!logsNotFound(logs)) {
 		const logsByDate = [...logs].sort(
-			(a, b) => new Date(a.isodate) - new Date(b.isodate)
+			(a, b) => new Date(a.local_date) - new Date(b.local_date)
 		);
-		const [year, month, day] = logsByDate[0].isodate.split("-").map(Number);
+		const [year, month, day] = logsByDate[0].local_date.split("-").map(Number);
 		let current = new Date(year, month - 1, day);
 		const end = new Date();
 
 		const logMap = new Map();
 		for (const log of logs) {
-			if (!logMap.has(log.isodate)) logMap.set(log.isodate, []);
-			logMap.get(log.isodate).push(log);
+			if (!logMap.has(log.local_date)) logMap.set(log.local_date, []);
+			logMap.get(log.local_date).push(log);
 		}
 
 		while (current <= end) {
@@ -120,7 +120,7 @@ function renderAvgMinutes(logs) {
 		}
 
 		yVals = days.map((d) => {
-			const dayLogs = logs.filter((log) => log.isodate === d);
+			const dayLogs = logs.filter((log) => log.local_date === d);
 			return dayLogs.reduce((sum, log) => sum + log.duration, 0);
 		});
 

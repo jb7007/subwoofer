@@ -13,8 +13,8 @@ export function renderRecentLogs(logs) {
 	// Group logs by date
 	const grouped = {};
 	for (const log of logs) {
-		if (!grouped[log.date]) grouped[log.date] = [];
-		grouped[log.date].push(log);
+		if (!grouped[log.local_date]) grouped[log.local_date] = [];
+		grouped[log.local_date].push(log);
 	}
 
 	let count = 0;

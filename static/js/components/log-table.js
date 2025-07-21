@@ -14,7 +14,7 @@ export function renderLogs(logs) {
 
 		row.innerHTML = `
             <td>${log.id}</td>
-            <td>${log.date}</td>
+            <td>${log.local_date}</td>
             <td>${log.duration}</td>
             <td>${instrumentMap[log.instrument] || log.instrument}</td>
             <td>${log.piece}</td>
