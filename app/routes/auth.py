@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, redirect, request
-from flask_login import current_user, login_user, logout_user
+from flask_login import login_user, logout_user
 
-from app.models import User, db
+from app.models import User
 from app.utils import add_to_db, verify
 
 auth_bp = Blueprint("auth", __name__)
@@ -36,22 +36,17 @@ def register():
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
-
-    check = verify({"username": username, "password": password}, 400)
-    if check:
-        return check
+    data = request.get_json() or {}
+    username = data.get("username", "")
+    password = data.get("password", "")
 
     user = User.query.filter_by(username=username).first()
     check = verify({"user": user}, 401)
     if check:
         return check
 
-    check = verify({"password": password}, 401, msg_override="Incorrect password")
-    if check:
-        return check
+    if not user.check_password(password):
+        return jsonify({"message": "Invalid credentials"}), 401
 
     login_user(user)
     return jsonify({"message": "Login successful", "redirect": "/dashboard"}), 200
