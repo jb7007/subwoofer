@@ -73,6 +73,16 @@ def prepare_log_data(raw: dict, user_id: int) -> dict:
         .first()
     )
     data["user_log_number"] = (latest.user_log_number + 1) if latest else 1
+    
+    piece_title = data.pop("piece", None)
+    composer_name = data.pop("composer", None)
+
+    if piece_title:
+        # Try to find by both title and composer
+        piece = get_or_create_piece(piece_title, composer_name, user_id, data["duration"])  
+        data["piece_id"] = piece.id
+    else:
+        data["piece_id"] = None
     return data
 
 

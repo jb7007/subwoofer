@@ -18,16 +18,6 @@ def add_log():
     raw_data = request.get_json()
     log_data = prepare_log_data(raw_data, current_user.id)
 
-    piece_title = log_data.pop("piece", None)
-    composer_name = log_data.pop("composer", None)
-
-    if piece_title:
-        # Try to find by both title and composer
-        piece = get_or_create_piece(piece_title, composer_name, current_user.id, log_data["duration"])  
-        log_data["piece_id"] = piece.id
-    else:
-        log_data["piece_id"] = None
-
     new_log = PracticeLog(**log_data)
     add_to_db(new_log)
     return jsonify({"message": "log added!"}), 201
