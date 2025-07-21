@@ -29,7 +29,7 @@ def add_log():
         log_data["piece_id"] = None
 
     new_log = PracticeLog(**log_data)
-    add_to_db(db, new_log)
+    add_to_db(new_log)
     return jsonify({"message": "log added!"}), 201
 
 
@@ -42,22 +42,7 @@ def get_logs():
         .all()
     )
 
-    # TODO: replace with serialize function and adjust js frontend
-    serialized_logs = []
-    for log in logs:
-        serialized_logs.append(
-            {
-                "id": log.user_log_number,
-                "date": log.local_date.strftime("%b %d, %Y"),
-                "isodate": log.utc_timestamp.strftime("%Y-%m-%d"),
-                "duration": log.duration,
-                "instrument": log.instrument,
-                "piece": log.piece.title if log.piece else "Unlisted",
-                "composer": log.piece.composer if log.piece else "Unlisted",
-                "notes": log.notes or "",
-            }
-        )
-    return jsonify(serialized_logs), 200
+    return jsonify(serialize_logs(logs)), 200
 
 
 @logs_bp.route("/api/recent-logs", methods=["GET"])

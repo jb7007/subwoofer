@@ -20,7 +20,7 @@ def register():
 
     new_user = User(username=username)
     new_user.set_password(password)
-    add_to_db(db, new_user)
+    add_to_db(new_user)
 
     login_user(new_user)
 
