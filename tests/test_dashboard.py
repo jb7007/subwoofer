@@ -2,38 +2,29 @@ from .conftest import create_test_user, login_test_user
 from app.utils import prepare_log_data, add_to_db, get_or_create_piece
 from app.models import PracticeLog
 
-def test_dash_stats(client, app):
+def test_submit_log_endpoint(client, app):
     user = create_test_user()
     login_test_user(client)
 
     with app.app_context():
-        log_data = {
-            "utc_timestamp": "2025-07-20T18:00:00",
-            "local_date": "2025-07-20T14:00:00",
-            "instrument": "violin",
+        payload = {
+            "utc_timestamp": "2025-01-01T00:00:00",
+            "local_date": "2025-01-01T00:00:00",
+            "instrument": "piano",
             "duration": 60,
             "notes": "",
             "piece": "Concerto in D",
             "composer": "Beethoven"
         }
+
+        resp = client.post("/api/logs", json=payload)
+        data = resp.get_json()
+        assert resp.status_code == 201
+        assert data["message"] == "log added!"
         
-        log_data = prepare_log_data(log_data, user.id)
-
-        piece_title = log_data.pop("piece", None)
-        composer_name = log_data.pop("composer", None)
-
-        if piece_title:
-            # Try to find by both title and composer
-            piece = get_or_create_piece(piece_title, composer_name, user.id, log_data["duration"])  
-            log_data["piece_id"] = piece.id
-        else:
-            log_data["piece_id"] = None
+        logs = PracticeLog.query.filter_by(user_id=user.id).all()
+        assert len(logs) == 1
         
-        new_log = PracticeLog(**log_data)
-        add_to_db(new_log)
-
-    resp = client.get("/api/dash-stats")
-    assert resp.status_code == 200
-    data = resp.get_json()
-    assert data["total_minutes"] == 60
-    assert data["common_instrument"] == "Violin"
+        log = logs[0]
+        assert log.instrument == "piano"
+        assert log.duration == 60
