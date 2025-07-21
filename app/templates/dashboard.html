@@ -27,7 +27,13 @@
 	<body class="bg-light p-3">
 		<div class="layout">
 			<div class="sidebar">
-				<div class="logo">🎵 Practice Tracker</div>
+				<div class="logo">
+					<a
+						href="{{ url_for('main.home') }}"
+						style="color: inherit; text-decoration: none"
+						>🎵 Practice Tracker</a
+					>
+				</div>
 				<p style="text-align: center">{{ date }}</p>
 				<nav>
 					<ul>
@@ -217,7 +223,7 @@
 
 		<script
 			type="module"
-			src="{{ url_for('static', filename='js/logic/dashboard/dashboard.js') }}"
+			src="{{ url_for('static', filename='js/pages/dashboard.js') }}"
 		></script>
 	</body>
 </html>
