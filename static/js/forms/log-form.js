@@ -1,3 +1,9 @@
+import { submitLog, fetchLogs } from "../api/index.js";
+import { closeLogModal } from "../modals/index.js";
+import { setLogs } from "../state/logs.js";
+import { renderLogs } from "../components/index.js";
+import { getLogData } from "../logic/index.js";
+
 export function extractPieceAndComposer() {
 	// get HTML dropdown value for the piece
 	const dropdownValue = document.getElementById("pieceDropdown").value;
@@ -61,4 +67,30 @@ export function setupPieceInputToggle() {
 		composerLabel.style.display = pieceFilled ? "flex" : "none";
 		composerInput.style.display = pieceFilled ? "flex" : "none";
 	});
+}
+
+export async function handleLogSubmission() {
+	try {
+		const logData = getLogData();
+		console.log("Submitting log data:", logData);
+		const { ok, data } = await submitLog(logData);
+		console.log("Log submission response:", { ok, data });
+		console.log("Log data:", data);
+		if (!ok) {
+			alert(data.message || "Failed to submit log.");
+			return;
+		}
+
+		closeLogModal();
+
+		const { ok: updateOk, data: logs } = await fetchLogs();
+		console.log("Updated logs after submission:", logs);
+		if (updateOk) {
+			setLogs(logs);
+			renderLogs(logs);
+		}
+	} catch (error) {
+		console.error("Error submitting log:", error);
+		alert("An error occurred while submitting the log. Please try again.");
+	}
 }

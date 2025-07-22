@@ -1,4 +1,4 @@
-import { loginUser } from "../api/auth.js";
+import { loginUser } from "../api/index.js";
 
 export async function handleLoginSubmit() {
 	const username = document.getElementById("loginUsername").value.trim();

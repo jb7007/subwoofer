@@ -1,4 +1,4 @@
-import { registerUser } from "../api/auth.js";
+import { registerUser } from "../api/index.js";
 
 export async function handleSignupSubmit() {
 	const username = document.getElementById("signupUsername").value.trim();
