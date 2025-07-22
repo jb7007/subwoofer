@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from datetime import datetime
 
 from app.models import PracticeLog
-from app.utils.utils import (get_avg_log_mins, get_most_frequent, get_logs_from, get_this_week_logs, get_today_log_mins,
+from app.utils import (get_avg_log_mins, get_most_frequent, get_logs_from, get_this_week_logs, get_today_log_mins,
                    get_total_log_mins, get_intstrument_name, get_today_logs)
 
 stats_bp = Blueprint("stats", __name__)
