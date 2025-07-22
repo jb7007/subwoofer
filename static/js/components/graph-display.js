@@ -6,7 +6,7 @@ import {
 	logsNotFound,
 	totalLogMins,
 	setAsTmrw,
-} from "../utils/log-utils.js";
+} from "../utils/index.js";
 
 // Renders the user's daily practice gauge
 function renderDailyMinutes(logs) {

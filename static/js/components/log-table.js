@@ -1,6 +1,6 @@
 // js/components/log-table.js
 
-import { instrumentMap } from "../utils/instrument-map.js";
+import { instrumentMap } from "../utils/index.js";
 
 export function renderLogs(logs) {
 	const tableBody = document.getElementById("log-table-body");
