@@ -1,6 +1,6 @@
 import { closeModal } from "./modal-helper.js";
 import { logAnimateModalOut } from "../../js/animation/modal.js";
-import { resetPieceComposerFields } from "../forms/log-form.js";
+import { resetPieceComposerFields } from "../forms/index.js";
 
 export function closeLogModal() {
 	const modalEl = document.getElementById("logModal");

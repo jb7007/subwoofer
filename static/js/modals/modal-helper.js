@@ -1,6 +1,5 @@
-import { hiddenInputSetup } from "./modal-setup.js";
-import { resetPieceComposerFields } from "../forms/log-form.js";
-import { fetchPieces } from "../api/logs.js";
+import { resetPieceComposerFields } from "../forms/index.js";
+import { fetchPieces } from "../api/index.js";
 
 export function openModal(modalElement) {
 	// adds the .active class, which makes the modal visible
@@ -86,6 +85,19 @@ export function modalOverlayExit(modalEl, animateOut) {
 			if (modalEl.id === "logModal") resetPieceComposerFields();
 			if (typeof animateOut === "function") animateOut();
 			else closeModal(modalEl);
+		}
+	});
+}
+
+export function hiddenInputSetup(hiddenFields) {
+	hiddenFields.forEach((fieldId) => {
+		const field = document.getElementById(fieldId);
+		if (field) {
+			field.style.display = "none"; // Hide composer input
+			field.disabled = true; // Disable composer input
+			if (fieldId === "composerInput") {
+				field.value = ""; // Clear composer input on close
+			}
 		}
 	});
 }

@@ -1,13 +1,15 @@
-import { handleSignupSubmit } from "../forms/signup-form.js";
-import { handleLoginSubmit } from "../forms/login-form.js";
-import { setupPieceInputToggle } from "../forms/log-form.js";
+import {
+	handleSignupSubmit,
+	handleLoginSubmit,
+	setupPieceInputToggle,
+	handleLogSubmission,
+} from "../forms/index.js";
 import {
 	setUpEscapeToExit,
 	setUpExitButton,
 	setUpOpenButton,
 	modalOverlayExit,
 } from "./modal-helper.js";
-import { handleLogSubmission } from "../logic/logs/logs.js";
 import {
 	signupAnimateModalIn,
 	signupAnimateModalOut,
@@ -15,7 +17,7 @@ import {
 	loginAnimateModalOut,
 	logAnimateModalIn,
 	logAnimateModalOut,
-} from "../../js/animation/modal.js";
+} from "../animation/modal.js";
 
 export function setupSignupForm() {
 	const signupForm = document.getElementById("signupModalBox");
@@ -34,19 +36,6 @@ export function setupLoginForm() {
 	loginForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		await handleLoginSubmit();
-	});
-}
-
-export function hiddenInputSetup(hiddenFields) {
-	hiddenFields.forEach((fieldId) => {
-		const field = document.getElementById(fieldId);
-		if (field) {
-			field.style.display = "none"; // Hide composer input
-			field.disabled = true; // Disable composer input
-			if (fieldId === "composerInput") {
-				field.value = ""; // Clear composer input on close
-			}
-		}
 	});
 }
 
