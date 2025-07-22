@@ -37,7 +37,7 @@ def session(app):
     connection.close()
 
 def create_test_user(username="testuser", password="testpass"):
-    user = User(username=username)
+    user = User(username=username, timezone="America/New_York")
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
