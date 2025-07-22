@@ -1,8 +1,8 @@
 # routes/__init__.py
 from .auth import auth_bp
 from .logs import logs_bp
-from .pieces import pieces_bp
-from .stats import stats_bp
+from .stats.pieces import pieces_bp
+from .stats.stats import stats_bp
 from .main import main_bp
 
 def register_blueprints(app):
