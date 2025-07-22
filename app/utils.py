@@ -3,12 +3,13 @@
 
 from collections import defaultdict, Counter
 from typing import List, Optional, Tuple, Any
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from flask import jsonify
 from flask_login import current_user
 from datetime import timezone, datetime
 from zoneinfo import ZoneInfo
 
+from .instrument_map import instrument_labels as INSTRUMENTS
 from .models import PracticeLog, Piece, db
 
 # ─── DATABASE HELPERS 
@@ -133,6 +134,74 @@ def get_or_create_piece(title: str, composer: str, user_id: int, duration: int) 
 
 # ─── QUERY HELPERS 
 
+def get_today_local(tz_name) -> datetime:
+    """
+    Get the current date in the user's timezone.
+    """
+    return datetime.now(tz=ZoneInfo(tz_name)).date()
+
+def get_today_utc() -> datetime:
+    """
+    Get the current date in UTC.
+    """
+    return datetime.now(timezone.utc).date()
+
+def get_this_week_logs():
+    now_local = get_today_local(current_user.timezone)
+    
+    start_local = now_local - timedelta(days=now_local.weekday())
+    start_local = start_local.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    end_local = start_local + timedelta(days=7)
+    
+    start_utc = start_local.astimezone(timezone.utc)
+    end_utc = end_local.astimezone(timezone.utc)
+    
+    weekly_logs = (
+        PracticeLog.query
+        .filter_by(user_id=current_user.id)
+        .filter(PracticeLog.utc_timestamp >= start_utc, PracticeLog.utc_timestamp < end_utc)
+        .all()
+    )
+    
+    return weekly_logs
+
+def get_weekly_log_data():
+    weekly_logs = get_this_week_logs()
+    now_local = get_today_local(current_user.timezone)
+    start_local = now_local - timedelta(days=now_local.weekday())
+    
+    daily_totals = defaultdict(int)
+    for log in weekly_logs:
+        log_local_date = log.utc_timestamp.astimezone(ZoneInfo(current_user.timezone)).date()
+        day_index = (log_local_date - start_local.date()).days
+        if 0 <= day_index <= 6:
+            daily_totals[day_index] += log.duration
+
+    
+    y_vals = []
+    x_vals = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    running_total = 0
+
+    for i in range(7):
+        running_total += daily_totals[i]
+        y_vals.append(running_total)
+        
+    return {
+        "x": x_vals,
+        "y": y_vals,
+        "avg_arr": [round(sum(y_vals) / 7, 2)] * 7,
+        "x_bounds": [0, 6],
+    }
+        
+
+def get_intstrument_name(instr: str) -> str:
+    """
+    Get the full name of an instrument from its key.
+    Returns "Unlisted" if not found.
+    """
+    return INSTRUMENTS.get(instr, "Unlisted")
+
 def get_logs() -> list:
     """Get all PracticeLog entries for the current user."""
     return PracticeLog.query.filter_by(
@@ -209,7 +278,6 @@ def get_today_log_mins(logs: list) -> int:
     today = datetime.now(tz=ZoneInfo(current_user.timezone)).date()
     today_logs = [log for log in logs if log.utc_timestamp.date() == today]
     return get_total_log_mins(today_logs)
-
 
 def get_avg_log_mins(logs: list, round_val: int=None) -> float:
     """Calculate average minutes from a list of logs."""
