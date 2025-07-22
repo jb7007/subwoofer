@@ -1,6 +1,6 @@
 # 🎷 Practice Tracker (WIP)
 
-Hi there! I'm Jeremiah, and this is my *Practice Tracker* —
+Hi there! I'm Jeremiah, and this is *SUBWOOFER* —
 
 *A full-stack web app for musicians to track their practice sessions, visualize progress, and stay motivated over time.*
 
