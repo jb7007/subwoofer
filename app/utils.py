@@ -63,7 +63,6 @@ def prepare_log_data(raw: dict, user_id: int) -> dict:
     """
     data = raw.copy()
     data["utc_timestamp"] = datetime.fromisoformat(data["utc_timestamp"])
-    data["local_date"] = datetime.fromisoformat(data["local_date"])
     data["user_id"] = user_id
 
     latest = (
@@ -166,7 +165,7 @@ def get_last_log_from(user) -> PracticeLog | None:
     )
 
 
-def get_first_log(return_date: bool=False, utc: bool=True):
+def get_first_log(return_date: bool=False):
     """
     Get the earliest PracticeLog for the current user.
     Can return the date fields if requested.
@@ -180,7 +179,7 @@ def get_first_log(return_date: bool=False, utc: bool=True):
     if not first:
         return None
     if return_date:
-        return first.utc_timestamp if utc else first.local_date
+        return first.utc_timestamp
     return first
 
 

@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     
-    creation_date = db.Column(db.DateTime, default=utc_now, nullable=False)
+    creation_date = db.Column(db.DateTime, default=utc_now(), nullable=False)
     timezone = db.Column(db.String(50), default="UTC", nullable=False)
 
     # establishes a property/way to list all logs owned by the user (user.logs)
@@ -40,10 +40,9 @@ class PracticeLog(db.Model):
     # links each log to a specific user (log.user)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-    local_date = db.Column(db.Date, nullable=False)
     utc_timestamp = db.Column(db.DateTime(timezone=True), nullable=False)
 
-    updated_at = db.Column(db.DateTime, default=utc_now, onupdate=utc_now)
+    updated_at = db.Column(db.DateTime, default=utc_now(), onupdate=utc_now())
 
     instrument = db.Column(db.String(50), nullable=False)
     duration = db.Column(db.Integer, nullable=False)

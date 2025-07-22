@@ -23,6 +23,7 @@ def register():
     verify({"user": existing_user}, 409, does_exist=True)
 
     new_user = User(username=username, timezone=timezone)
+    print("new user created:", new_user)
     new_user.set_password(password)
     add_to_db(new_user)
 
