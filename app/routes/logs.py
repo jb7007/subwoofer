@@ -45,6 +45,6 @@ def api_recent_logs():
         .all()
     )
 
-    serialized = serialize_logs(logs)
+    serialized = serialize_logs(logs, local_format="%A, %b %d, %Y")
 
     return jsonify(serialized)
