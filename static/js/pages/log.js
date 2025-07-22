@@ -1,9 +1,9 @@
 // static/js/log-core/log.js
-import { setupModalListeners, setupLogForm } from "../modals/modal-setup.js";
-import { fetchLogs } from "../api/logs.js";
+import { setupModalListeners, setupLogForm } from "../modals/index.js";
+import { fetchLogs } from "../api/index.js";
 import { setLogs, getLogs } from "../state/logs.js";
-import { sortLogs } from "../logic/logs/logs.js";
-import { renderLogs } from "../components/log-table.js";
+import { sortLogs } from "../logic/index.js";
+import { renderLogs } from "../components/index.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	setupModalListeners();
