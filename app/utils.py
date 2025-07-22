@@ -154,6 +154,18 @@ def get_last_log() -> PracticeLog | None:
         .first()
     )
 
+def get_today_logs() -> list:
+    """
+    Get all PracticeLog entries for the current user from today.
+    Uses the user's timezone to determine "today".
+    """
+    today = datetime.now(tz=ZoneInfo(current_user.timezone)).date()
+    return (
+        PracticeLog.query
+        .filter_by(user_id=current_user.id)
+        .filter(PracticeLog.utc_timestamp >= today)
+        .all()
+    )
 
 def get_last_log_from(user) -> PracticeLog | None:
     """Get the most recent PracticeLog for a given user."""
@@ -188,6 +200,15 @@ def get_first_log(return_date: bool=False):
 def get_total_log_mins(logs: list) -> int:
     """Sum durations of a list of logs."""
     return sum(log.duration for log in logs)
+
+def get_today_log_mins(logs: list) -> int:
+    """
+    Calculate total minutes logged today.
+    Uses the user's timezone to determine "today".
+    """
+    today = datetime.now(tz=ZoneInfo(current_user.timezone)).date()
+    today_logs = [log for log in logs if log.utc_timestamp.date() == today]
+    return get_total_log_mins(today_logs)
 
 
 def get_avg_log_mins(logs: list, round_val: int=None) -> float:
