@@ -63,9 +63,20 @@ def add_log():
         201: Log created successfully
         400: Invalid or missing required data
     """
-    # Extract and validate log data from request
+    # Extract raw data from request
     raw_data = request.get_json()
-    log_data = prepare_log_data(raw_data, current_user.id)
+    if raw_data is None:
+        return jsonify({"error": "validation_failed", "message": "Request body must contain valid JSON"}), 400
+    
+    # Validate the incoming data
+    from app.utils.validation import validate_log_submission_data
+    is_valid, validated_data, error_message = validate_log_submission_data(raw_data)
+    
+    if not is_valid:
+        return jsonify({"error": "validation_failed", "message": error_message}), 400
+    
+    # Prepare validated data for database
+    log_data = prepare_log_data(validated_data, current_user.id)
 
     # Create new practice log entry
     new_log = PracticeLog(**log_data)
