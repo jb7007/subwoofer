@@ -15,7 +15,7 @@ def dashboard():
     date = datetime.now().strftime("%B %d, %Y")
     return render_template("dashboard.html", user=current_user, date=date)
 
-@stats_bp.route("api/stats")
+@stats_bp.route("/api/stats")
 @login_required
 def stats():
     user = current_user

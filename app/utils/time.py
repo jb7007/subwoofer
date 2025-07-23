@@ -27,3 +27,9 @@ def set_as_local(
     local_dt = utc_dt.astimezone(ZoneInfo(tz_name))
     return local_dt.strftime(fmt)
 
+def utc_now() -> datetime:
+    """
+    Get the current datetime in UTC.
+    """
+    return datetime.now(timezone.utc)
+
