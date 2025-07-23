@@ -10,12 +10,17 @@ from ..instrument_map import instrument_labels as INSTRUMENTS
 def prepare_log_data(raw: dict, user_id: int) -> dict:
     """
     Prepare and clean incoming log data:
-    - Parse ISO datetime strings
+    - Parse ISO datetime strings (if not already parsed)
     - Assign user_id
     - Determine next user_log_number
     """
     data = raw.copy()
-    data["utc_timestamp"] = datetime.fromisoformat(data["utc_timestamp"])
+    
+    # Handle timestamp - could be string or already parsed datetime
+    if isinstance(data["utc_timestamp"], str):
+        data["utc_timestamp"] = datetime.fromisoformat(data["utc_timestamp"])
+    # If it's already a datetime object (from validation), use as-is
+    
     data["user_id"] = user_id
 
     latest = (
