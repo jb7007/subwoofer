@@ -68,7 +68,9 @@ I'm a saxophonist who wanted a better way to track my personal growth. I built t
 🎷 PRACTICE TRACKER (SUBWOOFER) PROJECT TREE 🎷
 
 practice-tracker/
+
 ├── 📋 Project Config
+
 │ ├── .env # Environment variables (API keys, secrets)
 │ ├── .gitignore # Git ignore patterns
 │ ├── README.md # Project documentation
