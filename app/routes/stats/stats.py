@@ -4,8 +4,8 @@ from flask_login import current_user, login_required
 from datetime import datetime
 
 from app.models import PracticeLog
-from app.utils import (get_avg_log_mins, get_most_frequent, get_logs_from, get_this_week_logs, get_today_log_mins,
-                   get_total_log_mins, get_intstrument_name, get_today_logs)
+from app.utils import (get_avg_log_mins, get_most_frequent, get_this_week_logs, get_logs_from, get_today_log_mins,
+                   get_total_log_mins, get_instrument_name,)
 
 stats_bp = Blueprint("stats", __name__)
 
@@ -36,7 +36,7 @@ def stats():
     )
     
     piece_title = most_practiced_piece.title if most_practiced_piece else "Unlisted"
-    instrument_name = get_intstrument_name(most_played_instrument)
+    instrument_name = get_instrument_name(most_played_instrument)
     
     return render_template("stats.html")
 

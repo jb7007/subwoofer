@@ -5,28 +5,8 @@ from zoneinfo import ZoneInfo
 
 from flask_login import current_user
 from app.models import PracticeLog
+from app.utils.query import get_this_week_logs
 from app.utils.time import get_today_local
-
-
-def get_this_week_logs():
-    now_local = get_today_local(current_user.timezone)
-    
-    start_local = now_local - timedelta(days=now_local.weekday())
-    start_local = start_local.replace(hour=0, minute=0, second=0, microsecond=0)
-    
-    end_local = start_local + timedelta(days=7)
-    
-    start_utc = start_local.astimezone(timezone.utc)
-    end_utc = end_local.astimezone(timezone.utc)
-    
-    weekly_logs = (
-        PracticeLog.query
-        .filter_by(user_id=current_user.id)
-        .filter(PracticeLog.utc_timestamp >= start_utc, PracticeLog.utc_timestamp < end_utc)
-        .all()
-    )
-    
-    return weekly_logs
 
 def get_weekly_log_data():
     weekly_logs = get_this_week_logs()
