@@ -241,6 +241,10 @@ def test_get_weekly_log_data(client):
     """Test weekly log data retrieval function."""
     user = create_test_user()
     
+    # Create a test piece for the logs
+    piece = Piece(user_id=user.id, title="Test Piece", composer="Test Composer", log_time=0)
+    add_to_db(piece)
+    
     # Create logs spanning multiple weeks
     now = datetime.now(timezone.utc)
     current_week = now - timedelta(days=now.weekday())
@@ -249,12 +253,12 @@ def test_get_weekly_log_data(client):
         # This week
         PracticeLog(user_id=user.id, user_log_number=1,
                    utc_timestamp=current_week + timedelta(days=1),
-                   instrument="piano", duration=40, notes="This week", piece_id=1),
+                   instrument="piano", duration=40, notes="This week", piece_id=piece.id),
         
         # Last week
         PracticeLog(user_id=user.id, user_log_number=2,
                    utc_timestamp=current_week - timedelta(days=5),
-                   instrument="guitar", duration=50, notes="Last week", piece_id=1),
+                   instrument="guitar", duration=50, notes="Last week", piece_id=piece.id),
     ]
     
     # Add logs to database

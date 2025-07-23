@@ -254,8 +254,10 @@ def test_submit_log_invalid_data(client):
     }
 
     resp = client.post("/api/logs", json=payload)
-    # Should return server error for missing required fields (no input validation)
-    assert resp.status_code == 500
+    # Should return validation error for missing required fields
+    assert resp.status_code == 400
+    assert resp.get_json()["error"] == "validation_failed"
+    assert "utc_timestamp" in resp.get_json()["message"]
 
 
 def test_submit_log_creates_piece_if_not_exists(client):

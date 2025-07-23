@@ -87,8 +87,10 @@ def test_log_submission_missing_fields(client):
         "piece": "Test Piece",
         "composer": "Test Composer"
     })
-    # Application doesn't validate input, so it raises internal server error
-    assert resp.status_code == 500  # Internal server error due to KeyError
+    # With validation, missing required fields return 400 Bad Request
+    assert resp.status_code == 400
+    assert resp.get_json()["error"] == "validation_failed"
+    assert "utc_timestamp" in resp.get_json()["message"]
     
     # Test with missing duration
     resp = client.post("/api/logs", json={
@@ -97,7 +99,9 @@ def test_log_submission_missing_fields(client):
         "piece": "Test Piece",
         "composer": "Test Composer"
     })
-    assert resp.status_code == 500  # Internal server error
+    assert resp.status_code == 400
+    assert resp.get_json()["error"] == "validation_failed"
+    assert "duration" in resp.get_json()["message"]
 
 
 def test_log_submission_invalid_timestamp(client):
@@ -122,8 +126,10 @@ def test_log_submission_invalid_timestamp(client):
         }
         
         resp = client.post("/api/logs", json=payload)
-        # Application doesn't validate timestamps, so ValueError causes 500
-        assert resp.status_code == 500, f"Failed for timestamp: {invalid_ts}"
+        # Application now validates timestamps and returns proper errors
+        assert resp.status_code == 400, f"Failed for timestamp: {invalid_ts}"
+        assert resp.get_json()["error"] == "validation_failed"
+        assert "timestamp" in resp.get_json()["message"].lower()
 
 
 def test_log_submission_invalid_duration(client):
