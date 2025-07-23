@@ -67,7 +67,7 @@ def get_first_log(return_date: bool=False):
 
 
 def get_this_week_logs():
-    now_local = get_today_local(current_user.timezone)
+    now_local = datetime.now(tz=ZoneInfo(current_user.timezone))
     
     start_local = now_local - timedelta(days=now_local.weekday())
     start_local = start_local.replace(hour=0, minute=0, second=0, microsecond=0)

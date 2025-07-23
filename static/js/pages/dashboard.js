@@ -1,7 +1,7 @@
 // js/logic/dashboard/dashboard.js
 // handles main logic for dashboard
 
-import { fetchLogs, recentLogs, getDashStats } from "../api/index.js";
+import { recentLogs, getDashboardStats } from "../api/index.js";
 import { setupModalListeners } from "../modals/index.js";
 import {
 	renderRecentLogs,
@@ -13,25 +13,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 	setupModalListeners();
 
 	try {
-		const fetchResult = await fetchLogs();
 		const recentResult = await recentLogs();
-		const dashResult = await getDashStats();
-		if (fetchResult.ok) {
-			renderGraphs(fetchResult.data);
+		const dashboardResult = await getDashboardStats();
+
+		if (dashboardResult.ok && dashboardResult.data) {
+			const data = dashboardResult.data;
+			renderGraphs(data);
+			setMetricText({
+				"top-instrument": data.common_instrument,
+				"total-mins": data.total_minutes,
+				"total-mins-header": data.total_minutes,
+				"avg-mins": data.average_minutes,
+				"avg-mins-header": data.average_minutes,
+				"common-piece": data.common_piece,
+			});
 		}
+
 		if (recentResult.ok) {
 			renderRecentLogs(recentResult.data);
-			console.log("Recent logs:", recentResult.data);
-		}
-		if (dashResult.ok) {
-			setMetricText({
-				"top-instrument": dashResult.data.common_instrument,
-				"total-mins": dashResult.data.total_minutes,
-				"total-mins-header": dashResult.data.total_minutes,
-				"avg-mins": dashResult.data.average_minutes,
-				"avg-mins-header": dashResult.data.average_minutes,
-				"common-piece": dashResult.data.common_piece,
-			});
 		}
 	} catch (err) {
 		console.error("Error fetching logs for chart:", err);

@@ -1,5 +1,4 @@
 // dash.js
-
 import { fetchJson } from "./api-helper.js";
 
-export const getDashStats = () => fetchJson("/api/dash-stats");
+export const getDashboardStats = () => fetchJson("/api/dashboard/stats");

@@ -1,23 +1,21 @@
 // js/components/graph-display.js
 
 import { renderAsTxt } from "./time-format.js";
-import {
-	getDailyGraphVal,
-	logsNotFound,
-	totalLogMins,
-	setAsTmrw,
-} from "../utils/index.js";
 
 // Renders the user's daily practice gauge
-function renderDailyMinutes(logs) {
-	const totalToday = getDailyGraphVal(logs);
+function renderDailyMinutes(data) {
+	if (!data) {
+		console.error("renderDailyMinutes: data is undefined");
+		return;
+	}
 
+	const { total_today, target } = data;
 	const trace = [
 		{
-			value: totalToday,
+			value: total_today,
 			type: "indicator",
 			mode: "gauge+number+delta",
-			delta: { reference: 60 },
+			delta: { reference: target },
 			gauge: {
 				axis: { visible: false, range: [null, 120] },
 				steps: [
@@ -32,55 +30,25 @@ function renderDailyMinutes(logs) {
 		height: 125,
 		margin: { t: 10, b: 10, l: 0, r: 0 },
 	});
-	renderAsTxt("daily-practice-txt", totalToday);
+	renderAsTxt("daily-practice-txt", total_today);
 }
 
 // Renders the user's total cumulative minutes chart
-function renderTotalMinutes(logs) {
-	let totalMins = 0,
-		xRange = 0;
-	const xVals = [],
-		yVals = [];
-
-	if (!logsNotFound(logs)) {
-		const logsByDate = [...logs].sort(
-			(a, b) => new Date(a.local_date) - new Date(b.local_date)
-		);
-		const [year, month, day] = logsByDate[0].local_date.split("-").map(Number);
-		let current = new Date(year, month - 1, day);
-		const end = new Date();
-
-		const logMap = new Map();
-		for (const log of logs) {
-			if (!logMap.has(log.local_date)) logMap.set(log.local_date, []);
-			logMap.get(log.local_date).push(log);
-		}
-
-		while (current <= end) {
-			const dateStr = current.toLocaleString("sv-SE").split(" ")[0];
-			const dayLogs = logMap.get(dateStr) || [];
-			const dayMins = totalLogMins(dayLogs);
-
-			xVals.push(dateStr);
-			yVals.push((totalMins += dayMins));
-			xRange++;
-
-			setAsTmrw(current);
-		}
-	}
+function renderTotalMinutes(graphData) {
+	const { total_mins, y_vals, x_range } = graphData;
 
 	const data = [
 		{
 			type: "indicator",
 			mode: "number+delta",
 			title: { text: "Cumulative Total" },
-			value: totalMins,
-			delta: { reference: totalMins - 10, valueformat: ".0f" },
+			value: total_mins,
+			delta: { reference: total_mins - 10, valueformat: ".0f" },
 			axis: { visible: false },
 		},
 		{
 			mode: "lines",
-			y: yVals,
+			y: y_vals,
 			fill: "tozeroy",
 			line: { color: "cornflowerblue", width: 2 },
 			fillcolor: "rgba(100, 149, 237, 0.3)",
@@ -89,64 +57,37 @@ function renderTotalMinutes(logs) {
 
 	const layout = {
 		margin: { t: 5, b: 0, l: 0, r: 0 },
-		xaxis: { range: [0, xRange - 1], visible: false },
+		xaxis: { range: [0, x_range - 1], visible: false },
 		yaxis: { visible: false },
 	};
 
 	Plotly.newPlot("total-chart", data, layout, { responsive: true });
-	renderAsTxt("total-practice-txt", totalMins);
+	renderAsTxt("total-practice-txt", total_mins);
 }
 
 // Renders average minutes and trend line for current week
-function renderAvgMinutes(logs) {
-	let minAvg = 0,
-		yVals = [],
-		minAvgArr = [],
-		xAxisRange = 1;
-
-	if (logs && logs.length > 0) {
-		const totalMin = logs.reduce((sum, log) => sum + log.duration, 0);
-		minAvg = totalMin / logs.length;
-
-		const today = new Date();
-		const start = new Date(today);
-		start.setDate(today.getDate() - today.getDay()); // start of week
-
-		const days = [];
-		let current = new Date(start);
-		while (current <= today) {
-			days.push(current.toLocaleString("sv-SE").split(" ")[0]);
-			current.setDate(current.getDate() + 1);
-		}
-
-		yVals = days.map((d) => {
-			const dayLogs = logs.filter((log) => log.local_date === d);
-			return dayLogs.reduce((sum, log) => sum + log.duration, 0);
-		});
-
-		minAvgArr = new Array(days.length).fill(minAvg);
-		xAxisRange = days.length - 1;
-	}
+function renderAvgMinutes(data) {
+	const { y_vals, min_avg, min_avg_arr, x_axis_range } = data;
 
 	const trace = [
 		{
 			type: "indicator",
 			mode: "number+delta",
 			title: { text: "Total Average" },
-			value: Math.floor(minAvg),
-			delta: { reference: minAvg - 25, valueformat: ".0f" },
+			value: Math.floor(min_avg),
+			delta: { reference: min_avg - 25, valueformat: ".0f" },
 			axis: { visible: false },
 			showlegend: false,
 		},
 		{
 			mode: "lines+markers",
-			y: yVals,
+			y: y_vals,
 			showlegend: false,
 			line: { color: "rgb(38, 56, 91)", width: 2 },
 		},
 		{
 			mode: "lines",
-			y: minAvgArr,
+			y: min_avg_arr,
 			fill: "tozeroy",
 			line: { color: "cornflowerblue", width: 2 },
 			fillcolor: "rgba(100, 149, 237, 0.3)",
@@ -156,17 +97,27 @@ function renderAvgMinutes(logs) {
 
 	const layout = {
 		margin: { t: 5, b: 0, l: 0, r: 0 },
-		xaxis: { range: [0, xAxisRange], visible: false },
+		xaxis: { range: [0, x_axis_range], visible: false },
 		yaxis: { range: [-1, null], visible: false },
 	};
 
 	Plotly.newPlot("avg-chart", trace, layout, { responsive: true });
-	renderAsTxt("avg-practice-txt", Math.floor(minAvg), false, true);
+	renderAsTxt("avg-practice-txt", Math.floor(min_avg), false, true);
 }
 
 // Combined renderer (used in dashboard.js)
-export function renderGraphs(logs) {
-	renderDailyMinutes(logs);
-	renderTotalMinutes(logs);
-	renderAvgMinutes(logs);
+export function renderGraphs(dashData) {
+	if (dashData.daily) {
+		renderDailyMinutes(dashData.daily);
+	} else {
+		console.error("dashData.daily is undefined");
+	}
+
+	if (dashData.cumulative) {
+		renderTotalMinutes(dashData.cumulative);
+	}
+
+	if (dashData.weekly) {
+		renderAvgMinutes(dashData.weekly);
+	}
 }
