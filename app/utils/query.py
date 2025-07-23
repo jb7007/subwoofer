@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone as tz
 from app.models import PracticeLog
 from flask_login import current_user
 from app.utils.time import get_today_local
@@ -66,20 +66,22 @@ def get_first_log(return_date: bool=False):
     return first
 
 
-def get_this_week_logs():
-    now_local = datetime.now(tz=ZoneInfo(current_user.timezone))
+def get_this_week_logs(timezone=None, user_id=None):
+    user_timezone = timezone or current_user.timezone
+    user_id = user_id or current_user.id
+    now_local = datetime.now(tz=ZoneInfo(user_timezone))
     
     start_local = now_local - timedelta(days=now_local.weekday())
     start_local = start_local.replace(hour=0, minute=0, second=0, microsecond=0)
     
     end_local = start_local + timedelta(days=7)
     
-    start_utc = start_local.astimezone(timezone.utc)
-    end_utc = end_local.astimezone(timezone.utc)
+    start_utc = start_local.astimezone(tz.utc)
+    end_utc = end_local.astimezone(tz.utc)
     
     weekly_logs = (
         PracticeLog.query
-        .filter_by(user_id=current_user.id)
+        .filter_by(user_id=user_id)
         .filter(PracticeLog.utc_timestamp >= start_utc, PracticeLog.utc_timestamp < end_utc)
         .all()
     )

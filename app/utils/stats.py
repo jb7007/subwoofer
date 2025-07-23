@@ -26,7 +26,7 @@ from app.models import PracticeLog
 from app.utils.query import get_this_week_logs
 from app.utils.time import get_today_local
 
-def get_weekly_log_data():
+def get_weekly_log_data(timezone=None, user_id=None):
     """
     Calculate weekly practice data with cumulative daily totals.
     
@@ -34,6 +34,10 @@ def get_weekly_log_data():
     practice time throughout the week. Each day shows the running total of 
     practice minutes from Monday to that day.
     
+    Args:
+        timezone: User timezone string (defaults to current_user.timezone if not provided)
+        user_id: User ID (defaults to current_user.id if not provided)
+
     Returns:
         dict: Contains chart data with:
             - x: Day abbreviations (Mon, Tue, Wed, etc.)
@@ -42,18 +46,21 @@ def get_weekly_log_data():
             - x_bounds: Chart bounds for x-axis display
     """
     # Get current week's practice logs
-    weekly_logs = get_this_week_logs()
+    weekly_logs = get_this_week_logs(timezone, user_id)
     
     # Calculate start of week in user's local timezone (Monday)
-    now_local = get_today_local(current_user.timezone)
-    start_local = now_local - timedelta(days=now_local.weekday())
+    user_timezone = timezone or current_user.timezone
+    now_local_date = get_today_local(user_timezone)
+    # Calculate Monday of current week
+    days_since_monday = now_local_date.weekday()
+    start_local_date = now_local_date - timedelta(days=days_since_monday)
     
     # Group logs by day of week (0=Monday, 6=Sunday)
     daily_totals = defaultdict(int)
     for log in weekly_logs:
         # Convert UTC timestamp to user's local timezone for accurate day calculation
-        log_local_date = log.utc_timestamp.astimezone(ZoneInfo(current_user.timezone)).date()
-        day_index = (log_local_date - start_local.date()).days
+        log_local_date = log.utc_timestamp.astimezone(ZoneInfo(user_timezone)).date()
+        day_index = (log_local_date - start_local_date).days
         
         # Only include logs from this week (0-6 day range)
         if 0 <= day_index <= 6:
@@ -90,7 +97,7 @@ def get_total_log_mins(logs: list) -> int:
     return sum(log.duration for log in logs)
 
 
-def get_today_log_mins(logs: list) -> int:
+def get_today_log_mins(logs: list, timezone=None) -> int:
     """
     Calculate total practice minutes logged today in the user's timezone.
     
@@ -99,12 +106,14 @@ def get_today_log_mins(logs: list) -> int:
     
     Args:
         logs: List of PracticeLog objects to filter and sum
+        timezone: User timezone string (defaults to current_user.timezone if not provided)
         
     Returns:
         int: Total minutes practiced today in user's local timezone
     """
     # Get today's date in user's timezone (not UTC)
-    today = datetime.now(tz=ZoneInfo(current_user.timezone)).date()
+    user_timezone = timezone or current_user.timezone
+    today = datetime.now(tz=ZoneInfo(user_timezone)).date()
     
     # Filter logs to only include today's sessions
     today_logs = [log for log in logs if log.utc_timestamp.date() == today]
@@ -180,7 +189,7 @@ def get_most_frequent(
         return (value, cnt)
     return value  # default "value" mode
 
-def calculate_cumulative_data(logs):
+def calculate_cumulative_data(logs, timezone=None):
     """
     Calculate cumulative practice data for the all-time progress chart.
     
@@ -190,6 +199,7 @@ def calculate_cumulative_data(logs):
     
     Args:
         logs: List of PracticeLog objects to process
+        timezone: User timezone string (defaults to current_user.timezone if not provided)
         
     Returns:
         dict: Chart data containing:
@@ -202,10 +212,11 @@ def calculate_cumulative_data(logs):
         return {"total_mins": 0, "y_vals": [], "x_vals": [], "x_range": 0}
     
     # Group logs by date in user's local timezone
+    user_timezone = timezone or current_user.timezone
     log_dates = {}
     for log in logs:
         # Convert UTC timestamp to user's local date for accurate grouping
-        local_date = log.utc_timestamp.astimezone(ZoneInfo(current_user.timezone)).date().isoformat()
+        local_date = log.utc_timestamp.astimezone(ZoneInfo(user_timezone)).date().isoformat()
         if local_date not in log_dates:
             log_dates[local_date] = []
         log_dates[local_date].append(log)
@@ -217,7 +228,7 @@ def calculate_cumulative_data(logs):
     
     # Calculate date range from first practice session to today
     start_date = datetime.strptime(sorted_dates[0], "%Y-%m-%d")
-    end_date = datetime.now(ZoneInfo(current_user.timezone)).date()
+    end_date = datetime.now(ZoneInfo(user_timezone)).date()
     current = start_date
     
     # Build cumulative totals for each day in the range
@@ -249,7 +260,7 @@ def calculate_cumulative_data(logs):
         "x_range": len(x_vals)
     }
 
-def calculate_weekly_data(logs):
+def calculate_weekly_data(logs, timezone=None):
     """
     Calculate weekly practice data for the current week's daily practice chart.
     
@@ -259,6 +270,7 @@ def calculate_weekly_data(logs):
     
     Args:
         logs: List of PracticeLog objects for the current week
+        timezone: User timezone string (defaults to current_user.timezone if not provided)
         
     Returns:
         dict: Chart data containing:
@@ -271,7 +283,8 @@ def calculate_weekly_data(logs):
         return {"y_vals": [], "min_avg": 0, "min_avg_arr": [], "x_axis_range": 0}
     
     # Calculate the start of the current week in user's local timezone
-    today_local = datetime.now(ZoneInfo(current_user.timezone))
+    user_timezone = timezone or current_user.timezone
+    today_local = datetime.now(ZoneInfo(user_timezone))
     start_local = today_local - timedelta(days=today_local.weekday())  # Monday
     start_local = start_local.replace(hour=0, minute=0, second=0, microsecond=0)
     
@@ -281,7 +294,7 @@ def calculate_weekly_data(logs):
     current = start_local
     
     # Initialize all days of the week with 0 minutes
-    while len(days) < 7:
+    for i in range(7):
         date_str = current.date().isoformat()
         days.append(date_str)
         daily_totals[date_str] = 0  # Default to 0 for days with no practice
@@ -290,7 +303,7 @@ def calculate_weekly_data(logs):
     # Calculate actual practice totals for each day
     for log in logs:
         # Convert UTC timestamp to user's local date
-        log_date = log.utc_timestamp.astimezone(ZoneInfo(current_user.timezone)).date().isoformat()
+        log_date = log.utc_timestamp.astimezone(ZoneInfo(user_timezone)).date().isoformat()
         
         # Only include logs from this week
         if log_date in daily_totals:
