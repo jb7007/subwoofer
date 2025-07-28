@@ -36,11 +36,13 @@ import { getLogData } from "../logic/index.js";
  */
 export function extractPieceAndComposer() {
 	// Get HTML dropdown value for pre-existing pieces
-	const dropdownValue = document.getElementById("pieceDropdown").value;
+	const dropdownValue = document.getElementById("pieceDropdown")?.value;
 
 	// Get user-typed piece title and composer (if manually entered) and trim whitespace
-	const manualTitle = document.getElementById("piece")?.value.trim();
-	const manualComposer = document.getElementById("composerInput")?.value.trim();
+	const manualTitle = document.getElementById("piece")?.value?.trim();
+	const manualComposer = document
+		.getElementById("composerInput")
+		?.value?.trim();
 
 	// Initialize variables for piece title and composer to be sent to backend
 	let pieceTitle,
