@@ -5,6 +5,8 @@ This module tests all practice log functionality including log creation,
 retrieval, validation, and API endpoints for log management.
 """
 
+import pytest
+
 from datetime import datetime, timezone, timedelta
 from .conftest import create_test_user, login_test_user
 from app.models import PracticeLog, Piece
@@ -155,6 +157,48 @@ def test_submit_multiple_logs_increments_user_log_number(client):
     assert logs[0].user_log_number == 1
     assert logs[1].user_log_number == 2
 
+@pytest.mark.skip(reason="being unused")
+def test_edit_existing_log(client):
+    """Test editing user's existing logs."""
+    user = create_test_user()
+    login_test_user(client)
+    
+    # submit first log
+    payload1 = {
+        "utc_timestamp": "2025-01-01T10:00:00",
+        "instrument": "guitar",
+        "duration": 30,
+        "notes": "",
+        "piece": "Stairway to Heaven",
+        "composer": "Led Zeppelin"
+    }
+    
+    resp1 = client.post("/api/logs", json=payload1)
+    assert resp1.status_code == 201
+    
+    log_before = PracticeLog.query.filter_by(user_id=user.id).first()
+    assert log_before.id == 1
+    assert log_before.user_log_number == 1
+    
+    # send updated log information to edit existing log
+    payload2 = {
+        "instrument": "electricGuitar",
+        "duration": 60,
+        "notes": "increase tempo by 15 bpm"
+    }
+    
+    resp2 = client.patch("/api/logs/1/edit", json=payload2)
+    assert resp2.status_code == 200
+    
+    # ensure only the existing log is edited and no additional logs were made
+    logs = PracticeLog.query.filter_by(user_id=user.id).all()
+    assert len(logs) == 1
+    
+    # log should be updated with provided info
+    log_after = logs[0]
+    assert log_after.instrument == "electricGuitar"
+    assert log_after.duration == 60
+    assert log_after.notes == "increase tempo by 15 bpm"
 
 def test_get_logs_endpoint(client):
     """Test retrieving user's practice logs via API."""
