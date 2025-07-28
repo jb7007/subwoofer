@@ -68,8 +68,10 @@ def test_dashboard_stats_api_with_data(client):
     user = create_test_user()
     login_test_user(client)
     
-    # Create some test practice logs - use current time so "today" calculations work
-    base_time = datetime.now(timezone.utc).replace(hour=10, minute=0, second=0, microsecond=0)
+    # Create some test practice logs - use user's local time so "today" calculations work
+    from zoneinfo import ZoneInfo
+    user_tz = ZoneInfo(user.timezone)  # America/New_York
+    base_time = datetime.now(tz=user_tz).replace(hour=10, minute=0, second=0, microsecond=0)
     
     # Create logs for different days
     logs_data = [
@@ -80,7 +82,9 @@ def test_dashboard_stats_api_with_data(client):
     ]
     
     for i, log_data in enumerate(logs_data):
-        log_time = base_time - timedelta(days=log_data["day_offset"])
+        # Create time in user's timezone, then convert to UTC for storage
+        local_time = base_time - timedelta(days=log_data["day_offset"])
+        utc_time = local_time.astimezone(timezone.utc)
         
         # Create piece if it doesn't exist
         piece = Piece(
@@ -91,11 +95,11 @@ def test_dashboard_stats_api_with_data(client):
         )
         add_to_db(piece)
         
-        # Create practice log
+        # Create practice log with UTC timestamp
         log = PracticeLog(
             user_id=user.id,
             user_log_number=i + 1,
-            utc_timestamp=log_time,
+            utc_timestamp=utc_time,
             instrument=log_data["instrument"],
             duration=log_data["duration"],
             notes="Test notes",
@@ -162,9 +166,13 @@ def test_dashboard_stats_timezone_handling(client):
     user = create_test_user()  # User has America/New_York timezone
     login_test_user(client)
     
-    # Create a log with a specific UTC time that should be "today" in EST
-    # 6 AM UTC = 1 AM EST (same day)
-    utc_time = datetime.now(timezone.utc).replace(hour=6, minute=0, second=0, microsecond=0)
+    # Create a log that should be "today" in EST - use user's local timezone
+    from zoneinfo import ZoneInfo
+    user_tz = ZoneInfo(user.timezone)  # America/New_York
+    
+    # Create a log for today at 1 AM local time (which will be 5/6 AM UTC)
+    local_time = datetime.now(tz=user_tz).replace(hour=1, minute=0, second=0, microsecond=0)
+    utc_time = local_time.astimezone(timezone.utc)
     
     piece = Piece(title="Morning Practice", composer="Test", user_id=user.id, log_time=45)
     add_to_db(piece)
