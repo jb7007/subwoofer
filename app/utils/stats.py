@@ -116,7 +116,8 @@ def get_today_log_mins(logs: list, timezone=None) -> int:
     today = datetime.now(tz=ZoneInfo(user_timezone)).date()
     
     # Filter logs to only include today's sessions
-    today_logs = [log for log in logs if log.utc_timestamp.date() == today]
+    # Convert UTC timestamp to user timezone before comparing dates
+    today_logs = [log for log in logs if log.utc_timestamp.astimezone(ZoneInfo(user_timezone)).date() == today]
     
     # Sum the durations of today's practice sessions
     return get_total_log_mins(today_logs)
