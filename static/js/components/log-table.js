@@ -10,6 +10,7 @@ export function renderLogs(logs) {
 
 	logs.forEach((log) => {
 		const row = document.createElement("tr");
+		row.dataset.id = log.id; // Set dataset for easy access later
 		console.log("Rendering log:", log);
 
 		row.innerHTML = `
