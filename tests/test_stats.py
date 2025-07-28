@@ -176,18 +176,22 @@ def test_calculate_weekly_data_multiple_sessions_same_day(client):
     """Test weekly data with multiple practice sessions on the same day."""
     user = create_test_user()
     
-    # Current week's Tuesday
+    # Create a specific Tuesday in current week
     now = datetime.now(timezone.utc)
     week_start = now - timedelta(days=now.weekday())
     tuesday = week_start + timedelta(days=1)
     
+    # Make sure both sessions are clearly on the same day
+    tuesday_morning = tuesday.replace(hour=9, minute=0, second=0, microsecond=0)
+    tuesday_evening = tuesday.replace(hour=18, minute=0, second=0, microsecond=0)
+    
     logs = [
-        # Two sessions on Tuesday
+        # Two sessions on the same Tuesday
         PracticeLog(user_id=user.id, user_log_number=1,
-                   utc_timestamp=tuesday + timedelta(hours=9),  # Morning
+                   utc_timestamp=tuesday_morning,  # Morning
                    instrument="piano", duration=30, notes="Morning practice", piece_id=1),
         PracticeLog(user_id=user.id, user_log_number=2,
-                   utc_timestamp=tuesday + timedelta(hours=18),  # Evening
+                   utc_timestamp=tuesday_evening,  # Evening
                    instrument="guitar", duration=25, notes="Evening practice", piece_id=1),
     ]
     
