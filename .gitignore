@@ -6,3 +6,18 @@ __pycache__/
 *.db
 .vscode/
 requirements.txt
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.pnpm-debug.log*
+
+# Jest
+coverage/
+.nyc_output
+
+# ESLint cache
+.eslintcache
