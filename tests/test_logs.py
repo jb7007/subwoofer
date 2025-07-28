@@ -89,6 +89,33 @@ def test_submit_log_with_detailed_data(client):
     assert piece.title == "Violin Concerto No. 1"
     assert piece.composer == "Max Bruch"
     assert log.piece_id == piece.id
+    
+def test_submit_log_minimal_data(client):
+    user = create_test_user()
+    login_test_user(client)
+    
+    payload = {
+        "utc_timestamp": "2025-01-15T14:30:00",
+        "instrument": "piano",
+        "duration": 10,
+        "notes": ""
+    }
+    
+    resp = client.post("/api/logs", json=payload)
+    print(resp.data)
+    assert resp.status_code == 201
+    
+    # Verify log was created correctly given minimal data needed for a successful entry
+    log = PracticeLog.query.filter_by(user_id=user.id).first()
+    assert log.id == 1
+    assert log.user_log_number == 1
+    assert log.user_id == 1
+    assert log.utc_timestamp == datetime.fromisoformat("2025-01-15T14:30:00")
+    assert log.updated_at is not None
+    assert log.instrument == "piano"
+    assert log.duration == 10
+    assert log.piece == None
+    assert log.notes == ""
 
 
 def test_submit_multiple_logs_increments_user_log_number(client):
