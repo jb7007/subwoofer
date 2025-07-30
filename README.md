@@ -1,64 +1,118 @@
-# 🎷 Practice Tracker (WIP)
+# 🎷 Subwoofer – Practice Tracker for Musicians  
+*A clean, fast, animated full-stack web app to log practice sessions, track progress, and stay accountable.*
 
-Hi there! I'm Jeremiah, and this is _SUBWOOFER_ —
+> **Status:** Actively developed | Not yet deployed | Core functionality working as of July 2025
 
-_A full-stack web app for musicians to track their practice sessions, visualize progress, and stay motivated over time._
+---
 
-## 🌟 Features (planned / in progress)
+## 🧠 Why I Built This  
+As a saxophonist and computer science major, I needed a better way to track my practice, stay motivated, and actually see my progress. Subwoofer started as a personal project but evolved into a full-featured platform that helps musicians build consistency, set goals, and visualize growth — no matter their instrument.
 
-- ✅ User authentication & account management
-- ✅ Session logging (piece, instrument, duration, notes)
-- ✅ Dashboard with graphs & stats
-- ✅ Backend-calculated chart data with timezone support
-- ✅ Comprehensive code documentation and comments
-- 🛠️ Goal setting and tracking
-- 🛠️ Calendar heatmap
-- 🛠️ Practice streaks & leaderboard
+---
+
+## 🌟 Features
+
+### ✅ Completed
+- 🔐 User authentication and session management  
+- 📝 Log practice sessions by piece, instrument, duration, and notes  
+- 📈 Dashboard with stats, charts, and recent activity  
+- 🌍 Timezone-aware backend logic (UTC storage, local display)  
+- 🧱 Modular API structure & centralized fetch logic  
+- 📊 Plotly-based interactive charts (total, daily, average)  
+- 🧾 Fully documented codebase with docstrings and inline comments  
+
+### 🚧 In Progress / Planned
+- 🎯 Goal setting and progress tracking  
+- 📅 Calendar heatmap view  
+- 🔥 Practice streaks and daily consistency tracker  
+- 🏆 Leaderboard with top users or personal bests  
+- 📤 Data export (CSV / PDF)  
+- 🧪 Test suite (PyTest, Jest)  
+
+---
 
 ## ⚙️ Tech Stack
 
-- **Backend:** Python (Flask), SQLite (development)
-- **Frontend:** Jinja2 (server-rendered templates), Bootstrap + custom CSS
-- **Client-side Logic:** Vanilla JS + GSAP (for animation)
-- **Charts:** Plotly.js for interactive data visualization
-- **API Architecture:** Modularized fetch logic (grouped by feature, centralized with a shared helper)
+- **Backend:** Python (Flask), SQLite (dev), SQLAlchemy ORM  
+- **Frontend:** Jinja2 templates, Bootstrap 5, custom CSS  
+- **Client-side:** Vanilla JavaScript, GSAP animations  
+- **Data Visualization:** Plotly.js  
+- **Authentication:** Flask-Login (sessions + protected routes)  
+- **API Architecture:** Modularized by feature, shared helpers  
 
-## 🧠 Why I Built This
-
-I'm a saxophonist who wanted a better way to track my personal growth. I built this for myself — to see how far I've come and where I'm going — but I hope it helps other musicians too, especially the ones who just need a little nudge to keep going.
+---
 
 ## 🏗️ Recent Architecture Updates
 
-**Backend Chart Calculations:** All graph data is now calculated server-side for better performance and consistency. The dashboard API provides a unified endpoint that delivers all chart data in a single request.
+### 📈 Backend Graph Calculations  
+All dashboard chart data is now calculated server-side for improved performance and accuracy. The unified `/api/dashboard/stats` endpoint returns all charts and key statistics in a single response.
 
-**Timezone Handling:** Proper timezone conversion ensures accurate data display regardless of user location. All timestamps are stored in UTC and converted to user's local timezone for display.
+### 🌐 Timezone Handling  
+Practice logs are timestamped in UTC and displayed in the user's local timezone to ensure consistent cross-region usage.
 
-**Code Documentation:** Comprehensive docstrings and inline comments have been added throughout the codebase for better maintainability and developer onboarding.
+### 📚 Code Documentation  
+Comprehensive docstrings and inline comments have been added across the codebase to support developer onboarding, refactoring, and future contributions.
 
-## 🚧 Status
-
-**As of July 23, 2025:** This project is actively being developed and will be deployed once core features are complete. The core functionality is working with recent improvements to data processing and code quality.
-
-## 📝 To Do
-
-- [ ] Add goal editor interface
-- [ ] Finalize dashboard design
-- [ ] Add practice streaks calculation
-- [ ] Implement calendar heatmap view
-- [ ] Add data export functionality
-- [ ] ...and more to come!
-
-## 🔧 Development Setup
-
-1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
-3. Set up environment variables in `.env` file
-4. Run the application: `python run.py`
-5. Access at `http://localhost:5000`
+---
 
 ## 📊 API Endpoints
 
-- `GET /api/dashboard/stats` - Unified dashboard data (charts + statistics)
-- `GET /api/logs` - User's practice logs
-- `POST /api/logs` - Create new practice log
-- `GET /api/recent-logs` - Recent practice sessions for dashboard
+| Endpoint                | Method | Description                            |
+|------------------------|--------|----------------------------------------|
+| `/api/dashboard/stats` | GET    | Returns all chart and stat data        |
+| `/api/logs`            | GET    | Returns all logs for current user      |
+| `/api/logs`            | POST   | Creates a new practice log entry       |
+| `/api/recent-logs`     | GET    | Returns logs for recent activity box   |
+
+---
+
+## 🚧 To Do
+
+- [ ] Build goal editor UI  
+- [ ] Finalize dashboard layout and polish  
+- [ ] Add streak-tracking logic  
+- [ ] Add calendar heatmap visualization  
+- [ ] Allow export of practice data  
+- [ ] Write tests (backend + frontend)  
+
+---
+
+## 🔧 Local Development Setup
+
+```bash
+git clone https://github.com/jb7007/subwoofer.git
+cd subwoofer
+pip install -r requirements.txt
+
+# Set up a .env file with your Flask config variables
+python run.py
+```
+
+Visit:  
+`http://localhost:5000`
+
+---
+
+## 📸 Screenshots  
+*(Coming soon – UI cleanup and animations in progress)*
+
+---
+
+## ✨ Future Plans
+
+- Mobile-responsive layout  
+- OAuth or social login support  
+- Public profile pages or practice sharing  
+
+---
+
+## 📇 Author
+
+**Jeremiah Branch**  
+Sophomore CS Major @ Michigan Tech  
+Musician 🎷 | Developer 💻 | Tired 😓  
+[github.com/jb7007](https://github.com/jb7007)
+
+---
+
+> This project is built with love, frustration, caffeine, and absolutely way too many browser tabs. 🤍
