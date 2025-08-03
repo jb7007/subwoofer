@@ -8,7 +8,6 @@
  */
 
 import { spawn } from "child_process";
-import path from "path";
 
 const colors = {
 	green: "\x1b[32m",
@@ -90,6 +89,8 @@ async function runJavaScriptCoverage() {
 
 async function main() {
 	const args = process.argv.slice(2);
+
+	// process.argv[0] is the node executable, process.argv[1] is the script path
 
 	log("🧪 Practice Tracker Test Suite", colors.bold);
 	log("================================", colors.bold);

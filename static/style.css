@@ -1,6 +1,6 @@
 /* ──────────────── GLOBAL ──────────────── */
 body {
-  font-family: 'Commissioner', sans-serif;
+	font-family: "Commissioner", sans-serif;
 }
 
 body,
@@ -9,463 +9,549 @@ h2,
 h3,
 p,
 a {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* ──────────────── BACKGROUND ──────────────── */
 .parallax-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 200vh;
-  z-index: -1;
-  background-image: url("/static/images/shared/practice-bg.png");
-  background-repeat: repeat;
-  background-size: 2000px;
-  background-position: top left;
-  filter: blur(1px);
-  pointer-events: none;
-  will-change: background-position;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 200vh;
+	z-index: -1;
+	background-image: url("/static/images/shared/practice-bg.png");
+	background-repeat: repeat;
+	background-size: 2000px;
+	background-position: top left;
+	filter: blur(1px);
+	pointer-events: none;
+	will-change: background-position;
 }
 
 /* ──────────────── HEADER & HERO ──────────────── */
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 3rem;
 }
 
 .hero-title {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 300;
-  text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  margin: 3rem 3rem 1.5rem;
+	display: block;
+	font-size: 2.5rem;
+	font-weight: 300;
+	text-align: center;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	margin: 3rem 3rem 1.5rem;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
-  font-weight: 300;
-  text-align: center;
-  color: #555;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  margin-bottom: 3rem;
+	font-size: 1.25rem;
+	font-weight: 300;
+	text-align: center;
+	color: #555;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	margin-bottom: 3rem;
 }
 
 /* ──────────────── UTILITIES ──────────────── */
 .center-flex {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .bg-offblack {
-  background-color: #1b1b1b !important;
+	background-color: #1b1b1b !important;
 }
 
 .border-offblack {
-  border: 2px solid #1b1b1b !important;
+	border: 2px solid #1b1b1b !important;
 }
 
 /* ──────────────── CARDS ──────────────── */
 .card {
-  background-color: #fcfcfc;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+	background-color: #fcfcfc;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
 .dash-card {
-  flex: 1 1 0;
-  min-width: 200px;
-  border: #777;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 0.375rem;
-  padding: 1em;
-  margin: 1rem 1rem 1rem;
-  background-color: #fcfcfc;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  transition: all 0.15s ease-in-out;
+	flex: 1 1 0;
+	min-width: 200px;
+	border: #777;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 0.375rem;
+	padding: 1em;
+	margin: 1rem 1rem 1rem;
+	background-color: #fcfcfc;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+	transition: all 0.15s ease-in-out;
 }
 
 .dash-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+	transform: scale(1.02);
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
 }
 
 .dash-card-streak {
-  flex: 1 1 0;
-  min-width: 200px;
-  border-radius: 0.375rem;
-  padding: 1em;
-  background-color: #fcfcfc;
+	flex: 1 1 0;
+	min-width: 200px;
+	border-radius: 0.375rem;
+	padding: 1em;
+	background-color: #fcfcfc;
 }
 
 .card-row {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 0;
 }
 
 .card-row .card {
-  flex: 0 0 25rem;
-  max-width: 100%;
+	flex: 0 0 25rem;
+	max-width: 100%;
 }
 
 .card-promo {
-  border: 0;
-  align-items: center;
-  margin-bottom: 3rem;
+	border: 0;
+	align-items: center;
+	margin-bottom: 3rem;
 }
 
 .card-promo-image {
-  width: 16.66667%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	width: 16.66667%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .card-promo-text {
-  width: 83.33333%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	width: 83.33333%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .card-center_img-top {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 250px;
-  height: 250px;
-  border-top-left-radius: 0.375rem;
-  border-top-right-radius: 0.375rem;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 250px;
+	height: 250px;
+	border-top-left-radius: 0.375rem;
+	border-top-right-radius: 0.375rem;
 }
 
 .card-hover {
-  transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
 }
 
 .card-hover:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+	transform: scale(1.02);
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }
 
 /* ──────────────── LOGO HOVER ──────────────── */
 .logo-hover a {
-  display: inline-block;
-  transition: transform 0.15s ease-in-out;
+	display: inline-block;
+	transition: transform 0.15s ease-in-out;
 }
 
 .logo-hover a:hover {
-  transform: scale(1.05);
-  text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+	transform: scale(1.05);
+	text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 /* ──────────────── BUTTONS ──────────────── */
 .pt-button {
-  display: inline-block;
-  background-color: #1b1b1b;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  font-size: 1rem;
-  text-decoration: none;
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.5);
-  transition: background-color 0.2s ease, transform 0.1s ease;
+	display: inline-block;
+	background-color: #1b1b1b;
+	color: #fff;
+	border: none;
+	padding: 0.5rem 1.25rem;
+	border-radius: 0.5rem;
+	font-weight: 500;
+	font-size: 1rem;
+	text-decoration: none;
+	box-shadow: 0 3px 4px rgba(0, 0, 0, 0.5);
+	transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .pt-button:hover {
-  background-color: #111;
-  transform: scale(1.05) rotate(2deg);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+	background-color: #111;
+	transform: scale(1.05) rotate(2deg);
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .modal-btn {
-  margin-top: 1.5rem;
+	margin-top: 1.5rem;
 }
 
-.modal-btn+.modal-btn {
-  margin-top: 1rem;
+.modal-btn + .modal-btn {
+	margin-top: 1rem;
+}
+
+.edit-cell {
+	width: 0;
+	padding: 0;
+	position: relative;
+	overflow: visible;
+	border: none;
+}
+
+.edit-btn {
+	position: absolute;
+	right: -32px;
+	top: 50%;
+	transform: translateY(-50%);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+}
+
+tr:hover .edit-btn {
+	opacity: 1;
+	pointer-events: auto;
+	cursor: pointer;
 }
 
 /* ──────────────── MODALS ──────────────── */
 .modal-overlay {
-  opacity: 0;
-  display: none;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+	opacity: 0;
+	display: none;
+	pointer-events: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
 }
 
 .modal-overlay.active {
-  display: flex;
-  pointer-events: all;
-  opacity: 1;
+	display: flex;
+	pointer-events: all;
+	opacity: 1;
 }
 
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 400px;
-  width: 90%;
-  position: relative;
-  text-align: center;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.75);
+	background: white;
+	padding: 2rem;
+	border-radius: 1rem;
+	max-width: 400px;
+	width: 90%;
+	position: relative;
+	text-align: center;
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.75);
 }
 
 .modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	font-size: 1.5rem;
+	background: none;
+	border: none;
+	cursor: pointer;
 }
 
 /* ──────────────── FORMS ──────────────── */
 .form-label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	font-weight: 500;
+	margin-bottom: 0.25rem;
 }
 
 .form-label-right {
-  font-size: 0.875rem;
-  color: #777;
-  margin-left: auto;
+	font-size: 0.875rem;
+	color: #777;
+	margin-left: auto;
 }
 
 /* ──────────────── TABLES ──────────────── */
 thead th {
-  border-bottom: 2px solid #000 !important;
+	border-bottom: 2px solid #000 !important;
+}
+
+.floating-edit-btn {
+	position: absolute;
+	right: -40px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: #333;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 32px;
+	height: 32px;
+	font-size: 16px;
+	cursor: pointer;
+	opacity: 0;
+	pointer-events: none;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+.floating-edit-btn:hover {
+	background: #555;
+	transform: translateY(-50%) scale(1.1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+tr:hover .floating-edit-btn,
+.floating-edit-btn:hover {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+/* Add invisible padding area around the button to prevent it from disappearing */
+.floating-edit-btn::before {
+	content: "";
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	right: -10px;
+	bottom: -10px;
+	background: transparent;
+}
+
+tbody tr {
+	position: relative;
+}
+
+/* Extend the hover area to the right to include the button area */
+tbody tr::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: -50px;
+	bottom: 0;
+	width: 50px;
+	background: transparent;
+	pointer-events: none;
 }
 
 /* ──────────────── LAYOUT WRAPPER ──────────────── */
 .layout {
-  display: flex;
+	display: flex;
 }
 
 /* ──────────────── SIDEBAR ──────────────── */
 .sidebar {
-  width: 250px;
-  /* fixed width */
-  height: 100vh;
-  /* full screen height */
-  background-color: #111;
-  /* dark sidebar */
-  color: white;
-  padding: 1rem;
-  box-sizing: border-box;
-  /* so padding doesn’t expand total width */
-  position: fixed;
-  /* so it stays locked to the left */
-  top: 0;
-  left: 0;
-  z-index: 10;
-  /* above everything else except modals */
+	width: 250px;
+	/* fixed width */
+	height: 100vh;
+	/* full screen height */
+	background-color: #111;
+	/* dark sidebar */
+	color: white;
+	padding: 1rem;
+	box-sizing: border-box;
+	/* so padding doesn’t expand total width */
+	position: fixed;
+	/* so it stays locked to the left */
+	top: 0;
+	left: 0;
+	z-index: 10;
+	/* above everything else except modals */
 }
 
 .sidebar .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 2rem;
 }
 
 .sidebar nav ul {
-  list-style: none;
-  /* remove bullets */
-  padding: 0;
-  margin: 0;
+	list-style: none;
+	/* remove bullets */
+	padding: 0;
+	margin: 0;
 }
 
 .sidebar nav ul li {
-  margin: 1rem 0;
+	margin: 1rem 0;
 }
 
 .sidebar nav ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.2s ease;
+	color: white;
+	text-decoration: none;
+	font-size: 1.1rem;
+	transition: color 0.2s ease;
 }
 
 .sidebar nav ul li a:hover {
-  color: #ccc;
+	color: #ccc;
 }
 
 .content-wrapper {
-  margin-left: 250px;
-  padding: 0rem;
-  flex-grow: 1;
+	margin-left: 250px;
+	padding: 0rem;
+	flex-grow: 1;
 }
 
 .main-dash {
-  display: flex;
+	display: flex;
 }
 
 .dash-left {
-  flex-grow: 1;
-  min-width: 0;
+	flex-grow: 1;
+	min-width: 0;
 }
 
 .dash-right {
-  width: 300px;
-  flex-shrink: 0;
+	width: 300px;
+	flex-shrink: 0;
 }
 
 .dash-title {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 300;
-  text-align: left;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  margin: 1rem 1rem 1.5rem;
+	display: block;
+	font-size: 2.5rem;
+	font-weight: 300;
+	text-align: left;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	margin: 1rem 1rem 1.5rem;
 }
 
 .dash-subtitle {
-  font-size: 1.5rem;
-  font-weight: 300;
-  text-align: left;
-  color: #555;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	font-size: 1.5rem;
+	font-weight: 300;
+	text-align: left;
+	color: #555;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dash-card-title {
-  font-size: 1.25rem;
-  font-weight: 300;
-  text-align: center;
-  white-space: nowrap;
-  color: #555;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	font-size: 1.25rem;
+	font-weight: 300;
+	text-align: center;
+	white-space: nowrap;
+	color: #555;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dash-card-header {
-  justify-items: center;
+	justify-items: center;
 }
 
 .log-list {
-  width: 100%;
-  max-width: 300px;
-  background-color: #ffffff;
-  color: black;
-  padding: 1rem;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 300px;
+	background-color: #ffffff;
+	color: black;
+	padding: 1rem;
+	box-sizing: border-box;
+	margin-left: auto;
+	margin-bottom: 2rem;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .instrument-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 2rem;
 }
 
 .common-instrument-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 2rem;
 }
 
 .instr-left-container {
-  flex: 1;
+	flex: 1;
 }
 
 .instrument {
-  flex: 1;
+	flex: 1;
 }
 
 .instrument-info {
-  display: flex;
-  flex-wrap: inherit
+	display: flex;
+	flex-wrap: inherit;
 }
 
 .right-info p {
-  margin: 0;
-  min-width: 40%;
+	margin: 0;
+	min-width: 40%;
 }
 
 .instrument-stat-list {
-  list-style: none;
-  text-align: right;
+	list-style: none;
+	text-align: right;
 }
 
 .two-column-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  gap: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	gap: 1rem;
 }
 
 .total-practice-time-container {
-  flex: 0 0 auto;
+	flex: 0 0 auto;
 }
 
 .daily-practice-time-container {
-  flex: 0 0 auto;
+	flex: 0 0 auto;
 }
 
 .total-bar-chart {
-  flex: 1;
-  min-width: 100px;
-  height: 100px;
+	flex: 1;
+	min-width: 100px;
+	height: 100px;
 }
 
 .daily-gauge {
-  width: 100%;
-  height: 100px;
+	width: 100%;
+	height: 100px;
 }
 
 .total-chart {
-  width: 100%;
-  height: 100px;
+	width: 100%;
+	height: 100px;
 }
 
 #total-chart {
-  width: 100%;
-  height: 125px;
-  overflow: hidden;
+	width: 100%;
+	height: 125px;
+	overflow: hidden;
 }
 
 .avg-chart {
-  width: 100%;
-  height: 100px;
+	width: 100%;
+	height: 100px;
 }
 
 #avg-chart {
-  width: 100%;
-  height: 125px;
-  overflow: hidden;
+	width: 100%;
+	height: 125px;
+	overflow: hidden;
 }
 
-
 #daily-gauge {
-  width: 100%;
-  height: 125px;
-  overflow: hidden;
+	width: 100%;
+	height: 125px;
+	overflow: hidden;
 }
 
 #daily-gauge .plot-container,
 #daily-gauge svg {
-  padding: 0 !important;
-  margin: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
 }
