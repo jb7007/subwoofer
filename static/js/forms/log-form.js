@@ -14,6 +14,7 @@
  */
 
 import { submitLog, fetchLogs } from "../api/index.js";
+import { deleteLog } from "../api/index.js";
 import { editLog } from "../api/index.js";
 import { closeLogModal } from "../modals/index.js";
 import { setLogs } from "../state/logs.js";
@@ -152,5 +153,27 @@ export async function handleLogEdit(editData, logNumber) {
 	} catch (error) {
 		console.error("Error editing log:", error);
 		alert("An error occurred while editing the log. Please try again.");
+	}
+}
+
+export async function handleLogDeletion(logNumber) {
+	try {
+		const { ok, data } = await deleteLog(logNumber);
+		console.log(ok, data);
+
+		if (!ok) {
+			alert(data.message || "Failed to delete log.");
+			return;
+		}
+
+		const { ok: updateOk, data: logs } = await fetchLogs();
+		console.log("Updated logs after deletion:", logs);
+		if (updateOk) {
+			setLogs(logs);
+			renderLogs(logs);
+		}
+	} catch (error) {
+		console.error("Error deleting log:", error);
+		alert("An error occurred while deleting the log. Please try again.");
 	}
 }

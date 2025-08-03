@@ -116,7 +116,7 @@ def get_logs():
 
 @logs_bp.route("/api/edit-log/<int:user_log_number>", methods=["PATCH"])
 @login_required
-def edit_logs(user_log_number):
+def edit_log(user_log_number):
     data = request.get_json()
     log = PracticeLog.query.filter_by(user_id=current_user.id, user_log_number=user_log_number).first()
     
@@ -133,6 +133,24 @@ def edit_logs(user_log_number):
     db.session.commit()
     
     return jsonify({"message": "log edited!"}), 201
+
+@logs_bp.route("/api/delete-log/<int:user_log_number>", methods=["DELETE"])
+@login_required
+def delete_log(user_log_number):
+    data = request.get_json()
+    
+    if user_log_number != int(data["logNumber"]):
+        return jsonify({"error": "Log ID mismatch occured!"}), 404
+    
+    log = PracticeLog.query.filter_by(user_id=current_user.id, user_log_number=user_log_number).first()
+    
+    if not log:
+        return jsonify({"error": "Log not found!"}), 404
+    
+    db.session.delete(log)
+    db.session.commit()
+    
+    return jsonify({"message": "log deleted!"}), 200
 
 
 @logs_bp.route("/api/recent-logs", methods=["GET"])

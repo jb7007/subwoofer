@@ -80,7 +80,22 @@ export function renderAsTxt(
  * renderTxtShort("compact-time", 45);     // "45min"
  * renderTxtShort("compact-time", 60);     // "1hr"
  */
-export function renderTxtShort(htmlId, minuteTime) {
+export function renderTxtShort(htmlId, minuteTime, parse = false) {
+	if (parse) {
+		if (minuteTime < 60) {
+			// Less than an hour: show abbreviated minutes
+			return `${minuteTime} min${minuteTime === 1 ? "" : "s"}</em>`;
+		} else {
+			// An hour or more: show abbreviated hours and minutes
+			const hours = Math.floor(minuteTime / 60);
+			const minutes = minuteTime % 60;
+			const hourText = `${hours} hr${hours === 1 ? "" : "s"}`; // "1 hr" or "2 hrs"
+			const minuteText =
+				minutes > 0 ? ` ${minutes} min${minutes === 1 ? "" : "s"}` : ""; // " 15 mins" or ""
+			return `<em>${hourText + minuteText}</em>`;
+		}
+	}
+
 	const el = document.getElementById(htmlId);
 	if (!el) return; // Exit if element doesn't exist
 
