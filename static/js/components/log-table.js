@@ -64,10 +64,11 @@ function getCellData(row) {
 function injectEditableFields(cellElements, values, logId) {
 	cellElements[
 		"id"
-	].innerHTML = `<button class="cancel-btn" data-log-id="${logId}" title="Edit log">Cancel</button>`;
+	].innerHTML = `<button class="delete-btn" data-log-id="${logId}" title="Edit log">Delete</button>`;
 	cellElements[
 		"date"
-	].innerHTML = `<button class="submit-btn" data-log-id="${logId}" title="Edit log">Save</button>`;
+	].innerHTML = `<button class="cancel-btn" data-log-id="${logId}" title="Edit log">Cancel</button>
+	<button class="submit-btn" data-log-id="${logId}" title="Edit log">Save</button>`;
 	cellElements[
 		"duration"
 	].innerHTML = `<input type="text" id="edit-log${logId}-duration" value="${values["duration"]}" />`;
@@ -111,6 +112,7 @@ function buildEditedData(row, logId, values) {
 function resetLogRow(row, values) {
 	const cellElements = getCellData(row).cellElements;
 	row.querySelector(".cancel-btn").remove();
+	row.querySelector(".delete-btn").remove();
 	row.querySelector(".submit-btn").remove();
 	Object.keys(values).forEach((key) => {
 		if (cellElements[key]) {
@@ -145,6 +147,27 @@ export function setupEditLogRow(row_id) {
 			console.log("Cancel button clicked for log ID:", logId);
 			// Reset the row to its original state
 			resetLogRow(row, values);
+		}
+
+		if (e.target.matches(".delete-btn")) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	});
+
+	document.addEventListener("keydown", async (e) => {
+		if (e.key === "Escape") {
+			e.preventDefault();
+			e.stopPropagation();
+			// Reset the row to its original state
+			resetLogRow(row, values);
+		}
+
+		if (e.key === "Enter") {
+			e.preventDefault();
+			e.stopPropagation();
+			const editedData = buildEditedData(row, logId, values);
+			await handleLogEdit(editedData, logId);
 		}
 	});
 }
