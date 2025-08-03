@@ -12,13 +12,15 @@ export function renderLogs(logs) {
 	tableBody.innerHTML = ""; // Clear current rows
 
 	logs.forEach((log) => {
-		const row = document.createElement("tr");
-		row.dataset.logId = log.id;
-		row.dataset.rawDuration = log.duration; // Store the raw duration for editing
-		row.style.position = "relative"; // Enable positioning for floating button
-		console.log("Rendering log:", log);
+		const row = document.createElement("tr"); // current row to render
+
+		row.dataset.logId = log.id; // store log id for editing
+		row.dataset.rawDuration = log.duration; // store the raw duration for editing
+
+		row.style.position = "relative"; // enable positioning for floating button
 
 		if (log.piece !== "Unlisted") {
+			// if piece is not "Unlisted", italicize it
 			log.piece = `<span style="font-style: italic;">${log.piece}</span>`;
 		}
 
@@ -40,7 +42,7 @@ export function renderLogs(logs) {
             <td data-label="notes">${log.notes}</td>
 			<button class="floating-edit-btn" data-log-id="${
 				log.id
-			}" title="Edit log">✏️</button>
+			}" title="Edit this log">✏️</button>
         `;
 
 		tableBody.appendChild(row);
@@ -49,20 +51,18 @@ export function renderLogs(logs) {
 	document.querySelectorAll(".floating-edit-btn").forEach((btn) => {
 		btn.addEventListener("click", (e) => {
 			e.stopPropagation();
-			const logId = btn.closest("tr").dataset.logId;
-			console.log("Edit button clicked for log ID:", logId);
+			const logId = btn.closest("tr").dataset.logId; // store log id from the button
 			setupEditLogRow(logId);
 		});
 	});
 }
 
 function getCellData(row) {
-	const values = {};
-	const cellElements = {};
+	const values = {}; // to store cell values
+	const cellElements = {}; // to store cell elements for later use
 
 	row.querySelectorAll("td").forEach((cell) => {
-		const label = cell.dataset.label;
-		console.log("Processing cell:", cell, "with label:", label);
+		const label = cell.dataset.label; // i.e. "id", "date", "duration", etc. from data-label attribute
 		if (label) {
 			values[label] = cell.textContent.trim();
 			cellElements[label] = cell;
@@ -77,6 +77,7 @@ function getRawDurationFromRow(row) {
 }
 
 function rebindEditBtn(row, logId) {
+	// rebind the edit button to the row after revealing (from hidden state)
 	row.querySelector(".floating-edit-btn")?.addEventListener("click", (e) => {
 		e.stopPropagation();
 		setupEditLogRow(logId);
@@ -96,21 +97,25 @@ function showAllEditButtons() {
 }
 
 function injectEditableFields(cellElements, values, logId, rawDuration) {
+	// setup the editable fields in the table cells
 	cellElements[
-		"id"
-	].innerHTML = `<button class="delete-btn" data-log-id="${logId}" title="Edit log">Delete</button>`;
+		"id" // now becomes a delete button
+	].innerHTML = `<button class="delete-btn" data-log-id="${logId}" title="Delete log">Delete</button>`;
+
 	cellElements[
-		"date"
-	].innerHTML = `<button class="cancel-btn" data-log-id="${logId}" title="Edit log">Cancel</button>
-	<button class="submit-btn" data-log-id="${logId}" title="Edit log">Save</button>`;
+		"date" // now has cancel and save buttons
+	].innerHTML = `<button class="cancel-btn" data-log-id="${logId}" title="Cancel edit">Cancel</button>
+	<button class="submit-btn" data-log-id="${logId}" title="Save edit">Save</button>`;
+
 	cellElements[
-		"duration"
+		"duration" // now has an input field for editing duration, with the previous duration as default
 	].innerHTML = `<input type="text" id="edit-log${logId}-duration" value="${rawDuration}" placeholder="Enter mins: (${rawDuration})" />`;
-	cellElements["instrument"].innerHTML = instrumentHTML;
+
+	cellElements["instrument"].innerHTML = instrumentHTML; // inject the instrument dropdown
 	cellElements["instrument"].querySelector("select").value =
-		reverseInstrumentMap[values["instrument"]];
+		reverseInstrumentMap[values["instrument"]]; // set the select value to the instrument from the log
 	cellElements[
-		"notes"
+		"notes" // now has an input field for editing notes, with the previous notes as default
 	].innerHTML = `<input type="text" id="edit-log${logId}-notes" value="${values["notes"]}" />`;
 }
 
@@ -124,18 +129,18 @@ function buildEditedData(row, logId, values, rawDuration) {
 	} else {
 		newDuration = parseInt(raw);
 		if (newDuration <= 0 || isNaN(newDuration)) {
-			newDuration = 1;
+			newDuration = 1; // set to minimum 1 minute if invalid
 			alert("Minimum required minutes for practicing is 1!");
 		}
 		if (newDuration > 1440) {
-			newDuration = 1440;
+			newDuration = 1440; // cap the maximum duration to 1440 minutes (24 hours)
 			alert("Maximum allowed minutes for practicing is 1440!");
 		}
 	}
 
 	return {
-		id: logId,
-		duration: newDuration,
+		id: logId, // log ID to edit
+		duration: newDuration, // new duration in minutes
 		instrument:
 			row.querySelector(".instrument-map")?.value ||
 			reverseInstrumentMap[values["instrument"]],
@@ -144,17 +149,17 @@ function buildEditedData(row, logId, values, rawDuration) {
 }
 
 export function setupEditLogRow(row_id) {
-	hideAllEditButtons();
-	const row = document.querySelector(`tr[data-log-id="${row_id}"]`);
+	hideAllEditButtons(); // hide all edit buttons to prevent multiple edits at once
+	const row = document.querySelector(`tr[data-log-id="${row_id}"]`); // find the row with the given ID
 	if (!row) return console.error(`Row with ID ${row_id} not found`);
 
 	const logId = row.dataset.logId;
 	if (!logId) return console.error(`Log ID not found for row ${row_id}`);
 
-	const originalHTML = row.innerHTML;
+	const originalHTML = row.innerHTML; // store the original HTML to reset later
 
 	const { values, cellElements } = getCellData(row);
-	const rawDuration = getRawDurationFromRow(row);
+	const rawDuration = getRawDurationFromRow(row); // store the raw duration for editing
 	injectEditableFields(cellElements, values, logId, rawDuration);
 
 	// named functions for the event handlers to remove later
@@ -173,7 +178,7 @@ export function setupEditLogRow(row_id) {
 		if (e.target.matches(".cancel-btn")) {
 			e.preventDefault();
 			e.stopPropagation();
-			// Reset the row to its original state
+			// reset the row to its original state
 			row.innerHTML = originalHTML;
 			rebindEditBtn(row, logId);
 			cleanup();
@@ -197,7 +202,7 @@ export function setupEditLogRow(row_id) {
 	};
 
 	const handleKeyDown = async (e) => {
-		// Only handle key events if we're focused on an input within the current row
+		// only handle key events if we're focused on an input within the current row
 		const activeElement = document.activeElement;
 		const isInCurrentRow =
 			activeElement && activeElement.closest(`tr[data-log-id="${logId}"]`);
@@ -221,7 +226,7 @@ export function setupEditLogRow(row_id) {
 		}
 
 		if (e.key === "Delete" && e.ctrlKey) {
-			// require Ctrl+Delete to prevent accidental deletion
+			// require ctrl+delete to prevent accidental deletion
 			e.preventDefault();
 			e.stopPropagation();
 			const proceed = window.confirm(
@@ -239,13 +244,13 @@ export function setupEditLogRow(row_id) {
 	};
 
 	const cleanup = () => {
-		showAllEditButtons();
+		showAllEditButtons(); // show all edit buttons again
 		const logTable = document.getElementById("log-table-body");
-		logTable.removeEventListener("click", handleTableClick);
-		document.removeEventListener("keydown", handleKeyDown);
+		logTable.removeEventListener("click", handleTableClick); // remove the click event listener
+		document.removeEventListener("keydown", handleKeyDown); // remove the keydown event listener
 	};
 
 	const logTable = document.getElementById("log-table-body");
-	logTable.addEventListener("click", handleTableClick);
-	document.addEventListener("keydown", handleKeyDown);
+	logTable.addEventListener("click", handleTableClick); // add the click event listener
+	document.addEventListener("keydown", handleKeyDown); // add the keydown event listener
 }
