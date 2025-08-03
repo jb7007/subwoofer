@@ -14,6 +14,7 @@
  */
 
 import { submitLog, fetchLogs } from "../api/index.js";
+import { editLog } from "../api/index.js";
 import { closeLogModal } from "../modals/index.js";
 import { setLogs } from "../state/logs.js";
 import { renderLogs } from "../components/index.js";
@@ -130,5 +131,26 @@ export async function handleLogSubmission() {
 	} catch (error) {
 		console.error("Error submitting log:", error);
 		alert("An error occurred while submitting the log. Please try again.");
+	}
+}
+
+export async function handleLogEdit(editData, logNumber) {
+	try {
+		const { ok, data } = await editLog(editData, logNumber);
+
+		if (!ok) {
+			alert(data.message || "Failed to edit log.");
+			return;
+		}
+
+		const { ok: updateOk, data: logs } = await fetchLogs();
+		console.log("Updated logs after submission:", logs);
+		if (updateOk) {
+			setLogs(logs);
+			renderLogs(logs);
+		}
+	} catch (error) {
+		console.error("Error editing log:", error);
+		alert("An error occurred while editing the log. Please try again.");
 	}
 }

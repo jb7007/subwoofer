@@ -2,6 +2,8 @@
 
 import { instrumentMap, reverseInstrumentMap } from "../utils/index.js";
 import { instrumentHTML } from "./instrument-dropdown.js";
+import { editLog } from "../api/logs.js";
+import { handleLogEdit } from "../forms/index.js";
 
 export function renderLogs(logs) {
 	const tableBody = document.getElementById("log-table-body");
@@ -129,13 +131,12 @@ export function setupEditLogRow(row_id) {
 	injectEditableFields(cellElements, values, logId);
 
 	const logTable = document.getElementById("log-table-body");
-	logTable.addEventListener("click", (e) => {
+	logTable.addEventListener("click", async (e) => {
 		if (e.target.matches(".submit-btn")) {
 			e.preventDefault();
 			e.stopPropagation();
 			const editedData = buildEditedData(row, logId, values);
-			console.log("Submitting edited data:", editedData);
-			// const { ok, data } = await editLog(editedData);
+			await handleLogEdit(editedData, logId);
 		}
 
 		if (e.target.matches(".cancel-btn")) {

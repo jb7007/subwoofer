@@ -114,6 +114,26 @@ def get_logs():
     # Serialize logs with timezone conversion for frontend
     return jsonify(serialize_logs(logs)), 200
 
+@logs_bp.route("/api/edit-log/<int:user_log_number>", methods=["PATCH"])
+@login_required
+def edit_logs(user_log_number):
+    data = request.get_json()
+    log = PracticeLog.query.filter_by(user_id=current_user.id, user_log_number=user_log_number).first()
+    
+    if not log:
+        return jsonify({"error": "Log not found!"}), 404
+    
+    if "duration" in data:
+        log.duration = data["duration"]
+    if "instrument" in data:
+        log.instrument = data["instrument"]
+    if "notes" in data:
+        log.notes = data["notes"]
+    
+    db.session.commit()
+    
+    return jsonify({"message": "log edited!"}), 201
+
 
 @logs_bp.route("/api/recent-logs", methods=["GET"])
 @login_required

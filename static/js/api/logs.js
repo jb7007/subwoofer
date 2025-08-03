@@ -7,6 +7,13 @@ export const submitLog = (logData) =>
 		body: JSON.stringify(logData),
 	});
 
+export const editLog = (logData, logNumber) =>
+	fetchJson(`/api/edit-log/${logNumber}`, {
+		method: "PATCH",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(logData),
+	});
+
 // gets the current user's logs
 export const fetchLogs = () => fetchJson("/api/logs");
 export const recentLogs = () => fetchJson("/api/recent-logs");
