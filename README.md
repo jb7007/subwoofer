@@ -1,7 +1,7 @@
 # 🎷 Subwoofer – Practice Tracker for Musicians  
 *A clean, fast, animated full-stack web app to log practice sessions, track progress, and stay accountable.*
 
-> **Status:** Actively developed, on temporary hiatus (college move) | Not yet deployed | Core functionality working as of August 2025
+> **Status:** Actively developed, on temporary hiatus (college move-in) | Not yet deployed | Core functionality working as of August 2025
 
 ---
 
